@@ -10,10 +10,15 @@
 package swagger
 
 import (
+	"fmt"
 	"net/http"
+
+	tenant "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/tenant"
 )
 
 func AddTenant(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
+	tenant1, _ := tenant.NewTenant("mainTenant", "Subscripify My Company Sample", "my-company", "williamohara@subscripify.com")
+	fmt.Println(tenant1)
 }
