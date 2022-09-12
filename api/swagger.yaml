@@ -1,0 +1,181 @@
+openapi: 3.0.3
+info:
+  title: Private Services API  - OpenAPI 3.0
+  description: "This is the set of api endpoints to support access to Subscripify\
+    \ Super Services. Super Services are those that are available to Subscripify's\
+    \ super tenants. They provide higher capabilities to super tenants to manage across\
+    \ multiple main tenants within the context of the Super-Tenant.<br><br> \nThese\
+    \ APIs act as the front end to Private Services engineered and hosted by super\
+    \ tenants that need to access the subscripify platform.<br><br>\nExamples of super\
+    \ services available only to Super Tenants through this API are: <br>\nTenant\
+    \ Management<br>\nSubscription and Plan Management <br>\nBilling and Payments<br><br>\n\
+    Subscripify also maintains a set of api endpoints to support access to Subscripify\
+    \ Public Services. Subscripify public services are services required by all tenants\
+    \ and users on the subscripify platform. All tenants, regardless of type have\
+    \ access to these services.<br><br>\nExamples of private services available to\
+    \ Super Tenants and to Main Tenants are: <br>\nIdentity Services<br>\nUsage Analytics\
+    \ Services<br>\n\nFor more information about Subscripify's tenant architecture\
+    \ click here."
+  termsOfService: http://www.subscripify.com/terms/apiusage
+  contact:
+    email: william.ohara@subscripify.com
+  license:
+    name: Private
+    url: http://www.subscripify.com/license
+  version: 0.0.1
+externalDocs:
+  description: Find out more about Subscripify
+  url: http://www.subscripify.com
+servers:
+- url: https://lord-tenant.subscripify.com
+tags:
+- name: tenants
+  description: everything needed to create and manage tenants on the Subscripify platform
+  externalDocs:
+    description: Link to Tenant Architecture Doc
+    url: http://wiki.subscripify.com/tenant-architecture
+- name: subscription
+  description: everything subscriptions
+  externalDocs:
+    description: Find out more about our store
+    url: http://wiki.subscripify.com/tenant-architecture
+paths:
+  /tenants:
+    post:
+      tags:
+      - tenants
+      summary: Add a new tenant
+      description: Add a new tenant to the subscripify tenant system
+      operationId: addTenant
+      requestBody:
+        description: All data required to start a new tenant
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tenant'
+        required: true
+      responses:
+        "200":
+          description: Successful operation returns full tenant data including generated
+            felids
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        "401":
+          description: Authorization Required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        "405":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        "406":
+          description: Improper Protocol
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        "415":
+          description: Improper media type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        "429":
+          description: too many requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+      security:
+      - tenant_auth:
+        - write:tenants
+        - read:tenants
+components:
+  schemas:
+    tenant:
+      required:
+      - createdBy
+      - orgName
+      - subdomain
+      - tenantType
+      type: object
+      properties:
+        orgName:
+          maxLength: 30
+          pattern: ".[a-z][0-9]"
+          type: string
+          example: Subscripify
+        subdomain:
+          maxLength: 30
+          pattern: ".[a-z][0-9][-]"
+          type: string
+          description: The subdomain name used for the namespace of the tenant and
+            providing unique url for each client
+          example: subscripify
+        createdBy:
+          maxLength: 30
+          pattern: ".[a-z][0-9][-]"
+          type: string
+          description: "the identity UUID of the individual that created the tenant,\
+            \ can contain a service principal id"
+        tenantType:
+          maxLength: 30
+          pattern: super|lord|main
+          type: string
+          description: The tenant type being created
+          example: super
+      additionalProperties: false
+    UnauthorizedError:
+      type: object
+      properties:
+        responseCode:
+          type: integer
+          example: 401
+        message:
+          maxLength: 60
+          pattern: ".[a-z][0-9]"
+          type: string
+          example: not authorized to view this resource
+      additionalProperties: false
+      description: Authentication information is missing or invalid
+      example:
+        message: not authorized to view this resource
+        responseCode: 401
+  responses:
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnauthorizedError'
+  securitySchemes:
+    tenant_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
