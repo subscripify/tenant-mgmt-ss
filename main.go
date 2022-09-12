@@ -19,8 +19,8 @@ import (
 	// For example,
 	//
 	//    sw "github.com/myname/myrepo/go"
-	//
-	sw "./go"
+	//  /dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss
+	sw "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/go"
 )
 
 func main() {
