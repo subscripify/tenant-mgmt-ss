@@ -52,7 +52,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/tenant'
+              $ref: '#/components/schemas/tenantIntake'
         required: true
       responses:
         "200":
@@ -110,7 +110,7 @@ paths:
         - read:tenants
 components:
   schemas:
-    tenant:
+    tenantIntake:
       required:
       - createdBy
       - orgName

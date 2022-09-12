@@ -9,7 +9,7 @@
  */
 package swagger
 
-type Tenant struct {
+type TenantIntake struct {
 
 	OrgName string `json:"orgName"`
 	// The subdomain name used for the namespace of the tenant and providing unique url for each client
