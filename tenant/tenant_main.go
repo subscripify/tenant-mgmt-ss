@@ -27,3 +27,9 @@ func createMainTenant(orgName string, subdomain string, createdBy string) iTenan
 		},
 	}
 }
+
+//createSuperTenant
+//find Tenant
+//find tenants by owner org
+//delete tenant
+//change tenant

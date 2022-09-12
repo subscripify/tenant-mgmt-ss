@@ -14,6 +14,7 @@ type iTenant interface {
 	setTenantType(subscriptionConfigId string)
 	setCreatedBy(userIdentifier string)
 	setCreateDate()
+	GetTenant() (*tenant, error)
 }
 
 type tenant struct {
@@ -62,4 +63,9 @@ func (t *tenant) setCreatedBy(userIdentifier string) {
 
 func (t *tenant) setCreateDate() {
 	t.createDate = time.Now()
+}
+
+func (t *tenant) GetTenant() (string, error) {
+	// return a raw json of the current tenant otherwise return error
+	return "a json string", nil
 }
