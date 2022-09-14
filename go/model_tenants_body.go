@@ -9,13 +9,8 @@
  */
 package swagger
 
-type TenantIntake struct {
-
-	OrgName string `json:"orgName"`
-	// The subdomain name used for the namespace of the tenant and providing unique url for each client
-	Subdomain string `json:"subdomain"`
-	// the identity UUID of the individual that created the tenant, can contain a service principal id
-	CreatedBy string `json:"createdBy"`
-	// The tenant type being created
-	TenantType string `json:"tenantType"`
+type TenantsBody struct {
+    LordTenantIntake
+    SuperTenantIntake
+    MainTenantIntake
 }

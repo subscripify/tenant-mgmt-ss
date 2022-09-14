@@ -45,14 +45,15 @@ paths:
       tags:
       - tenants
       summary: Add a new tenant
-      description: Add a new tenant to the subscripify tenant system
+      description: Adds a new lord tenant to the subscripify tenant system. This will
+        start a new kubernetes cluster   on the selected cloud service
       operationId: addTenant
       requestBody:
         description: All data required to start a new tenant
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/tenantIntake'
+              $ref: '#/components/schemas/tenants_body'
         required: true
       responses:
         "200":
@@ -110,38 +111,75 @@ paths:
         - read:tenants
 components:
   schemas:
-    tenantIntake:
+    lordTenantIntake:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/superTenantIntake'
+      - $ref: '#/components/schemas/mainTenantIntake'
+      - required:
+        - internalServicesConfig
+        type: object
+        properties:
+          internalServicesConfig:
+            maxLength: 32
+            pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
+              -[0-9a-fA-F]{12}$"
+            type: string
+            description: The services config UUID to use for the lord tenant. Must
+              be a valid services config UUID
+        additionalProperties: false
+    superTenantIntake:
+      allOf:
+      - $ref: '#/components/schemas/mainTenantIntake'
+      - required:
+        - superServicesConfig
+        type: object
+        properties:
+          superServicesConfig:
+            maxLength: 32
+            pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
+              -[0-9a-fA-F]{12}$"
+            type: string
+            description: The services config UUID to use for the super-tenant. Must
+              be a valid services config UUID
+        additionalProperties: false
+    mainTenantIntake:
       required:
-      - createdBy
-      - orgName
+      - publicServicesConfig
       - subdomain
+      - subscripifyDeploymentCloudLocation
       - tenantType
       type: object
       properties:
-        orgName:
-          maxLength: 30
-          pattern: ".[a-z][0-9]"
+        tenantType:
+          maxLength: 5
+          pattern: ^super|lord|main$
           type: string
-          example: Subscripify
+          description: "Indicate which type of tenant one is spinning up. Main Tenants\
+            \ require only a public services config.  Super tenants require a super\
+            \ services config and a public config. Lord Tenants require super, public\
+            \ and internal services  configs."
         subdomain:
           maxLength: 30
           pattern: ".[a-z][0-9][-]"
           type: string
-          description: The subdomain name used for the namespace of the tenant and
-            providing unique url for each client
+          description: The subdomain name string which used for the services namespace
+            of the tenant and  providing unique url for each tenant
           example: subscripify
-        createdBy:
-          maxLength: 30
-          pattern: ".[a-z][0-9][-]"
+        publicServicesConfig:
+          maxLength: 32
+          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
+            -[0-9a-fA-F]{12}$"
           type: string
-          description: "the identity UUID of the individual that created the tenant,\
-            \ can contain a service principal id"
-        tenantType:
-          maxLength: 30
-          pattern: super|lord|main
+          description: The services config UUID to use for the main-tenant's public
+            services. The services config UUID  used must be a publicServices UUID
+            and belong to the liege tenant
+        subscripifyDeploymentCloudLocation:
+          maxLength: 32
+          pattern: azure
           type: string
-          description: The tenant type being created
-          example: super
+          description: The cloud provider to deploy to. e.g. The only cloud provider
+            supported (currently) is azure.
       additionalProperties: false
     UnauthorizedError:
       type: object
@@ -159,6 +197,13 @@ components:
       example:
         message: not authorized to view this resource
         responseCode: 401
+    tenants_body:
+      discriminator:
+        propertyName: TenantType
+      oneOf:
+      - $ref: '#/components/schemas/lordTenantIntake'
+      - $ref: '#/components/schemas/superTenantIntake'
+      - $ref: '#/components/schemas/mainTenantIntake'
   responses:
     default:
       description: Unexpected error

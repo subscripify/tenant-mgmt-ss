@@ -14,7 +14,7 @@ type iTenant interface {
 	setTenantType(subscriptionConfigId string)
 	setCreatedBy(userIdentifier string)
 	setCreateDate()
-	GetTenant() (*tenant, error)
+	GetTenant() (string, error)
 }
 
 type tenant struct {
