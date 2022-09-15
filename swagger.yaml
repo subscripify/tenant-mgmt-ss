@@ -56,6 +56,7 @@ paths:
               $ref: '#/components/schemas/lordTenantCreateBody'
         required: true
       responses:
+        
         "200":
           description: Successful operation returns full tenant data including generated
             felids
@@ -64,47 +65,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/lordTenantCreateBody'
         "401":
-          description: Authorization Required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/401"
         "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/403"
         "405":
-          description: Invalid input
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/405"
         "406":
-          description: Improper Protocol
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/406"
         "415":
-          description: Improper media type
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/415"
         "429":
-          description: too many requests
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/429"
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/default"
       security:
       - tenant_auth:
         - write:lord-tenants
@@ -114,8 +87,8 @@ paths:
       tags:
       - tenants
       summary: Add a new super tenant
-      description: Adds a new super tenant to the subscripify tenant system. This
-        will start a new Kubernetes cluster   on the selected cloud service
+      description: Adds a new super tenant to the subscripify tenant system. This will
+        start a new Kubernetes cluster   on the selected cloud service
       operationId: addSuperTenant
       requestBody:
         description: All data required to start a new tenant
@@ -125,6 +98,7 @@ paths:
               $ref: '#/components/schemas/superTenantCreateBody'
         required: true
       responses:
+        
         "200":
           description: Successful operation returns full tenant data including generated
             felids
@@ -133,57 +107,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/superTenantCreateBody'
         "401":
-          description: Authorization Required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/401"
         "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/403"
         "405":
-          description: Invalid input
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/405"
         "406":
-          description: Improper Protocol
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/406"
         "415":
-          description: Improper media type
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/415"
         "429":
-          description: too many requests
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/429"
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/default"
       security:
       - tenant_auth:
         - write:lord-tenants
         - read:lord-tenants
+        - write:super-tenants
+        - read:super-tenants
   /tenants/main:
     post:
       tags:
       - tenants
       summary: Add a new main tenant
-      description: Adds a new main tenant to the subscripify tenant system.
+      description: Adds a new main tenant to the subscripify tenant system. 
       operationId: addMainTenant
       requestBody:
         description: All data required to start a new tenant
@@ -192,7 +140,7 @@ paths:
             schema:
               $ref: '#/components/schemas/mainTenantCreateBody'
         required: true
-      responses:
+      responses:  
         "200":
           description: Successful operation returns full tenant data including generated
             felids
@@ -201,125 +149,95 @@ paths:
               schema:
                 $ref: '#/components/schemas/mainTenantCreateBody'
         "401":
-          description: Authorization Required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/401"
         "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/403"
         "405":
-          description: Invalid input
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/405"
         "406":
-          description: Improper Protocol
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/406"
         "415":
-          description: Improper media type
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/415"
         "429":
-          description: too many requests
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/429"
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+          $ref: "#/components/responses/default"
       security:
       - tenant_auth:
         - write:lord-tenants
         - read:lord-tenants
+        - write:super-tenants
+        - read:super-tenants
+        - write:main-tenants
+        - read:main-tenants
   /tenants/{tenantGuid}:
     get:
-      tags:
-      - tenants
       summary: returns a tenant
       description: returns a tenant
+      tags:
+        - "tenants"
       operationId: getTenant
       parameters:
-      - name: tenantGuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maxLength: 32
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
-          type: string
-          description: The services config UUID to use for the lord tenant. Must be
-            a valid services config UUID
+        - name: tenantGuid
+          in: path
+          required: true
+          schema:
+            maxLength: 32
+            pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
+              -[0-9a-fA-F]{12}$"
+            type: string
+            description: The services config UUID to use for the lord tenant. Must
+              be a valid services config UUID
       responses:
-        "200":
-          description: return tenant
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/mainTenantCreateBody'
-    delete:
-      tags:
-      - tenants
-      summary: removes a tenant
-      description: removes a tenant
-      operationId: deleteTenant
-      parameters:
-      - name: tenantGuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maxLength: 32
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
-          type: string
-          description: The services config UUID to use for the lord tenant. Must be
-            a valid services config UUID
-      responses:
-        "200":
+        '200':
           description: return tenant
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/mainTenantCreateBody'
     patch:
-      tags:
-      - tenants
       summary: updates a tenant
       description: updates a tenant
+      tags:
+        - "tenants"
       operationId: updateTenant
       parameters:
-      - name: tenantGuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maxLength: 32
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
-          type: string
-          description: The services config UUID to use for the lord tenant. Must be
-            a valid services config UUID
+        - name: tenantGuid
+          in: path
+          required: true
+          schema:
+            maxLength: 32
+            pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
+              -[0-9a-fA-F]{12}$"
+            type: string
+            description: The services config UUID to use for the lord tenant. Must
+              be a valid services config UUID
       responses:
-        "200":
+        '200':
+          description: return tenant
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mainTenantCreateBody'
+    delete:
+      summary: removes a tenant
+      description: removes a tenant
+      tags:
+        - "tenants"
+      operationId: deleteTenant
+      parameters:
+        - name: tenantGuid
+          in: path
+          required: true
+          schema:
+            maxLength: 32
+            pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
+              -[0-9a-fA-F]{12}$"
+            type: string
+            description: The services config UUID to use for the lord tenant. Must
+              be a valid services config UUID
+      responses:
+        '200':
           description: return tenant
           content:
             application/json:
@@ -331,9 +249,9 @@ components:
       required:
       - internalServicesConfig
       - publicServicesConfig
+      - superServicesConfig
       - subdomain
       - subscripifyDeploymentCloudLocation
-      - superServicesConfig
       - tenantType
       type: object
       properties:
@@ -342,8 +260,8 @@ components:
           pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
             -[0-9a-fA-F]{12}$"
           type: string
-          description: The services config UUID to use for the lord tenant. Must be
-            a valid services config UUID
+          description: The services config UUID to use for the lord tenant. Must
+            be a valid services config UUID
         superServicesConfig:
           maxLength: 32
           pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
@@ -373,18 +291,12 @@ components:
           description: The cloud provider to deploy to. e.g. The only cloud provider
             supported (currently) is azure.
       additionalProperties: false
-      example:
-        publicServicesConfig: publicServicesConfig
-        internalServicesConfig: internalServicesConfig
-        subdomain: subscripify
-        superServicesConfig: superServicesConfig
-        subscripifyDeploymentCloudLocation: subscripifyDeploymentCloudLocation
     superTenantCreateBody:
       required:
+      - superServicesConfig
       - publicServicesConfig
       - subdomain
       - subscripifyDeploymentCloudLocation
-      - superServicesConfig
       - tenantType
       type: object
       properties:
@@ -425,12 +337,6 @@ components:
           description: The cloud provider to deploy to. e.g. The only cloud provider
             supported (currently) is azure.
       additionalProperties: false
-      example:
-        tenantType: tenantType
-        publicServicesConfig: publicServicesConfig
-        subdomain: subscripify
-        superServicesConfig: superServicesConfig
-        subscripifyDeploymentCloudLocation: subscripifyDeploymentCloudLocation
     mainTenantCreateBody:
       required:
       - publicServicesConfig
@@ -469,11 +375,6 @@ components:
           description: The cloud provider to deploy to. e.g. The only cloud provider
             supported (currently) is azure.
       additionalProperties: false
-      example:
-        tenantType: tenantType
-        publicServicesConfig: publicServicesConfig
-        subdomain: subscripify
-        subscripifyDeploymentCloudLocation: subscripifyDeploymentCloudLocation
     UnauthorizedError:
       type: object
       properties:
@@ -490,13 +391,14 @@ components:
       example:
         message: not authorized to view this resource
         responseCode: 401
+    
   responses:
     "401":
-      description: Authorization Required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/UnauthorizedError'
+          description: Authorization Required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
     "403":
       description: Forbidden
       content:
