@@ -10,22 +10,52 @@
 package tenantapi
 
 import (
+	"encoding/json"
+	"fmt"
+	"log"
 	"net/http"
 )
 
 func AddLordTenant(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
+	defer r.Body.Close()
+	dec := json.NewDecoder(r.Body)
+	var lordTenantCreateBody LordTenantCreateBody
+	if err := dec.Decode(&lordTenantCreateBody); err != nil {
+		log.Printf("error: bad JSON: %s", err)
+		http.Error(w, "bad json", http.StatusBadRequest)
+		return
+	}
+	fmt.Fprintln(w, lordTenantCreateBody)
 }
 
 func AddMainTenant(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
+	defer r.Body.Close()
+	dec := json.NewDecoder(r.Body)
+	var mainTenantCreateBody MainTenantCreateBody
+	if err := dec.Decode(&mainTenantCreateBody); err != nil {
+		log.Printf("error: bad JSON: %s", err)
+		http.Error(w, "bad json", http.StatusBadRequest)
+		return
+	}
+	fmt.Fprintln(w, mainTenantCreateBody)
 }
 
 func AddSuperTenant(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
+	defer r.Body.Close()
+	dec := json.NewDecoder(r.Body)
+	var superTenantCreateBody SuperTenantCreateBody
+	if err := dec.Decode(&superTenantCreateBody); err != nil {
+		log.Printf("error: bad JSON: %s", err)
+		http.Error(w, "bad json", http.StatusBadRequest)
+		return
+	}
+	fmt.Fprintln(w, superTenantCreateBody)
 }
 
 func DeleteTenant(w http.ResponseWriter, r *http.Request) {
