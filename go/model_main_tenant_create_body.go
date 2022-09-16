@@ -10,8 +10,6 @@
 package tenantapi
 
 type MainTenantCreateBody struct {
-	// Indicate which type of tenant one is spinning up. Main Tenants require only a public services config.  Super tenants require a super services config and a public config. Lord Tenants require super, public and internal services  configs.
-	TenantType string `json:"tenantType"`
 	// The subdomain name string which used for the services namespace of the tenant and  providing unique url for each tenant
 	Subdomain string `json:"subdomain"`
 	// The services config UUID to use for the main-tenant's public services. The services config UUID  used must be a publicServices UUID and belong to the liege tenant

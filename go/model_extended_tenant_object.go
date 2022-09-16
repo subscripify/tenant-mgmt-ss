@@ -9,10 +9,15 @@
  */
 package tenantapi
 
-// Authentication information is missing or invalid
-type UnauthorizedError struct {
+type ExtendedTenantObject struct {
 
-	ResponseCode int32 `json:"responseCode,omitempty"`
+	TenantUUID string `json:"tenantUUID,omitempty"`
+	// The name of the organization at time of tenant creation and the alias used for searching by org name.
+	OrgName string `json:"orgName,omitempty"`
+	// The name prefix for the Kubernetes namespaces and cloud resources that make up this tenant.
+	KubeNamespace string `json:"kubeNamespace,omitempty"`
+	// The UUID of this tenant's owner tenant
+	LiegeUUID string `json:"liegeUUID,omitempty"`
 
-	Message string `json:"message,omitempty"`
+	CreateTimestamp string `json:"createTimestamp,omitempty"`
 }

@@ -9,7 +9,17 @@
  */
 package tenantapi
 
-type SuperTenantCreateBody struct {
+type SuperTenantObject struct {
+
+	TenantUUID string `json:"tenantUUID,omitempty"`
+	// The name of the organization at time of tenant creation and the alias used for searching by org name.
+	OrgName string `json:"orgName,omitempty"`
+	// The name prefix for the Kubernetes namespaces and cloud resources that make up this tenant.
+	KubeNamespace string `json:"kubeNamespace,omitempty"`
+	// The UUID of this tenant's owner tenant
+	LiegeUUID string `json:"liegeUUID,omitempty"`
+
+	CreateTimestamp string `json:"createTimestamp,omitempty"`
 	// The services config UUID to use for the super-tenant. Must be a valid services config UUID
 	SuperServicesConfig string `json:"superServicesConfig"`
 	// Indicate which type of tenant one is spinning up. Main Tenants require only a public services config.  Super tenants require a super services config and a public config. Lord Tenants require super, public and internal services  configs.

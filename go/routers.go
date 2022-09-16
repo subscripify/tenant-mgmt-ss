@@ -79,21 +79,28 @@ var routes = Routes{
 	Route{
 		"DeleteTenant",
 		strings.ToUpper("Delete"),
-		"/tenants/{tenantGuid}",
+		"/tenants/{targetTenantGuid}",
 		DeleteTenant,
 	},
 
 	Route{
 		"GetTenant",
 		strings.ToUpper("Get"),
-		"/tenants/{tenantGuid}",
+		"/tenants/{targetTenantGuid}",
 		GetTenant,
+	},
+
+	Route{
+		"SearchTenant",
+		strings.ToUpper("Get"),
+		"/tenants/search",
+		SearchTenant,
 	},
 
 	Route{
 		"UpdateTenant",
 		strings.ToUpper("Patch"),
-		"/tenants/{tenantGuid}",
+		"/tenants/{targetTenantGuid}",
 		UpdateTenant,
 	},
 }

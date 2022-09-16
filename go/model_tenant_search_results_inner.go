@@ -9,15 +9,11 @@
  */
 package tenantapi
 
-type SuperTenantCreateBody struct {
-	// The services config UUID to use for the super-tenant. Must be a valid services config UUID
-	SuperServicesConfig string `json:"superServicesConfig"`
-	// Indicate which type of tenant one is spinning up. Main Tenants require only a public services config.  Super tenants require a super services config and a public config. Lord Tenants require super, public and internal services  configs.
+type TenantSearchResultsInner struct {
+
+	TenantUUID string `json:"tenantUUID,omitempty"`
+	// The name of the organization at time of tenant creation and the alias used for searching by org name.
+	OrgName string `json:"orgName,omitempty"`
+	// Indicate which type of tenant. Lord tenants will see both \"super\" and \"main\" tenant types. Super tenants will only see \"main\" tenant types.
 	TenantType string `json:"tenantType,omitempty"`
-	// The subdomain name string which used for the services namespace of the tenant and  providing unique url for each tenant
-	Subdomain string `json:"subdomain"`
-	// The services config UUID to use for the main-tenant's public services. The services config UUID  used must be a publicServices UUID and belong to the liege tenant
-	PublicServicesConfig string `json:"publicServicesConfig"`
-	// The cloud provider to deploy to. e.g. The only cloud provider supported (currently) is azure.
-	SubscripifyDeploymentCloudLocation string `json:"subscripifyDeploymentCloudLocation"`
 }

@@ -46,30 +46,32 @@ paths:
       - tenants
       summary: Add a new lord tenant
       description: Adds a new lord tenant to the subscripify tenant system. This will
-        start a new Kubernetes cluster   on the selected cloud service
+        start a new Kubernetes cluster on the selected cloud service
       operationId: addLordTenant
       requestBody:
-        description: All data required to start a new tenant
+        description: All data required to start a new lord tenant
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/lordTenantCreateBody'
         required: true
       responses:
-        
         "200":
-          description: Successful operation returns full tenant data including generated
-            felids
+          description: Successful operation returns the new object UUID
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/lordTenantCreateBody'
+                $ref: '#/components/schemas/tenantUUIDCreatedObject'
         "401":
           $ref: "#/components/responses/401"
         "403":
           $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
         "405":
           $ref: "#/components/responses/405"
+        "409":
+          $ref: "#/components/responses/409"
         "406":
           $ref: "#/components/responses/406"
         "415":
@@ -81,37 +83,39 @@ paths:
       security:
       - tenant_auth:
         - write:lord-tenants
-        - read:lord-tenants
   /tenants/super:
     post:
       tags:
       - tenants
       summary: Add a new super tenant
-      description: Adds a new super tenant to the subscripify tenant system. This will
-        start a new Kubernetes cluster   on the selected cloud service
+      description: Adds a new super tenant to the selected liege tenant in liegeUUID header parameter.
       operationId: addSuperTenant
+      parameters:
+        - $ref: "#/components/parameters/liegeUUID"
       requestBody:
-        description: All data required to start a new tenant
+        description: All data required to start a new super tenant
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/superTenantCreateBody'
         required: true
-      responses:
-        
+      responses: 
         "200":
-          description: Successful operation returns full tenant data including generated
-            felids
+          description: Successful operation returns the new object UUID
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/superTenantCreateBody'
+                $ref: '#/components/schemas/tenantUUIDCreatedObject'
         "401":
           $ref: "#/components/responses/401"
         "403":
           $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
         "405":
           $ref: "#/components/responses/405"
+        "409":
+          $ref: "#/components/responses/409"
         "406":
           $ref: "#/components/responses/406"
         "415":
@@ -123,18 +127,18 @@ paths:
       security:
       - tenant_auth:
         - write:lord-tenants
-        - read:lord-tenants
         - write:super-tenants
-        - read:super-tenants
   /tenants/main:
     post:
       tags:
       - tenants
       summary: Add a new main tenant
-      description: Adds a new main tenant to the subscripify tenant system. 
+      description: Adds a new main tenant to the selected liege tenant in liegeUUID header parameter. 
       operationId: addMainTenant
+      parameters:
+        - $ref: "#/components/parameters/liegeUUID"
       requestBody:
-        description: All data required to start a new tenant
+        description: All data required to start a new main tenant
         content:
           application/json:
             schema:
@@ -142,18 +146,21 @@ paths:
         required: true
       responses:  
         "200":
-          description: Successful operation returns full tenant data including generated
-            felids
+          description: Successful operation returns the new object UUID
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/mainTenantCreateBody'
+                $ref: '#/components/schemas/tenantUUIDCreatedObject'
         "401":
           $ref: "#/components/responses/401"
         "403":
           $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
         "405":
           $ref: "#/components/responses/405"
+        "409":
+          $ref: "#/components/responses/409"
         "406":
           $ref: "#/components/responses/406"
         "415":
@@ -165,12 +172,9 @@ paths:
       security:
       - tenant_auth:
         - write:lord-tenants
-        - read:lord-tenants
         - write:super-tenants
-        - read:super-tenants
         - write:main-tenants
-        - read:main-tenants
-  /tenants/{tenantGuid}:
+  /tenants/{targetTenantGuid}:
     get:
       summary: returns a tenant
       description: returns a tenant
@@ -178,23 +182,35 @@ paths:
         - "tenants"
       operationId: getTenant
       parameters:
-        - name: tenantGuid
-          in: path
-          required: true
-          schema:
-            maxLength: 32
-            pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-              -[0-9a-fA-F]{12}$"
-            type: string
-            description: The services config UUID to use for the lord tenant. Must
-              be a valid services config UUID
+        - $ref: "#/components/parameters/targetTenantUUID"
       responses:
         '200':
           description: return tenant
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/mainTenantCreateBody'
+                oneOf:
+                - $ref: "#/components/schemas/lordTenantObject"
+                - $ref: "#/components/schemas/superTenantObject"
+                - $ref: "#/components/schemas/mainTenantObject"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "409":
+          $ref: "#/components/responses/409"
+        "406":
+          $ref: "#/components/responses/406"
+        "415":
+          $ref: "#/components/responses/415"
+        "429":
+          $ref: "#/components/responses/429"
+        default:
+          $ref: "#/components/responses/default"
     patch:
       summary: updates a tenant
       description: updates a tenant
@@ -218,7 +234,28 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/mainTenantCreateBody'
+                oneOf:
+                - $ref: "#/components/schemas/lordTenantObject"
+                - $ref: "#/components/schemas/superTenantObject"
+                - $ref: "#/components/schemas/mainTenantObject"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "409":
+          $ref: "#/components/responses/409"
+        "406":
+          $ref: "#/components/responses/406"
+        "415":
+          $ref: "#/components/responses/415"
+        "429":
+          $ref: "#/components/responses/429"
+        default:
+          $ref: "#/components/responses/default"
     delete:
       summary: removes a tenant
       description: removes a tenant
@@ -242,8 +279,107 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/mainTenantCreateBody'
+                oneOf:
+                - $ref: "#/components/schemas/lordTenantObject"
+                - $ref: "#/components/schemas/superTenantObject"
+                - $ref: "#/components/schemas/mainTenantObject"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "409":
+          $ref: "#/components/responses/409"
+        "406":
+          $ref: "#/components/responses/406"
+        "415":
+          $ref: "#/components/responses/415"
+        "429":
+          $ref: "#/components/responses/429"
+        default:
+          $ref: "#/components/responses/default"
+  /tenants/search:
+    get:
+      tags: 
+      - tenants
+      summary: Tenant Search
+      description: Search for tenants based upon the input parameters available
+      operationId: searchTenant
+      parameters:
+        - $ref: "#/components/parameters/liegeUUID"
+      responses: 
+        "200":
+          description: Successful operation returns full tenant data including generated
+            felids
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/tenantSearchResults"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "409":
+          $ref: "#/components/responses/409"
+        "406":
+          $ref: "#/components/responses/406"
+        "415":
+          $ref: "#/components/responses/415"
+        "429":
+          $ref: "#/components/responses/429"
+        default:
+          $ref: "#/components/responses/default"
 components:
+  parameters:
+    liegeUUID:
+      name: liegeUUID
+      description: "Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required \
+        \ and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or \ 
+        \ deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. \
+        \ <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the \
+        \ appropriate permissions."
+      in: header
+      required: true
+      schema: 
+        type: string
+        pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
+          -[0-9a-fA-F]{12}$"
+    targetTenantUUID:
+      name: targetTenantUUID
+      in: path
+      required: true
+      schema:
+        maxLength: 32
+        pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
+          -[0-9a-fA-F]{12}$"
+        type: string
+        description: "This is the UUID of the target tenant. \ 
+          \ The target tenant must belong to the liege tenant in the liegeUUID header."
+    searchSubdomain:
+      name: subdmn
+      in: query
+      required: false
+      schema:
+        maxLength: 61
+        pattern: ^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$
+        type: string
+        description: "A partial or whole subdomain name. Use of this field for search adheres to naming rules outlined in \ 
+          \ <a href='https://www.rfc-editor.org/rfc/rfc3986#section-3.2.2'>RFC3986</a> for subdomains."
+    searchOrgName:
+      name: orgName
+      in: query
+      required: false
+      schema:
+        maxLength: 20
+        type: string
+        description: "A partial or whole organization name/ alias given when the tenant was created."
   schemas:
     lordTenantCreateBody:
       required:
@@ -252,7 +388,6 @@ components:
       - superServicesConfig
       - subdomain
       - subscripifyDeploymentCloudLocation
-      - tenantType
       type: object
       properties:
         internalServicesConfig:
@@ -297,7 +432,6 @@ components:
       - publicServicesConfig
       - subdomain
       - subscripifyDeploymentCloudLocation
-      - tenantType
       type: object
       properties:
         superServicesConfig:
@@ -342,17 +476,8 @@ components:
       - publicServicesConfig
       - subdomain
       - subscripifyDeploymentCloudLocation
-      - tenantType
       type: object
       properties:
-        tenantType:
-          maxLength: 5
-          pattern: ^super|lord|main$
-          type: string
-          description: "Indicate which type of tenant one is spinning up. Main Tenants\
-            \ require only a public services config.  Super tenants require a super\
-            \ services config and a public config. Lord Tenants require super, public\
-            \ and internal services  configs."
         subdomain:
           maxLength: 30
           pattern: ".[a-z][0-9][-]"
@@ -375,14 +500,83 @@ components:
           description: The cloud provider to deploy to. e.g. The only cloud provider
             supported (currently) is azure.
       additionalProperties: false
-    UnauthorizedError:
+    tenantUUIDCreatedObject:
+      type: object
+      properties:
+        tenantUUID:
+          type: string
+          maxLength: 32
+          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
+            -[0-9a-fA-F]{12}$"
+    tenantSearchResults:
+      type: array
+      items:
+        type: object
+        properties:
+          tenantUUID:
+            type: string
+            maxLength: 32
+            pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
+              -[0-9a-fA-F]{12}$"
+            readOnly: true
+          orgName:
+            type: string
+            maxLength: 32
+            description: The name of the organization at time of tenant creation and the alias used for searching by org name.
+          tenantType:
+            maxLength: 5
+            pattern: ^super|lord|main$
+            type: string
+            description: Indicate which type of tenant. Lord tenants will see both "super" and "main" tenant types. 
+              Super tenants will only see "main" tenant types.
+    extendedTenantObject:
+      type: object
+      properties:
+        tenantUUID:
+          type: string
+          maxLength: 32
+          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
+            -[0-9a-fA-F]{12}$"
+          readOnly: true
+        orgName:
+          type: string
+          maxLength: 32
+          description: The name of the organization at time of tenant creation and the alias used for searching by org name.
+        kubeNamespace:
+          type: string
+          maxLength: 32
+          description: The name prefix for the Kubernetes namespaces and cloud resources that make up this tenant.
+          readOnly: true
+        liegeUUID:
+          type: string
+          maxLength: 32
+          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
+            -[0-9a-fA-F]{12}$"
+          description: The UUID of this tenant's owner tenant
+          readOnly: true
+        createTimestamp:
+          type: string
+          readOnly: true
+    mainTenantObject:
+      allOf:
+        - $ref: "#/components/schemas/mainTenantCreateBody"
+        - $ref: "#/components/schemas/extendedTenantObject"
+    superTenantObject:
+      allOf:
+        - $ref: "#/components/schemas/superTenantCreateBody"
+        - $ref: "#/components/schemas/extendedTenantObject"   
+    lordTenantObject:
+      allOf:
+        - $ref: "#/components/schemas/lordTenantCreateBody"
+        - $ref: "#/components/schemas/extendedTenantObject"
+    httpResponseError:
       type: object
       properties:
         responseCode:
           type: integer
           example: 401
         message:
-          maxLength: 60
+          maxLength: 200
           pattern: ".[a-z][0-9]"
           type: string
           example: not authorized to view this resource
@@ -391,60 +585,71 @@ components:
       example:
         message: not authorized to view this resource
         responseCode: 401
-    
   responses:
     "401":
           description: Authorization Required
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
+                $ref: '#/components/schemas/httpResponseError'
     "403":
       description: Forbidden
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/UnauthorizedError'
+            $ref: '#/components/schemas/httpResponseError'
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpResponseError'
     "405":
       description: Invalid input
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/UnauthorizedError'
+            $ref: '#/components/schemas/httpResponseError'
     "406":
       description: Improper Protocol
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/UnauthorizedError'
+            $ref: '#/components/schemas/httpResponseError'
+    "409":
+      description: Resource Already Exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpResponseError'
     "415":
       description: Improper media type
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/UnauthorizedError'
+            $ref: '#/components/schemas/httpResponseError'
     "429":
       description: too many requests
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/UnauthorizedError'
+            $ref: '#/components/schemas/httpResponseError'
     default:
       description: Unexpected error
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/UnauthorizedError'
-  securitySchemes:
-    tenant_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
-          scopes:
-            write:pets: modify pets in your account
-            read:pets: read your pets
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header
+            $ref: '#/components/schemas/httpResponseError'
+  # securitySchemes:
+  #   tenant_auth:
+  #     type: oauth2
+  #     flows:
+  #       implicit:
+  #         authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+  #         scopes:
+  #           write:pets: modify pets in your account
+  #           read:pets: read your pets
+  #   api_key:
+  #     type: apiKey
+  #     name: api_key
+  #     in: header

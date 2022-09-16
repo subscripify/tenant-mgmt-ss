@@ -3,7 +3,7 @@
   <br>
   <a href="www.subscripify.com"><img src="https://www.subscripify.com/images/logo_white_background.jpg" alt="Markdownify" width="200"></a>
   <br>
-  Subscripify's Tenant-Spinup service
+  Subscripify's Tenant Spin Up service
   <br>
 </h1>
 
