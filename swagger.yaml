@@ -406,7 +406,7 @@ components:
             be a valid services config UUID
         subdomain:
           maxLength: 30
-          pattern: ".[a-z][0-9][-]"
+          pattern: "^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$"
           type: string
           description: The subdomain name string which used for the services namespace
             of the tenant and  providing unique url for each tenant
@@ -451,7 +451,7 @@ components:
             \ and internal services  configs."
         subdomain:
           maxLength: 30
-          pattern: ".[a-z][0-9][-]"
+          pattern: "^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$"
           type: string
           description: The subdomain name string which used for the services namespace
             of the tenant and  providing unique url for each tenant
@@ -480,7 +480,7 @@ components:
       properties:
         subdomain:
           maxLength: 30
-          pattern: ".[a-z][0-9][-]"
+          pattern: "^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$"
           type: string
           description: The subdomain name string which used for the services namespace
             of the tenant and  providing unique url for each tenant

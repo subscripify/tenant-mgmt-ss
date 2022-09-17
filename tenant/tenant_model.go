@@ -2,6 +2,7 @@ package tenant
 
 import (
 	"fmt"
+	"regexp"
 	"time"
 
 	"github.com/google/uuid"
@@ -17,6 +18,7 @@ type iTenant interface {
 	setPrivateServicesConfig(publicServicesConfig uuid.UUID) error
 	setCustomServicesConfig(publicServicesConfig uuid.UUID) error
 	setCloudLocation(cloudLocation CloudLocation) error
+	setTenantType(tenantType TenantType) error
 	setCreatedBy(userIdentifier string) error
 	setCreateTimestamp()
 	GetTenant() (string, error)
@@ -26,8 +28,9 @@ type tenant struct {
 	tenantUUID             uuid.UUID
 	orgName                string
 	subdomain              string
+	secondaryDomain        string
+	topLevelDomain         string
 	kubeNamespacePrefix    string
-	tenantType             TenantType
 	internalServicesConfig uuid.UUID
 	superServicesConfig    uuid.UUID
 	publicServicesConfig   uuid.UUID
@@ -35,24 +38,26 @@ type tenant struct {
 	customServicesConfig   uuid.UUID
 	cloudLocation          CloudLocation
 	leigeUUID              uuid.UUID
+	isLordTenant           bool
+	isSuperTenant          bool
 	createTimestamp        time.Time
 	createdBy              string
 }
 
-type TenantType int
+type TenantType string
 
 const (
-	LordTenant TenantType = iota
-	SuperTenant
-	MainTenant
+	LordTenant  TenantType = "lord"
+	SuperTenant            = "super"
+	MainTenant             = "main"
 )
 
-type CloudLocation int
+type CloudLocation string
 
 const (
-	Azure CloudLocation = iota
-	ACS
-	GCP
+	Azure CloudLocation = "Azure"
+	ACS                 = "ACS"
+	GCP                 = "GCP"
 )
 
 func (t *tenant) setNewTenantUUID() error {
@@ -67,14 +72,21 @@ func (t *tenant) setOrgName(orgName string) {
 
 // the subdomain name must be unique within the same lord tenant. A lord tenant ties to a second level domain (eg. subscripify.com)
 func (t *tenant) setSubdomainName(subdomain string) error {
-	t.subdomain = subdomain
-	return nil
+	pattern := "^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$"
+	r := regexp.MustCompile(pattern)
+	if r.MatchString(subdomain) {
+		t.subdomain = subdomain
+		t.kubeNamespacePrefix = subdomain
+		return nil
+	}
+	err := fmt.Errorf("Not a valid subdomain name - must match pattern '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$'")
+	return err
 }
 
 // all lord tenants require this config other types of tenants this is null - it refers to the configuration files for internal services available to this tenant
 func (t *tenant) setInternalServicesConfig(internalServicesConfig uuid.UUID) error {
 
-	if t.tenantType != LordTenant {
+	if !t.isLordTenant {
 		err := fmt.Errorf("invalid tenant type for setting internal services - lord tenants only")
 		return err
 	}
@@ -85,7 +97,7 @@ func (t *tenant) setInternalServicesConfig(internalServicesConfig uuid.UUID) err
 // all lord tenants and super tenants require this config other types of tenants this is null - it refers to the configuration files for super services available to this tenant
 func (t *tenant) setSuperServicesConfig(superServicesConfig uuid.UUID) error {
 
-	if t.tenantType == MainTenant {
+	if !t.isLordTenant && !t.isSuperTenant {
 		err := fmt.Errorf("invalid tenant type for setting super services - lord tenants and super tenants only")
 		return err
 	}
@@ -103,7 +115,7 @@ func (t *tenant) setPublicServicesConfig(publicServicesConfig uuid.UUID) error {
 // all all Super Tenants require this config and is set at time of creation - it refers to the private services oAuth/access configuration for the super tenant
 func (t *tenant) setPrivateServicesConfig(publicServicesConfig uuid.UUID) error {
 
-	if t.tenantType != SuperTenant {
+	if !t.isSuperTenant {
 		err := fmt.Errorf("invalid tenant type for setting Private Services Config - super tenants only")
 		return err
 	}
@@ -114,7 +126,7 @@ func (t *tenant) setPrivateServicesConfig(publicServicesConfig uuid.UUID) error 
 // all all super and main tenants require this config and is set at time of creation - it refers to the custom services api oAuth/access configuration for this tenant
 func (t *tenant) setCustomServicesConfig(publicServicesConfig uuid.UUID) error {
 
-	if t.tenantType == LordTenant {
+	if t.isLordTenant {
 		err := fmt.Errorf("invalid tenant type for setting Private Services Config - super tenants and main tenants only")
 		return err
 	}
@@ -125,6 +137,25 @@ func (t *tenant) setCustomServicesConfig(publicServicesConfig uuid.UUID) error {
 // limited to Azure, ACS, GCP
 func (t *tenant) setCloudLocation(cloudLocation CloudLocation) error {
 	t.cloudLocation = cloudLocation
+	return nil
+}
+
+// sets the tenant type booleans in the database based upon the passed value
+func (t *tenant) setTenantType(tenantType TenantType) error {
+
+	switch tenantType {
+	case LordTenant:
+		t.isLordTenant = true
+		t.isSuperTenant = false
+	case SuperTenant:
+		t.isLordTenant = false
+		t.isSuperTenant = true
+	case MainTenant:
+		t.isLordTenant = false
+		t.isSuperTenant = false
+	default:
+		return fmt.Errorf("invalid tenant type")
+	}
 	return nil
 }
 

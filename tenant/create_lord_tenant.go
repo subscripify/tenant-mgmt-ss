@@ -4,13 +4,22 @@ type lordTenant struct {
 	tenant
 }
 
-func createLordTenant(orgName string, subdomain string, createdBy string) iTenant {
+func createLordTenant(
+	orgName string,
+	subdomain string,
+	internalServicesConfigAlias string,
+	superServicesConfigAlias string,
+	publicServicesConfigAlias string,
+	cloudLocation CloudLocation,
+	createdBy string) (iTenant, error) {
 	var l lordTenant
+
 	l.setNewTenantUUID()
+	l.setTenantType(LordTenant)
 	l.setCreatedBy(createdBy)
 	l.setSubdomainName(subdomain)
 
-	return &l
+	return &l, nil
 	// return &lordTenant{
 	// 	tenant: tenant{
 	// 		orgName:             orgName,
