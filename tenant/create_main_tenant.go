@@ -2,7 +2,6 @@ package tenant
 
 import (
 	"fmt"
-	"time"
 )
 
 type mainTenant struct {
@@ -15,15 +14,10 @@ func (t mainTenant) String() string {
 }
 
 func createMainTenant(orgName string, subdomain string, createdBy string) iTenant {
+
 	return &mainTenant{
 		tenant: tenant{
-			orgName:              orgName,
-			subdomain:            subdomain,
-			createdBy:            createdBy,
-			kubeNamespacePrefix:  "newKube",
-			subscriptionConfigId: "an id",
-			tenantType:           SuperTenant,
-			createDate:           time.Now(),
+			subdomain: "subscripify",
 		},
 	}
 }
