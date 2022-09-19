@@ -7,6 +7,8 @@ type lordTenant struct {
 func createLordTenant(
 	orgName string,
 	subdomain string,
+	secondaryDomain string,
+	topLevelDomain string,
 	internalServicesConfigAlias string,
 	superServicesConfigAlias string,
 	publicServicesConfigAlias string,
@@ -14,10 +16,23 @@ func createLordTenant(
 	createdBy string) (iTenant, error) {
 	var l lordTenant
 
-	l.setNewTenantUUID()
-	l.setTenantType(LordTenant)
-	l.setCreatedBy(createdBy)
-	l.setSubdomainName(subdomain)
+	newUUID := l.setNewTenantUUID()
+	l.setOrgName(orgName)
+	if err := l.setSubdomainName(subdomain); err != nil {
+		return nil, err
+	}
+	if err := l.setSecondaryDomainName(secondaryDomain); err != nil {
+		return nil, err
+	}
+	if err := l.setTopLevelDomain(topLevelDomain); err != nil {
+		return nil, err
+	}
+	if err := l.setTenantType(LordTenant); err != nil {
+		return nil, err
+	}
+	if err := l.setInternalServicesConfig(internalServicesConfigAlias); err != nil {
+		return nil, err
+	}
 
 	return &l, nil
 	// return &lordTenant{

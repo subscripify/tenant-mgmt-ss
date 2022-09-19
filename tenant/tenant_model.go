@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"regexp"
 	"time"
+	"tld"
 
+	"github.com/bombsimon/tld-validator"
 	"github.com/google/uuid"
 )
 
@@ -37,7 +39,7 @@ type tenant struct {
 	privateServicesConfig  uuid.UUID
 	customServicesConfig   uuid.UUID
 	cloudLocation          CloudLocation
-	leigeUUID              uuid.UUID
+	liegeUUID              uuid.UUID
 	isLordTenant           bool
 	isSuperTenant          bool
 	createTimestamp        time.Time
@@ -60,9 +62,10 @@ const (
 	GCP                 = "GCP"
 )
 
-func (t *tenant) setNewTenantUUID() error {
-	t.tenantUUID = uuid.New() //this is the only place in the application this value is created - but still check for duplicate - if error loop again - if loop three times return error
-	return nil
+// this is the only place in the application this value is created
+func (t *tenant) setNewTenantUUID() uuid.UUID {
+	t.tenantUUID = uuid.New()
+	return t.tenantUUID
 }
 
 // the org name does not need to be unique and is alias used for quick reference when searching
@@ -83,8 +86,43 @@ func (t *tenant) setSubdomainName(subdomain string) error {
 	return err
 }
 
+// sets the secondary domain - validates against proper naming conventions for domain names
+func (t *tenant) setSecondaryDomainName(secondaryDomain string) error {
+
+	if !(t.isLordTenant) {
+		err := fmt.Errorf("this value is only settable for a lord tenant - set tenant type to lord or set lord tenant value.")
+		return err
+	} else {
+		pattern := "^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$"
+		r := regexp.MustCompile(pattern)
+		if r.MatchString(secondaryDomain) {
+			t.secondaryDomain = secondaryDomain
+			return nil
+		} else {
+			err := fmt.Errorf("Not a valid domain name - must match pattern '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$'")
+			return err
+		}
+	}
+}
+
+// sets the top level domain - validates against ICANN/IANA list
+func (t *tenant) setTopLevelDomain(topLevelDomain string) error {
+	if !(t.isLordTenant) {
+		err := fmt.Errorf("this value is only settable for a lord tenant - set tenant type to lord or set lord tenant value.")
+		return err
+	} else {
+
+		if tld.IsValid(topLevelDomain) {
+			t.topLevelDomain = topLevelDomain
+			return nil
+		}
+		err := fmt.Errorf("not a valid top level domain - must be on this list https://data.iana.org/TLD/tlds-alpha-by-domain.txt")
+		return err
+	}
+}
+
 // all lord tenants require this config other types of tenants this is null - it refers to the configuration files for internal services available to this tenant
-func (t *tenant) setInternalServicesConfig(internalServicesConfig uuid.UUID) error {
+func (t *tenant) setInternalServicesConfig(internalServicesConfigAlias string.UUID) error {
 
 	if !t.isLordTenant {
 		err := fmt.Errorf("invalid tenant type for setting internal services - lord tenants only")
@@ -127,7 +165,7 @@ func (t *tenant) setPrivateServicesConfig(publicServicesConfig uuid.UUID) error 
 func (t *tenant) setCustomServicesConfig(publicServicesConfig uuid.UUID) error {
 
 	if t.isLordTenant {
-		err := fmt.Errorf("invalid tenant type for setting Private Services Config - super tenants and main tenants only")
+		err := fmt.Errorf("invalid tenant type for setting Custom Services Config - super tenants and main tenants only")
 		return err
 	}
 	t.publicServicesConfig = publicServicesConfig
@@ -136,6 +174,10 @@ func (t *tenant) setCustomServicesConfig(publicServicesConfig uuid.UUID) error {
 
 // limited to Azure, ACS, GCP
 func (t *tenant) setCloudLocation(cloudLocation CloudLocation) error {
+	if cloudLocation != Azure || cloudLocation != ACS || cloudLocation != GCP {
+		err := fmt.Errorf("this is not a supported cloud provider")
+		return err
+	}
 	t.cloudLocation = cloudLocation
 	return nil
 }
@@ -154,7 +196,8 @@ func (t *tenant) setTenantType(tenantType TenantType) error {
 		t.isLordTenant = false
 		t.isSuperTenant = false
 	default:
-		return fmt.Errorf("invalid tenant type")
+		err := fmt.Errorf("invalid tenant type")
+		return err
 	}
 	return nil
 }
