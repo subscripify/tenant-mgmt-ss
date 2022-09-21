@@ -10,18 +10,25 @@ type superTenant struct {
 
 // Define a Stringer interface that gives a string representation of the type
 func (t superTenant) String() string {
-	return fmt.Sprintf("This is a organization named %s", t.orgName)
+	return fmt.Sprintf("This is a organization named %s", t.alias)
 }
 
-func createSuperTenant(orgName string, subdomain string, createdBy string) iTenant {
+func createSuperTenant(
+	tenantAlias string,
+	subdomain string,
+	superServicesConfig string,
+	publicServicesConfig string,
+	privateAccessConfig string,
+	customAccessConfig string,
+	liegeUUID string,
+	lordUUID string,
+	createdBy string) iTenant {
 	return &superTenant{
 		tenant: tenant{
-			orgName:             orgName,
+			alias:               tenantAlias,
 			subdomain:           subdomain,
 			createdBy:           createdBy,
 			kubeNamespacePrefix: "newKube",
-
-			tenantType: SuperTenant,
 		},
 	}
 }

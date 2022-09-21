@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Private Services API  - OpenAPI 3.0
+  title: Private Services API  - OpenAPI 3.0 -work
   description: "This is the set of api endpoints to support access to Subscripify\
     \ Super Services. Super Services are those that are available to Subscripify's\
     \ super tenants. They provide higher capabilities to super tenants to manage across\

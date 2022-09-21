@@ -5,19 +5,22 @@ type lordTenant struct {
 }
 
 func createLordTenant(
-	orgName string,
-	subdomain string,
-	secondaryDomain string,
+	tenantAlias string,
 	topLevelDomain string,
-	internalServicesConfigAlias string,
-	superServicesConfigAlias string,
-	publicServicesConfigAlias string,
+	secondaryDomain string,
+	subdomain string,
+	lordServicesConfig string,
+	superServicesConfig string,
+	publicServicesConfig string,
 	cloudLocation CloudLocation,
 	createdBy string) (iTenant, error) {
 	var l lordTenant
 
-	newUUID := l.setNewTenantUUID()
-	l.setOrgName(orgName)
+	//parse the UUID strings to ensure that they are UUIDs
+
+	if err := l.setTenantType(LordTenant); err != nil {
+		return nil, err
+	}
 	if err := l.setSubdomainName(subdomain); err != nil {
 		return nil, err
 	}
@@ -27,10 +30,19 @@ func createLordTenant(
 	if err := l.setTopLevelDomain(topLevelDomain); err != nil {
 		return nil, err
 	}
-	if err := l.setTenantType(LordTenant); err != nil {
+	if err := l.setLordServicesConfig(lordServicesConfig); err != nil {
 		return nil, err
 	}
-	if err := l.setInternalServicesConfig(internalServicesConfigAlias); err != nil {
+	if err := l.setSuperServicesConfig(superServicesConfig); err != nil {
+		return nil, err
+	}
+	if err := l.setPublicServicesConfig(publicServicesConfig); err != nil {
+		return nil, err
+	}
+	if err := l.setCloudLocation(cloudLocation); err != nil {
+		return nil, err
+	}
+	if err := l.setCreatedBy(createdBy); err != nil {
 		return nil, err
 	}
 

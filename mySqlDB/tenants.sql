@@ -10,19 +10,19 @@ USE tenants;
 DROP TABLE IF EXISTS tenant;
 CREATE TABLE tenant (
   tenant_uuid                             BINARY(16) NOT NULL UNIQUE PRIMARY KEY,       -- the unique id for the tenant
-  org_name                                CHAR(36) NOT NULL,                            -- arbitrary alias used for search and easier search ui - this does not need to be the true name of the org
+  tenant_alias                            CHAR(36) NOT NULL,                            -- arbitrary alias used for search and easier search ui - this does not need to be the true name of the org
   top_level_domain                        CHAR(3)  NOT NULL,                            -- the top level domain (eg com, net, io, tv, etc.)
   secondary_domain                        CHAR(36) NOT NULL,                            -- every lord tenant must produce a secondary domain name (e.g. subscripify.com)
   subdomain                               CHAR(36) NOT NULL,                            -- sudomains must be unique for each secondary domain name
   kube_namespace_prefix                   CHAR(36) NOT NULL,                            -- tenants may need more than one k8 namespace depending upon config - but they must all start with this
-  lord_services_config                BINARY(16),                                   -- only applicable when tenant type is lord
+  lord_services_config                    BINARY(16),                                   -- only applicable when tenant type is lord
   super_services_config                   BINARY(16),                                   -- only applicable when tenant type is a lord or super 
   public_services_config                  BINARY(16) NOT NULL,                          -- all tenants have public services this field can not be null
   private_access_config                   BINARY(16),                                   -- lord services can not have a private access config - only available to super tenants
   custom_access_config                    BINARY(16),                                   -- lord services can not have a custom access config - only available to super tenants and main tenants
   subscripify_deployment_cloud_location   CHAR(36),                                     -- Azure, AWS, GCP 
-  liege_uuid                              BINARY(16) NOT NULL,                          -- the owning tenant of this tenant - lord tenants this field is equal to tenantUUID
-  lord_uuid                               BINARY(16) NOT NULL,                          -- the lord tenant of the secondary domain in which this tenant resides
+  liege_uuid                              BINARY(16),                                   -- the owning tenant of this tenant - lord tenants this field is equal to tenantUUID
+  lord_uuid                               BINARY(16),                                   -- the lord tenant of the secondary domain in which this tenant resides
   is_lord_tenant                          BOOL DEFAULT NULL,                            -- holds an true value if lord tenant otherwise it MUST be null
   is_super_tenant                         BOOL DEFAULT FALSE NOT NULL,                  -- holds true or false to indicate if tenant is a super tenant - this field can not be null
   create_timestamp                        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,  -- the create date 
@@ -41,7 +41,13 @@ CREATE TABLE tenant (
     REFERENCES access_configs(access_config_uuid),
   CONSTRAINT fk_custom_access_config
   FOREIGN KEY (custom_access_config)
-    REFERENCES access_configs(access_config_uuid)
+    REFERENCES access_configs(access_config_uuid),
+  CONSTRAINT srfk_liege_valid
+  FOREIGN KEY (liege_uuid)
+    REFERENCES tenant(tenant_uuid),
+  CONSTRAINT srfk_lord_valid
+  FOREIGN KEY (lord_uuid)
+    REFERENCES tenant(tenant_uuid)
 );
 
 
@@ -105,7 +111,7 @@ BEGIN
 END$$
 
 
--- these triggers ensure that all fields are requried based upon tenant type
+-- these triggers ensure that all fields are required based upon tenant type
 DELIMITER $$
 CREATE TRIGGER force_proper_tenant_config_update
 BEFORE UPDATE
@@ -154,6 +160,7 @@ BEGIN
     END CASE;
   END IF;
 END$$
+DELIMITER ;
 
 DELIMITER $$
 CREATE TRIGGER force_proper_tenant_config_insert
@@ -201,15 +208,76 @@ BEGIN
     END CASE;
   END IF;
 END$$
+DELIMITER ;
 
--- DELIMITER $$
--- CREATE TRIGGER force_proper_access_config_insert
--- BEFORE INSERT
--- ON tenant FOR EACH ROW
--- IF NEW.private_access_config IS NOT NULL THEN
--- 	IF !((SELECT access_type FROM access_configs WHERE access_config_uuid = NEW.private_access_config) = 'private') THEN SIGNAL SQLSTATE '45000' SET message_text = 'private access config requires private access_type'; END IF;
--- END IF;
--- IF NEW.custom_access_config IS NOT NULL THEN
--- 	IF !((SELECT access_type FROM access_configs WHERE access_config_uuid = NEW.custom_access_config) = 'public') THEN SIGNAL SQLSTATE '45000' SET message_text = 'public access config requires public access_type'; END IF;
--- END IF;
--- END$$
+DELIMITER $$
+
+CREATE TRIGGER force_proper_relationship_insert
+BEFORE INSERT
+ON tenant FOR EACH ROW
+BEGIN
+  IF (NEW.is_lord_tenant) THEN
+    CASE
+      -- relationship rules for lord tenants
+      WHEN NEW.lord_uuid IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'when is_lord_tenant is true lord_uuid field must be null';
+      WHEN NEW.liege_uuid IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'when is_lord_tenant is true liege_uuid field must be null';
+      ELSE BEGIN END;
+    END CASE;
+  END IF;
+  IF (NEW.is_super_tenant) THEN
+    CASE
+      -- relationship rules for super_tenants
+      WHEN NEW.lord_uuid IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'lord_uuid must have a lord tenant UUID';
+      WHEN !(SELECT is_lord_tenant FROM tenant WHERE tenant_uuid = NEW.lord_uuid) THEN SIGNAL SQLSTATE '45000' SET message_text = 'lord_uuid must be the tenant_UUID of a lord tenant';
+      WHEN NEW.liege_uuid IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'a super tenant liege_uuid field must have a lord tenant UUID';
+      WHEN !(SELECT is_lord_tenant FROM tenant WHERE tenant_uuid = NEW.liege_uuid) THEN SIGNAL SQLSTATE '45000' SET message_text = 'a super tenant liege_uuid must be the tenant_UUID of a lord tenant';
+      WHEN NEW.liege_uuid != NEW.lord_uuid THEN SIGNAL SQLSTATE '45000' SET message_text = 'a supper tenant liege_uuid must equal its lord_uuid';
+      ELSE BEGIN END;
+    END CASE;
+  END IF;
+  IF (NEW.is_lord_tenant IS FALSE OR NEW.is_lord_tenant IS NULL) AND (NEW.is_super_tenant IS FALSE OR NEW.is_super_tenant IS NULL) THEN
+    CASE
+      -- relationship rules for main_tenants
+      WHEN NEW.lord_uuid IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'lord_uuid must have a lord tenant UUID';
+      WHEN !(SELECT is_lord_tenant FROM tenant WHERE tenant_uuid = NEW.lord_uuid) THEN SIGNAL SQLSTATE '45000' SET message_text = 'lord_uuid must be the tenant_UUID of a lord tenant'; 
+      WHEN NEW.liege_uuid IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'a main tenant liege_uuid field must have a super tenant UUID';
+      WHEN !(SELECT is_super_tenant FROM tenant WHERE tenant_uuid = NEW.liege_uuid) THEN SIGNAL SQLSTATE '45000' SET message_text = 'a main tenant liege_uuid must be the tenant_UUID of a super tenant';
+      WHEN !((SELECT liege_uuid FROM tenants WHERE tenant_uuid = NEW.liege_uuid) = NEW.lord_uuid) THEN SIGNAL SQLSTATE '45000' SET message_text = 'liege_uuid must belong to the lord_UUID';
+      ELSE BEGIN END;
+    END CASE;
+  END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER force_relationship_keep_update
+BEFORE UPDATE
+ON tenant FOR EACH ROW
+BEGIN
+  IF (NEW.is_lord_tenant OR OLD.is_lord_tenant) THEN
+    CASE
+      WHEN NEW.lord_uuid IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'when is_lord_tenant is true lord_uuid field must be null';
+      WHEN NEW.liege_uuid IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'when is_lord_tenant is true liege_uuid field must be null';
+      ELSE BEGIN END;
+    END CASE;
+  END IF;
+  IF (NEW.is_super_tenant OR OLD.is_super_tenant) THEN
+    CASE
+      WHEN NEW.lord_UUID != OLD.lord_uuid THEN SIGNAL SQLSTATE '45000' SET message_text = 'can not change lord_UUID relationship - must create a new super tenant under new lord tenant and migrate resources from old to new';
+      WHEN NEW.liege_uuid != OLD.liege_uuid THEN SIGNAL SQLSTATE '45000' SET message_text = 'can not change liege_UUID relationship - must create a new super tenant under new lord tenant and migrate resources from old to new';
+      ELSE BEGIN END;
+    END CASE;
+  END IF;
+  IF ((NEW.is_lord_tenant IS FALSE OR NEW.is_lord_tenant IS NULL) OR (OLD.is_lord_tenant IS FALSE OR OLD.is_lord_tenant IS NULL))
+    AND 
+    ((NEW.is_super_tenant IS FALSE OR NEW.is_super_tenant IS NULL) OR (OLD.is_super_tenant IS FALSE OR OLD.is_super_tenant IS NULL)) THEN
+    CASE
+      WHEN NEW.lord_UUID != OLD.lord_uuid THEN SIGNAL SQLSTATE '45000' SET message_text = 'can not change lord_UUID relationship - must create a new main tenant and super tenant under new lord and migrate resources from old to new';
+      WHEN NEW.liege_uuid != OLD.liege_uuid THEN SIGNAL SQLSTATE '45000' SET message_text = 'can not change liege_UUID relationship - must create a new main tenant under new super tenant and migrate resources from old to new';
+      ELSE BEGIN END;
+    END CASE;
+  END IF;
+END$$
+DELIMITER ;
+

@@ -13,13 +13,13 @@ import (
 	"log"
 	"net/http"
 
-	sw "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/go"
+	tenantapi "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/go"
 )
 
 func main() {
 	log.Printf("Server started")
 
-	router := sw.NewRouter()
+	router := tenantapi.NewRouter()
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

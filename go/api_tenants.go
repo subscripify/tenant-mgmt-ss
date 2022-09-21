@@ -14,6 +14,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/tenant"
 )
 
 func AddLordTenant(w http.ResponseWriter, r *http.Request) {
@@ -28,6 +30,16 @@ func AddLordTenant(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Fprintln(w, lordTenantCreateBody)
+	tenant.NewLordTenant(
+		"This is my awesome lord",
+		"com",
+		"subscripify-2",
+		lordTenantCreateBody.Subdomain,
+		lordTenantCreateBody.InternalServicesConfig,
+		lordTenantCreateBody.SuperServicesConfig,
+		lordTenantCreateBody.PublicServicesConfig,
+		tenant.Azure,
+		"william.ohara@subscripify.com")
 }
 
 func AddMainTenant(w http.ResponseWriter, r *http.Request) {

@@ -4,77 +4,100 @@ import (
 	"fmt"
 	"regexp"
 	"time"
-	"tld"
 
 	"github.com/bombsimon/tld-validator"
 	"github.com/google/uuid"
+
+	goaway "github.com/TwiN/go-away"
 )
 
 type iTenant interface {
-	setNewTenantUUID() error
-	setOrgName(orgName string)
+	setNewTenantUUID()
+	setAlias(alias string) error
 	setSubdomainName(subdomain string) error
-	setInternalServicesConfig(internalServicesConfig uuid.UUID) error
-	setSuperServicesConfig(superServicesConfig uuid.UUID) error
-	setPublicServicesConfig(publicServicesConfig uuid.UUID) error
-	setPrivateServicesConfig(publicServicesConfig uuid.UUID) error
-	setCustomServicesConfig(publicServicesConfig uuid.UUID) error
+	setSecondaryDomainName(secondaryDomain string) error
+	setTopLevelDomain(topLevelDomain string) error
+	setLordServicesConfig(lordServicesConfig string) error
+	setSuperServicesConfig(superServicesConfig string) error
+	setPublicServicesConfig(publicServicesConfig string) error
+	setPrivateAccessConfig(privateAccessConfig string) error
+	setCustomAccessConfig(customAccessConfig string) error
 	setCloudLocation(cloudLocation CloudLocation) error
+	setLiegeUUID(liegeUUID string) error
+	setLordUUID(lordUUID string) error
 	setTenantType(tenantType TenantType) error
 	setCreatedBy(userIdentifier string) error
 	setCreateTimestamp()
-	GetTenant() (string, error)
 }
 
 type tenant struct {
-	tenantUUID             uuid.UUID
-	orgName                string
-	subdomain              string
-	secondaryDomain        string
-	topLevelDomain         string
-	kubeNamespacePrefix    string
-	internalServicesConfig uuid.UUID
-	superServicesConfig    uuid.UUID
-	publicServicesConfig   uuid.UUID
-	privateServicesConfig  uuid.UUID
-	customServicesConfig   uuid.UUID
-	cloudLocation          CloudLocation
-	liegeUUID              uuid.UUID
-	isLordTenant           bool
-	isSuperTenant          bool
-	createTimestamp        time.Time
-	createdBy              string
+	tenantUUID           uuid.UUID
+	alias                string
+	subdomain            string
+	secondaryDomain      string
+	topLevelDomain       string
+	kubeNamespacePrefix  string
+	lordServicesConfig   uuid.UUID
+	superServicesConfig  uuid.UUID
+	publicServicesConfig uuid.UUID
+	privateAccessConfig  uuid.UUID
+	customAccessConfig   uuid.UUID
+	cloudLocation        CloudLocation
+	liegeUUID            uuid.UUID
+	lordUUID             uuid.UUID
+	isLordTenant         bool
+	isSuperTenant        bool
+	createTimestamp      time.Time
+	createdBy            string
 }
 
 type TenantType string
 
 const (
 	LordTenant  TenantType = "lord"
-	SuperTenant            = "super"
-	MainTenant             = "main"
+	SuperTenant TenantType = "super"
+	MainTenant  TenantType = "main"
 )
 
 type CloudLocation string
 
 const (
 	Azure CloudLocation = "Azure"
-	ACS                 = "ACS"
-	GCP                 = "GCP"
+	ACS   CloudLocation = "ACS"
+	GCP   CloudLocation = "GCP"
 )
 
 // this is the only place in the application this value is created
-func (t *tenant) setNewTenantUUID() uuid.UUID {
+func (t *tenant) setNewTenantUUID() {
 	t.tenantUUID = uuid.New()
-	return t.tenantUUID
 }
 
-// the org name does not need to be unique and is alias used for quick reference when searching
-func (t *tenant) setOrgName(orgName string) {
-	t.orgName = orgName
+// the org name does not need to be unique and is alias used for quick reference when searching. no starting spaces
+func (t *tenant) setAlias(alias string) error {
+	// no spaces, special characters, or swear words
+	profanityDetector := goaway.NewProfanityDetector().WithSanitizeLeetSpeak(false).WithSanitizeSpecialCharacters(true).WithSanitizeAccents(false)
+	if profanityDetector.IsProfane(alias) {
+		err := fmt.Errorf("this is not a valid alias name")
+		return err
+	}
+	pattern := `(?m)^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$`
+	r := regexp.MustCompile(pattern)
+	if r.MatchString(alias) {
+		t.alias = alias
+		return nil
+	}
+	err := fmt.Errorf(`this is not a valid alias name must match pattern (?m)^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$`)
+	return err
+
 }
 
 // the subdomain name must be unique within the same lord tenant. A lord tenant ties to a second level domain (eg. subscripify.com)
 func (t *tenant) setSubdomainName(subdomain string) error {
+	profanityDetector := goaway.NewProfanityDetector().WithSanitizeLeetSpeak(false).WithSanitizeSpecialCharacters(true).WithSanitizeAccents(false)
+	if profanityDetector.IsProfane(subdomain) {
+		err := fmt.Errorf("this is not a valid subdomain name")
+		return err
+	}
 	pattern := "^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$"
 	r := regexp.MustCompile(pattern)
 	if r.MatchString(subdomain) {
@@ -82,7 +105,7 @@ func (t *tenant) setSubdomainName(subdomain string) error {
 		t.kubeNamespacePrefix = subdomain
 		return nil
 	}
-	err := fmt.Errorf("Not a valid subdomain name - must match pattern '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$'")
+	err := fmt.Errorf("not a valid subdomain name - must match pattern '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$'")
 	return err
 }
 
@@ -90,16 +113,17 @@ func (t *tenant) setSubdomainName(subdomain string) error {
 func (t *tenant) setSecondaryDomainName(secondaryDomain string) error {
 
 	if !(t.isLordTenant) {
-		err := fmt.Errorf("this value is only settable for a lord tenant - set tenant type to lord or set lord tenant value.")
+		err := fmt.Errorf("this value is only settable for a lord tenant - set tenant type to lord or set lord tenant value")
 		return err
 	} else {
+
 		pattern := "^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$"
 		r := regexp.MustCompile(pattern)
 		if r.MatchString(secondaryDomain) {
 			t.secondaryDomain = secondaryDomain
 			return nil
 		} else {
-			err := fmt.Errorf("Not a valid domain name - must match pattern '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$'")
+			err := fmt.Errorf("not a valid domain name - must match pattern '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$'")
 			return err
 		}
 	}
@@ -108,7 +132,7 @@ func (t *tenant) setSecondaryDomainName(secondaryDomain string) error {
 // sets the top level domain - validates against ICANN/IANA list
 func (t *tenant) setTopLevelDomain(topLevelDomain string) error {
 	if !(t.isLordTenant) {
-		err := fmt.Errorf("this value is only settable for a lord tenant - set tenant type to lord or set lord tenant value.")
+		err := fmt.Errorf("this value is only settable for a lord tenant - set tenant type to lord or set lord tenant value")
 		return err
 	} else {
 
@@ -121,64 +145,109 @@ func (t *tenant) setTopLevelDomain(topLevelDomain string) error {
 	}
 }
 
-// all lord tenants require this config other types of tenants this is null - it refers to the configuration files for internal services available to this tenant
-func (t *tenant) setInternalServicesConfig(internalServicesConfigAlias string.UUID) error {
+// all lord tenants require this config other types of tenants this is null - it refers to the configuration files for lord services available to this tenant
+// takes in string and parses to a UUID format.
+func (t *tenant) setLordServicesConfig(lordServicesConfig string) error {
+	lordServiceConfigParsedUUID, err := uuid.Parse(lordServicesConfig)
+	if err != nil {
+		return fmt.Errorf("lord services config uuid failed to parse: %s", err)
+	}
 
 	if !t.isLordTenant {
-		err := fmt.Errorf("invalid tenant type for setting internal services - lord tenants only")
+		err := fmt.Errorf("invalid tenant type for setting lord services - set tenant type to lord tenant")
 		return err
 	}
-	t.internalServicesConfig = internalServicesConfig
+	t.lordServicesConfig = lordServiceConfigParsedUUID
 	return nil
 }
 
 // all lord tenants and super tenants require this config other types of tenants this is null - it refers to the configuration files for super services available to this tenant
-func (t *tenant) setSuperServicesConfig(superServicesConfig uuid.UUID) error {
-
+// takes in string and parses to a UUID format.
+func (t *tenant) setSuperServicesConfig(superServicesConfig string) error {
+	superServiceConfigParsedUUID, err := uuid.Parse(superServicesConfig)
+	if err != nil {
+		return fmt.Errorf("super services config uuid failed to parse: %s", err)
+	}
 	if !t.isLordTenant && !t.isSuperTenant {
-		err := fmt.Errorf("invalid tenant type for setting super services - lord tenants and super tenants only")
+		err := fmt.Errorf("invalid tenant type for setting super services - set tenant type to lord tenants or super tenant")
 		return err
 	}
-	t.superServicesConfig = superServicesConfig
+	t.superServicesConfig = superServiceConfigParsedUUID
 	return nil
 }
 
 // all tenants require this config - it refers to the configuration files for public services available to this tenant
-func (t *tenant) setPublicServicesConfig(publicServicesConfig uuid.UUID) error {
+func (t *tenant) setPublicServicesConfig(publicServicesConfig string) error {
 
-	t.publicServicesConfig = publicServicesConfig
+	publicServiceConfigParsedUUID, err := uuid.Parse(publicServicesConfig)
+	if err != nil {
+		return fmt.Errorf("public services config uuid failed to parse: %s", err)
+	}
+	t.publicServicesConfig = publicServiceConfigParsedUUID
 	return nil
 }
 
 // all all Super Tenants require this config and is set at time of creation - it refers to the private services oAuth/access configuration for the super tenant
-func (t *tenant) setPrivateServicesConfig(publicServicesConfig uuid.UUID) error {
-
+func (t *tenant) setPrivateAccessConfig(privateAccessConfig string) error {
+	privateAccessConfigParsedUUID, err := uuid.Parse(privateAccessConfig)
+	if err != nil {
+		return fmt.Errorf("private services config uuid failed to parse: %s", err)
+	}
 	if !t.isSuperTenant {
-		err := fmt.Errorf("invalid tenant type for setting Private Services Config - super tenants only")
+		err := fmt.Errorf("invalid tenant type for setting private access config - set tenant type to super tenant")
 		return err
 	}
-	t.publicServicesConfig = publicServicesConfig
+	t.privateAccessConfig = privateAccessConfigParsedUUID
 	return nil
 }
 
 // all all super and main tenants require this config and is set at time of creation - it refers to the custom services api oAuth/access configuration for this tenant
-func (t *tenant) setCustomServicesConfig(publicServicesConfig uuid.UUID) error {
-
+func (t *tenant) setCustomAccessConfig(customAccessConfig string) error {
+	customAccessConfigParsedUUID, err := uuid.Parse(customAccessConfig)
+	if err != nil {
+		return fmt.Errorf("custom services config uuid failed to parse: %s", err)
+	}
 	if t.isLordTenant {
-		err := fmt.Errorf("invalid tenant type for setting Custom Services Config - super tenants and main tenants only")
+		err := fmt.Errorf("invalid tenant type for setting custom services config - super tenants and main tenants only")
 		return err
 	}
-	t.publicServicesConfig = publicServicesConfig
+	t.customAccessConfig = customAccessConfigParsedUUID
 	return nil
 }
 
 // limited to Azure, ACS, GCP
 func (t *tenant) setCloudLocation(cloudLocation CloudLocation) error {
-	if cloudLocation != Azure || cloudLocation != ACS || cloudLocation != GCP {
-		err := fmt.Errorf("this is not a supported cloud provider")
+	if cloudLocation == Azure || cloudLocation == ACS || cloudLocation == GCP {
+		t.cloudLocation = cloudLocation
+		return nil
+	}
+	err := fmt.Errorf("this is not a supported cloud provider")
+	return err
+}
+
+func (t *tenant) setLiegeUUID(liegeUUID string) error {
+	liegeUUIDParsedUUID, err := uuid.Parse(liegeUUID)
+	if err != nil {
+		return fmt.Errorf("custom services config uuid failed to parse: %s", err)
+	}
+	if t.isLordTenant {
+		err := fmt.Errorf("invalid tenant type for setting custom services config - super tenants and main tenants only")
 		return err
 	}
-	t.cloudLocation = cloudLocation
+	t.liegeUUID = liegeUUIDParsedUUID
+	return nil
+}
+
+func (t *tenant) setLordUUID(lordUUID string) error {
+	lordUUIDParsedUUID, err := uuid.Parse(lordUUID)
+	if err != nil {
+		return fmt.Errorf("custom services config uuid failed to parse: %s", err)
+	}
+	if t.isLordTenant {
+		err := fmt.Errorf("invalid tenant type for setting custom services config - super tenants and main tenants only")
+		return err
+	}
+	t.lordUUID = lordUUIDParsedUUID
 	return nil
 }
 
@@ -210,10 +279,4 @@ func (t *tenant) setCreatedBy(userIdentifier string) error {
 
 func (t *tenant) setCreateTimestamp() {
 	t.createTimestamp = time.Now()
-}
-
-// return a raw json of the current tenant otherwise return error
-func (t *tenant) GetTenant() (string, error) {
-
-	return "a json ", nil
 }
