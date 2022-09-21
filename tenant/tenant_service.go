@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log"
 	"time"
 
 	tenantdbserv "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/tenantdb"
@@ -18,13 +19,75 @@ func NewLordTenant(
 	superServicesConfig string,
 	publicServicesConfig string,
 	cloudLocation CloudLocation,
-	createdBy string) (iTenant, error) {
+	createdBy string) error {
 	//no special processing required - this is a pass through to maintain the pattern. the NewTenant function covers the factory for non lord tenant types
 	newLordTenant, err := createLordTenant(tenantAlias, topLevelDomain, secondaryDomain, subdomain, lordServicesConfig, superServicesConfig, publicServicesConfig, cloudLocation, createdBy)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return newLordTenant, nil
+
+	//setting up a 10 second timeout (could be less)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	tdb := tenantdbserv.Tdb.Handle
+
+	insertStr := `INSERT INTO tenant (
+		tenant_uuid, 
+		org_name,
+		top_level_domain,
+		secondary_domain,
+		subdomain, 
+		kube_namespace_prefix, 
+		lord_services_config, 
+		super_services_config,
+		public_services_config,
+		subscripify_deployment_cloud_location,
+		is_lord_tenant,
+		is_super_tenant,
+		created_by
+			)
+		VALUES (
+			UUID_TO_BIN(?),
+			?,
+			?,
+			?,
+			?,
+			?,
+			UUID_TO_BIN(?),
+			UUID_TO_BIN(?),
+			UUID_TO_BIN(?),
+			?,
+			?,
+			?,
+			?
+		);
+			`
+
+	r, err := tdb.ExecContext(ctx, insertStr,
+		newLordTenant.getTenantUUID(),
+		newLordTenant.getAlias(),
+		newLordTenant.getTopLevelDomain(),
+		newLordTenant.getSecondaryDomainName(),
+		newLordTenant.getSubdomainName(),
+		newLordTenant.getKubeNamespacePrefix(),
+		newLordTenant.getLordServicesConfig(),
+		newLordTenant.getSuperServicesConfig(),
+		newLordTenant.getPublicServicesConfig(),
+		newLordTenant.getCloudLocation(),
+		newLordTenant.isLordTenant(),
+		newLordTenant.isSuperTenant(),
+		newLordTenant.getTenantCreator(),
+	)
+	log.Print(newLordTenant.getTenantUUID().String())
+	log.Print(newLordTenant.getAlias())
+	if err != nil {
+		return err
+	}
+
+	count, _ := r.RowsAffected()
+	log.Printf("number of rows inserted :%v", count)
+	return nil
 }
 
 func NewTenant(

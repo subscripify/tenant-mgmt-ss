@@ -128,7 +128,7 @@ VALUES
 
 
     
-SELECT *, BIN_TO_UUID(private_access_config) FROM tenant;
+SELECT *, BIN_TO_UUID(tenant_uuid) FROM tenant;
 
 
 

@@ -30,7 +30,7 @@ func AddLordTenant(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Fprintln(w, lordTenantCreateBody)
-	tenant.NewLordTenant(
+	err := tenant.NewLordTenant(
 		"This is my awesome lord",
 		"com",
 		"subscripify-2",
@@ -40,6 +40,9 @@ func AddLordTenant(w http.ResponseWriter, r *http.Request) {
 		lordTenantCreateBody.PublicServicesConfig,
 		tenant.Azure,
 		"william.ohara@subscripify.com")
+	if err != nil {
+		log.Print(err)
+	}
 }
 
 func AddMainTenant(w http.ResponseWriter, r *http.Request) {

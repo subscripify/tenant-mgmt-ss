@@ -45,17 +45,14 @@ func createLordTenant(
 	if err := l.setCreatedBy(createdBy); err != nil {
 		return nil, err
 	}
+	if err := l.setAlias(tenantAlias); err != nil {
+		return nil, err
+	}
+
+	l.setNewTenantUUID()
 
 	return &l, nil
-	// return &lordTenant{
-	// 	tenant: tenant{
-	// 		orgName:             orgName,
-	// 		subdomain:           subdomain,
-	// 		createdBy:           createdBy,
-	// 		kubeNamespacePrefix: "newKube",
-	// 		tenantType: SuperTenant,
-	// 	},
-	// }
+
 }
 
 //createSuperTenant
