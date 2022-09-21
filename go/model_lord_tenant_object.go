@@ -1,7 +1,7 @@
 /*
  * Private Services API  - OpenAPI 3.0
  *
- * This is the set of api endpoints to support access to Subscripify Super Services. Super Services are those that are available to Subscripify's super tenants. They provide higher capabilities to super tenants to manage across multiple main tenants within the context of the Super-Tenant.<br><br>  These APIs act as the front end to Private Services engineered and hosted by super tenants that need to access the subscripify platform.<br><br> Examples of super services available only to Super Tenants through this API are: <br> Tenant Management<br> Subscription and Plan Management <br> Billing and Payments<br><br> Subscripify also maintains a set of api endpoints to support access to Subscripify Public Services. Subscripify public services are services required by all tenants and users on the subscripify platform. All tenants, regardless of type have access to these services.<br><br> Examples of private services available to Super Tenants and to Main Tenants are: <br> Identity Services<br> Usage Analytics Services<br>  For more information about Subscripify's tenant architecture click here.
+ * This is the set of api endpoints to support access to Subscripify Super Services. Super Services are those that are available to Subscripify super tenants. They provide higher capabilities to super tenants to manage across multiple main tenants within the context of the Super-Tenant.<br><br> These APIs act as the front end to Private Services engineered and hosted by super tenants that need to access the subscripify platform.<br><br>Examples of super services available only to Super Tenants through this API are- <br>Tenant Management<br>Subscription and Plan Management <br>Billing and Payments<br><br> Subscripify also maintains a set of api endpoints to support access to Subscripify Public Services. Subscripify public services are services required by all tenants and users on the subscripify platform. All tenants, regardless of type have access to these services.<br><br>Examples of private services available to Super Tenants and to Main Tenants are- <br>Identity Services<br>Usage Analytics Services<br>For more information about Subscripify tenant architecture click here.
  *
  * API version: 0.0.1
  * Contact: william.ohara@subscripify.com
@@ -20,12 +20,18 @@ type LordTenantObject struct {
 	LiegeUUID string `json:"liegeUUID,omitempty"`
 
 	CreateTimestamp string `json:"createTimestamp,omitempty"`
+	// The alias name does not need to be unique and is used for quick reference when searching in UI. No starting spaces and no special characters.
+	Alias string `json:"alias,omitempty"`
+	// Sets the top level domain for the tenant - validates against ICANN/IANA list https://data.iana.org/TLD/tlds-alpha-by-domain.txt e.g. \"com\" from my-tenant.subscripify.com
+	TopLevelDomain string `json:"topLevelDomain,omitempty"`
+	// Sets the secondary domain name for the tenant. e.g. \"subscripify\" from my-tenant.subscripify.com
+	SecondaryDomain string `json:"secondaryDomain,omitempty"`
+	// Sets the secondary domain name for the tenant. e.g. \"my-tenant\" from my-tenant.subscripify.com. Also used for the kubernetes namespace prefix for this tenant
+	Subdomain string `json:"subdomain"`
 	// The services config UUID to use for the lord tenant. Must be a valid services config UUID
 	InternalServicesConfig string `json:"internalServicesConfig"`
 	// The services config UUID to use for the super-tenant. Must be a valid services config UUID
 	SuperServicesConfig string `json:"superServicesConfig"`
-	// The subdomain name string which used for the services namespace of the tenant and  providing unique url for each tenant
-	Subdomain string `json:"subdomain"`
 	// The services config UUID to use for the main-tenant's public services. The services config UUID  used must be a publicServices UUID and belong to the liege tenant
 	PublicServicesConfig string `json:"publicServicesConfig"`
 	// The cloud provider to deploy to. e.g. The only cloud provider supported (currently) is azure.

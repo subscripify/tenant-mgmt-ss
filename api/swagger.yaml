@@ -2,20 +2,19 @@ openapi: 3.0.3
 info:
   title: Private Services API  - OpenAPI 3.0
   description: "This is the set of api endpoints to support access to Subscripify\
-    \ Super Services. Super Services are those that are available to Subscripify's\
-    \ super tenants. They provide higher capabilities to super tenants to manage across\
-    \ multiple main tenants within the context of the Super-Tenant.<br><br> \nThese\
+    \ Super Services. Super Services are those that are available to Subscripify super\
+    \ tenants. They provide higher capabilities to super tenants to manage across\
+    \ multiple main tenants within the context of the Super-Tenant.<br><br> These\
     \ APIs act as the front end to Private Services engineered and hosted by super\
-    \ tenants that need to access the subscripify platform.<br><br>\nExamples of super\
-    \ services available only to Super Tenants through this API are: <br>\nTenant\
-    \ Management<br>\nSubscription and Plan Management <br>\nBilling and Payments<br><br>\n\
-    Subscripify also maintains a set of api endpoints to support access to Subscripify\
-    \ Public Services. Subscripify public services are services required by all tenants\
-    \ and users on the subscripify platform. All tenants, regardless of type have\
-    \ access to these services.<br><br>\nExamples of private services available to\
-    \ Super Tenants and to Main Tenants are: <br>\nIdentity Services<br>\nUsage Analytics\
-    \ Services<br>\n\nFor more information about Subscripify's tenant architecture\
-    \ click here."
+    \ tenants that need to access the subscripify platform.<br><br>Examples of super\
+    \ services available only to Super Tenants through this API are- <br>Tenant Management<br>Subscription\
+    \ and Plan Management <br>Billing and Payments<br><br> Subscripify also maintains\
+    \ a set of api endpoints to support access to Subscripify Public Services. Subscripify\
+    \ public services are services required by all tenants and users on the subscripify\
+    \ platform. All tenants, regardless of type have access to these services.<br><br>Examples\
+    \ of private services available to Super Tenants and to Main Tenants are- <br>Identity\
+    \ Services<br>Usage Analytics Services<br>For more information about Subscripify\
+    \ tenant architecture click here."
   termsOfService: http://www.subscripify.com/terms/apiusage
   contact:
     email: william.ohara@subscripify.com
@@ -131,19 +130,19 @@ paths:
       - name: liegeUUID
         in: header
         description: "Liege is the tenant that manages the target tenant. In the case\
-          \ of adding a tenant, this header is required  and establishes the feudal\
+          \ of adding a tenant, this header is required and establishes the feudal\
           \ relationship between the creator tenant and the created tenant. <br><br>\
-          \ In the case of tenant updates or    deletes this field holds the liege\
-          \ of the target tenant. If the two ids do not have the appropriate relationship\
-          \ the action will fail.  <br><br>This field is also checked against the\
-          \ identity of the caller. The identity must be a member of the Liege tenant\
-          \ and must have the  appropriate permissions."
+          \ In the case of tenant updates or deletes this field holds the liege of\
+          \ the target tenant. If the two ids do not have the appropriate relationship\
+          \ the action will fail. <br><br>This field is also checked against the identity\
+          \ of the caller. The identity must be a member of the Liege tenant and must\
+          \ have the appropriate permissions."
         required: true
         style: simple
         explode: false
         schema:
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}\\\
+            \ -[0-9a-fA-F]{12}$"
           type: string
       requestBody:
         description: All data required to start a new super tenant
@@ -229,19 +228,19 @@ paths:
       - name: liegeUUID
         in: header
         description: "Liege is the tenant that manages the target tenant. In the case\
-          \ of adding a tenant, this header is required  and establishes the feudal\
+          \ of adding a tenant, this header is required and establishes the feudal\
           \ relationship between the creator tenant and the created tenant. <br><br>\
-          \ In the case of tenant updates or    deletes this field holds the liege\
-          \ of the target tenant. If the two ids do not have the appropriate relationship\
-          \ the action will fail.  <br><br>This field is also checked against the\
-          \ identity of the caller. The identity must be a member of the Liege tenant\
-          \ and must have the  appropriate permissions."
+          \ In the case of tenant updates or deletes this field holds the liege of\
+          \ the target tenant. If the two ids do not have the appropriate relationship\
+          \ the action will fail. <br><br>This field is also checked against the identity\
+          \ of the caller. The identity must be a member of the Liege tenant and must\
+          \ have the appropriate permissions."
         required: true
         style: simple
         explode: false
         schema:
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}\\\
+            \ -[0-9a-fA-F]{12}$"
           type: string
       requestBody:
         description: All data required to start a new main tenant
@@ -331,11 +330,11 @@ paths:
         explode: false
         schema:
           maxLength: 32
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}\\\
+            \ -[0-9a-fA-F]{12}$"
           type: string
-          description: This is the UUID of the target tenant.    The target tenant
-            must belong to the liege tenant in the liegeUUID header.
+          description: This is the UUID of the target tenant. The target tenant must
+            belong to the liege tenant in the liegeUUID header.
       responses:
         "200":
           description: return tenant
@@ -411,8 +410,8 @@ paths:
         explode: false
         schema:
           maxLength: 32
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}\\\
+            \ -[0-9a-fA-F]{12}$"
           type: string
           description: The services config UUID to use for the lord tenant. Must be
             a valid services config UUID
@@ -491,8 +490,8 @@ paths:
         explode: false
         schema:
           maxLength: 32
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}\\\
+            \ -[0-9a-fA-F]{12}$"
           type: string
           description: The services config UUID to use for the lord tenant. Must be
             a valid services config UUID
@@ -568,19 +567,19 @@ paths:
       - name: liegeUUID
         in: header
         description: "Liege is the tenant that manages the target tenant. In the case\
-          \ of adding a tenant, this header is required  and establishes the feudal\
+          \ of adding a tenant, this header is required and establishes the feudal\
           \ relationship between the creator tenant and the created tenant. <br><br>\
-          \ In the case of tenant updates or    deletes this field holds the liege\
-          \ of the target tenant. If the two ids do not have the appropriate relationship\
-          \ the action will fail.  <br><br>This field is also checked against the\
-          \ identity of the caller. The identity must be a member of the Liege tenant\
-          \ and must have the  appropriate permissions."
+          \ In the case of tenant updates or deletes this field holds the liege of\
+          \ the target tenant. If the two ids do not have the appropriate relationship\
+          \ the action will fail. <br><br>This field is also checked against the identity\
+          \ of the caller. The identity must be a member of the Liege tenant and must\
+          \ have the appropriate permissions."
         required: true
         style: simple
         explode: false
         schema:
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}\\\
+            \ -[0-9a-fA-F]{12}$"
           type: string
       responses:
         "200":
@@ -655,31 +654,49 @@ components:
       - superServicesConfig
       type: object
       properties:
+        alias:
+          maxLength: 36
+          pattern: "^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\\s\\-]*[a-zA-Z0-9]+))$"
+          type: string
+          description: The alias name does not need to be unique and is used for quick
+            reference when searching in UI. No starting spaces and no special characters.
+        topLevelDomain:
+          maxLength: 15
+          type: string
+          description: Sets the top level domain for the tenant - validates against
+            ICANN/IANA list https://data.iana.org/TLD/tlds-alpha-by-domain.txt e.g.
+            "com" from my-tenant.subscripify.com
+          example: com
+        secondaryDomain:
+          maxLength: 30
+          pattern: "^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$"
+          type: string
+          description: Sets the secondary domain name for the tenant. e.g. "subscripify"
+            from my-tenant.subscripify.com
+          example: subscripify
+        subdomain:
+          maxLength: 30
+          pattern: "^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$"
+          type: string
+          description: Sets the secondary domain name for the tenant. e.g. "my-tenant"
+            from my-tenant.subscripify.com. Also used for the kubernetes namespace
+            prefix for this tenant
+          example: my-tenant
         internalServicesConfig:
           maxLength: 32
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
           type: string
           description: The services config UUID to use for the lord tenant. Must be
             a valid services config UUID
         superServicesConfig:
           maxLength: 32
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
           type: string
           description: The services config UUID to use for the super-tenant. Must
             be a valid services config UUID
-        subdomain:
-          maxLength: 30
-          pattern: ".[a-z][0-9][-]"
-          type: string
-          description: The subdomain name string which used for the services namespace
-            of the tenant and  providing unique url for each tenant
-          example: subscripify
         publicServicesConfig:
           maxLength: 32
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
           type: string
           description: The services config UUID to use for the main-tenant's public
             services. The services config UUID  used must be a publicServices UUID
@@ -701,8 +718,7 @@ components:
       properties:
         superServicesConfig:
           maxLength: 32
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
           type: string
           description: The services config UUID to use for the super-tenant. Must
             be a valid services config UUID
@@ -716,15 +732,14 @@ components:
             \ and internal services  configs."
         subdomain:
           maxLength: 30
-          pattern: ".[a-z][0-9][-]"
+          pattern: "^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$"
           type: string
           description: The subdomain name string which used for the services namespace
             of the tenant and  providing unique url for each tenant
           example: subscripify
         publicServicesConfig:
           maxLength: 32
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
           type: string
           description: The services config UUID to use for the main-tenant's public
             services. The services config UUID  used must be a publicServices UUID
@@ -745,15 +760,14 @@ components:
       properties:
         subdomain:
           maxLength: 30
-          pattern: ".[a-z][0-9][-]"
+          pattern: "^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$"
           type: string
           description: The subdomain name string which used for the services namespace
             of the tenant and  providing unique url for each tenant
           example: subscripify
         publicServicesConfig:
           maxLength: 32
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
           type: string
           description: The services config UUID to use for the main-tenant's public
             services. The services config UUID  used must be a publicServices UUID
@@ -770,8 +784,7 @@ components:
       properties:
         tenantUUID:
           maxLength: 32
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
           type: string
       example:
         tenantUUID: tenantUUID
@@ -785,8 +798,7 @@ components:
       properties:
         tenantUUID:
           maxLength: 32
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
           type: string
           readOnly: true
         orgName:
@@ -802,8 +814,7 @@ components:
           readOnly: true
         liegeUUID:
           maxLength: 32
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
           type: string
           description: The UUID of this tenant's owner tenant
           readOnly: true
@@ -848,8 +859,7 @@ components:
       properties:
         tenantUUID:
           maxLength: 32
-          pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-            -[0-9a-fA-F]{12}$"
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
           type: string
           readOnly: true
         orgName:
@@ -927,19 +937,18 @@ components:
       name: liegeUUID
       in: header
       description: "Liege is the tenant that manages the target tenant. In the case\
-        \ of adding a tenant, this header is required  and establishes the feudal\
-        \ relationship between the creator tenant and the created tenant. <br><br>\
-        \ In the case of tenant updates or    deletes this field holds the liege of\
-        \ the target tenant. If the two ids do not have the appropriate relationship\
-        \ the action will fail.  <br><br>This field is also checked against the identity\
-        \ of the caller. The identity must be a member of the Liege tenant and must\
-        \ have the  appropriate permissions."
+        \ of adding a tenant, this header is required and establishes the feudal relationship\
+        \ between the creator tenant and the created tenant. <br><br> In the case\
+        \ of tenant updates or deletes this field holds the liege of the target tenant.\
+        \ If the two ids do not have the appropriate relationship the action will\
+        \ fail. <br><br>This field is also checked against the identity of the caller.\
+        \ The identity must be a member of the Liege tenant and must have the appropriate\
+        \ permissions."
       required: true
       style: simple
       explode: false
       schema:
-        pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-          -[0-9a-fA-F]{12}$"
+        pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}\\ -[0-9a-fA-F]{12}$"
         type: string
     targetTenantUUID:
       name: targetTenantUUID
@@ -949,10 +958,9 @@ components:
       explode: false
       schema:
         maxLength: 32
-        pattern: "^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b\
-          -[0-9a-fA-F]{12}$"
+        pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}\\ -[0-9a-fA-F]{12}$"
         type: string
-        description: This is the UUID of the target tenant.    The target tenant must
+        description: This is the UUID of the target tenant. The target tenant must
           belong to the liege tenant in the liegeUUID header.
     searchSubdomain:
       name: subdmn
@@ -965,7 +973,7 @@ components:
         pattern: "^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$"
         type: string
         description: A partial or whole subdomain name. Use of this field for search
-          adheres to naming rules outlined in    <a href='https://www.rfc-editor.org/rfc/rfc3986#section-3.2.2'>RFC3986</a>
+          adheres to naming rules outlined in <a href="https://www.rfc-editor.org/rfc/rfc3986#section-3.2.2">RFC3986</a>
           for subdomains.
     searchOrgName:
       name: orgName
