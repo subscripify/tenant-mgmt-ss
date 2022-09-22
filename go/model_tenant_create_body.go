@@ -9,21 +9,19 @@
  */
 package tenantapi
 
-type MainTenantObject struct {
-
-	TenantUUID string `json:"tenantUUID,omitempty"`
-	// The name of the organization at time of tenant creation and the alias used for searching by org name.
-	OrgName string `json:"orgName,omitempty"`
-	// The name prefix for the Kubernetes namespaces and cloud resources that make up this tenant.
-	KubeNamespace string `json:"kubeNamespace,omitempty"`
-	// The UUID of this tenant's owner tenant
-	LiegeUUID string `json:"liegeUUID,omitempty"`
-
-	CreateTimestamp string `json:"createTimestamp,omitempty"`
-	// The subdomain name string which used for the services namespace of the tenant and  providing unique url for each tenant
+type TenantCreateBody struct {
+	// Indicate which type of tenant to establish, main or super.
+	TenantType string `json:"tenantType"`
+	// The alias name does not need to be unique and is used for quick reference when searching in UI. No starting spaces and no special characters.
+	TenantAlias string `json:"tenantAlias"`
+	// The subdomain name string which used for the services namespace of the tenant and providing unique url for each tenant
 	Subdomain string `json:"subdomain"`
-	// The services config UUID to use for the main-tenant's public services. The services config UUID  used must be a publicServices UUID and belong to the liege tenant
+	// The services config UUID to use for a super tenant. Must be a valid services config UUID. This value must be empty when creating a main tenant.
+	SuperServicesConfig string `json:"superServicesConfig,omitempty"`
+	// The services config UUID to use for the tenant's public services. Must be a valid public services UUID.
 	PublicServicesConfig string `json:"publicServicesConfig"`
-	// The cloud provider to deploy to. e.g. The only cloud provider supported (currently) is azure.
-	SubscripifyDeploymentCloudLocation string `json:"subscripifyDeploymentCloudLocation"`
+	// The private access config UUID to use for the tenant's public services. Must be a valid private access UUID. This value must be empty when creating a main tenant.
+	PrivateAccessConfig string `json:"privateAccessConfig,omitempty"`
+	// The public access config UUID to use for the tenant's public services. Must be a valid public access UUID.
+	PublicAccessConfig string `json:"publicAccessConfig,omitempty"`
 }

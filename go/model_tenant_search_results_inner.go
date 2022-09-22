@@ -13,7 +13,7 @@ type TenantSearchResultsInner struct {
 
 	TenantUUID string `json:"tenantUUID,omitempty"`
 	// The name of the organization at time of tenant creation and the alias used for searching by org name.
-	OrgName string `json:"orgName,omitempty"`
+	TenantAlias string `json:"tenantAlias,omitempty"`
 	// Indicate which type of tenant. Lord tenants will see both \"super\" and \"main\" tenant types. Super tenants will only see \"main\" tenant types.
 	TenantType string `json:"tenantType,omitempty"`
 }

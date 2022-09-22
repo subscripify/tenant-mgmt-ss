@@ -40,7 +40,7 @@ tags:
     description: Find out more about our store
     url: http://wiki.subscripify.com/tenant-architecture
 paths:
-  /tenants/lord:
+  /lord-tenants:
     post:
       tags:
       - tenants
@@ -83,21 +83,21 @@ paths:
       security:
       - tenant_auth:
         - write:lord-tenants
-  /tenants/super:
+  /tenants:
     post:
       tags:
       - tenants
-      summary: Add a new super tenant
-      description: Adds a new super tenant to the selected liege tenant in liegeUUID header parameter.
-      operationId: addSuperTenant
+      summary: Add a new main or super tenant 
+      description: Adds a new tenant to the selected liege tenant in liegeUUID header parameter. The liege UUID must be a lord tenant if creating a super tenant and liege UUID must be a super tenant if creating a main tenant.
+      operationId: addTenant 
       parameters:
         - $ref: '#/components/parameters/liegeUUID'
       requestBody:
-        description: All data required to start a new super tenant
+        description: All data required to start a new super or main  tenant
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/superTenantCreateBody'
+              $ref: '#/components/schemas/tenantCreateBody'
         required: true
       responses: 
         '200':
@@ -128,52 +128,52 @@ paths:
       - tenant_auth:
         - write:lord-tenants
         - write:super-tenants
-  /tenants/main:
-    post:
-      tags:
-      - tenants
-      summary: Add a new main tenant
-      description: Adds a new main tenant to the selected liege tenant in liegeUUID header parameter. 
-      operationId: addMainTenant
-      parameters:
-        - $ref: '#/components/parameters/liegeUUID'
-      requestBody:
-        description: All data required to start a new main tenant
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/mainTenantCreateBody'
-        required: true
-      responses:  
-        '200':
-          description: Successful operation returns the new object UUID
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/tenantUUIDCreatedObject'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '404':
-          $ref: '#/components/responses/404'
-        '405':
-          $ref: '#/components/responses/405'
-        '409':
-          $ref: '#/components/responses/409'
-        '406':
-          $ref: '#/components/responses/406'
-        '415':
-          $ref: '#/components/responses/415'
-        '429':
-          $ref: '#/components/responses/429'
-        default:
-          $ref: '#/components/responses/default'
-      security:
-      - tenant_auth:
-        - write:lord-tenants
-        - write:super-tenants
-        - write:main-tenants
+  # /tenants/main:
+  #   post:
+  #     tags:
+  #     - tenants
+  #     summary: Add a new main tenant
+  #     description: Adds a new main tenant to the selected liege tenant in liegeUUID header parameter. 
+  #     operationId: addMainTenant
+  #     parameters:
+  #       - $ref: '#/components/parameters/liegeUUID'
+  #     requestBody:
+  #       description: All data required to start a new main tenant
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: '#/components/schemas/mainTenantCreateBody'
+  #       required: true
+  #     responses:  
+  #       '200':
+  #         description: Successful operation returns the new object UUID
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/tenantUUIDCreatedObject'
+  #       '401':
+  #         $ref: '#/components/responses/401'
+  #       '403':
+  #         $ref: '#/components/responses/403'
+  #       '404':
+  #         $ref: '#/components/responses/404'
+  #       '405':
+  #         $ref: '#/components/responses/405'
+  #       '409':
+  #         $ref: '#/components/responses/409'
+  #       '406':
+  #         $ref: '#/components/responses/406'
+  #       '415':
+  #         $ref: '#/components/responses/415'
+  #       '429':
+  #         $ref: '#/components/responses/429'
+  #       default:
+  #         $ref: '#/components/responses/default'
+  #     security:
+  #     - tenant_auth:
+  #       - write:lord-tenants
+  #       - write:super-tenants
+  #       - write:main-tenants
   /tenants/{targetTenantGuid}:
     get:
       summary: returns a tenant
@@ -189,10 +189,7 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                - $ref: '#/components/schemas/lordTenantObject'
-                - $ref: '#/components/schemas/superTenantObject'
-                - $ref: '#/components/schemas/mainTenantObject'
+                $ref: '#/components/schemas/fullTenantObject'
         '401':
           $ref: '#/components/responses/401'
         '403':
@@ -235,9 +232,7 @@ paths:
             application/json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/lordTenantObject'
-                - $ref: '#/components/schemas/superTenantObject'
-                - $ref: '#/components/schemas/mainTenantObject'
+                $ref: '#/components/schemas/fullTenantObject'
         '401':
           $ref: '#/components/responses/401'
         '403':
@@ -280,9 +275,7 @@ paths:
             application/json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/lordTenantObject'
-                - $ref: '#/components/schemas/superTenantObject'
-                - $ref: '#/components/schemas/mainTenantObject'
+                $ref: '#/components/schemas/fullTenantObject'
         '401':
           $ref: '#/components/responses/401'
         '403':
@@ -349,16 +342,14 @@ components:
       required: true
       schema: 
         type: string
-        pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}\
-          -[0-9a-fA-F]{12}$'
+        pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
     targetTenantUUID:
       name: targetTenantUUID
       in: path
       required: true
       schema:
         maxLength: 32
-        pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}\
-          -[0-9a-fA-F]{12}$'
+        pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
         type: string
         description: 'This is the UUID of the target tenant. The target tenant must belong to the liege tenant in the liegeUUID header.'
     searchSubdomain:
@@ -370,8 +361,8 @@ components:
         pattern: ^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$
         type: string
         description: 'A partial or whole subdomain name. Use of this field for search adheres to naming rules outlined in <a href="https://www.rfc-editor.org/rfc/rfc3986#section-3.2.2">RFC3986</a> for subdomains.'
-    searchOrgName:
-      name: orgName
+    searchTenantAlias:
+      name: tenantAlias
       in: query
       required: false
       schema:
@@ -388,12 +379,13 @@ components:
       - subscripifyDeploymentCloudLocation
       type: object
       properties:
-        alias: 
+        tenantAlias: 
           maxLength: 36
           pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$'
           type: string
           description: The alias name does not need to be unique and is used for quick reference when searching in UI. 
             No starting spaces and no special characters.
+          example: "my tenant alias"
         topLevelDomain:
           maxLength: 15
           type: string
@@ -437,76 +429,58 @@ components:
           description: The cloud provider to deploy to. e.g. The only cloud provider
             supported (currently) is azure.
       additionalProperties: false
-    superTenantCreateBody:
+    tenantCreateBody:
       required:
-      - superServicesConfig
-      - publicServicesConfig
+      - tenantType
+      - tenantAlias
       - subdomain
+      - publicServicesConfig
       - subscripifyDeploymentCloudLocation
       type: object
       properties:
+        tenantType:
+          maxLength: 5
+          pattern: ^super|main$
+          type: string
+          description: Indicate which type of tenant to establish, main or super.
+        tenantAlias: 
+          maxLength: 36
+          pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$'
+          type: string
+          description: The alias name does not need to be unique and is used for quick reference when searching in UI. 
+            No starting spaces and no special characters.
+          example: "my tenant alias"  
+        subdomain:
+          maxLength: 30
+          pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$'
+          type: string
+          description: The subdomain name string which used for the services namespace
+            of the tenant and providing unique url for each tenant
+          example: subscripify
         superServicesConfig:
           maxLength: 32
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           type: string
-          description: The services config UUID to use for the super-tenant. Must
-            be a valid services config UUID
-        tenantType:
-          maxLength: 5
-          pattern: ^super|lord|main$
-          type: string
-          description: Indicate which type of tenant one is spinning up. Main Tenants
-            require only a public services config.  Super tenants require a super
-            services config and a public config. Lord Tenants require super, public
-            and internal services  configs.
-        subdomain:
-          maxLength: 30
-          pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$'
-          type: string
-          description: The subdomain name string which used for the services namespace
-            of the tenant and  providing unique url for each tenant
-          example: subscripify
+          description: The services config UUID to use for a super tenant. Must
+            be a valid services config UUID. This value must be empty when creating a main tenant.
         publicServicesConfig:
           maxLength: 32
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           type: string
-          description: The services config UUID to use for the main-tenant's public
-            services. The services config UUID  used must be a publicServices UUID
-            and belong to the liege tenant
-        subscripifyDeploymentCloudLocation:
-          maxLength: 32
-          pattern: azure
-          type: string
-          description: The cloud provider to deploy to. e.g. The only cloud provider
-            supported (currently) is azure.
-      additionalProperties: false
-    mainTenantCreateBody:
-      required:
-      - publicServicesConfig
-      - subdomain
-      - subscripifyDeploymentCloudLocation
-      type: object
-      properties:
-        subdomain:
-          maxLength: 30
-          pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$'
-          type: string
-          description: The subdomain name string which used for the services namespace
-            of the tenant and  providing unique url for each tenant
-          example: subscripify
-        publicServicesConfig:
+          description: The services config UUID to use for the tenant's public
+            services. Must be a valid public services UUID. 
+        privateAccessConfig:
           maxLength: 32
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           type: string
-          description: The services config UUID to use for the main-tenant's public
-            services. The services config UUID  used must be a publicServices UUID
-            and belong to the liege tenant
-        subscripifyDeploymentCloudLocation:
+          description: The private access config UUID to use for the tenant's public
+            services. Must be a valid private access UUID. This value must be empty when creating a main tenant.
+        publicAccessConfig:
           maxLength: 32
-          pattern: azure
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           type: string
-          description: The cloud provider to deploy to. e.g. The only cloud provider
-            supported (currently) is azure.
+          description: The public access config UUID to use for the tenant's public
+            services. Must be a valid public access UUID.
       additionalProperties: false
     tenantUUIDCreatedObject:
       type: object
@@ -525,7 +499,7 @@ components:
             maxLength: 32
             pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
             readOnly: true
-          orgName:
+          tenantAlias:
             type: string
             maxLength: 32
             description: The name of the organization at time of tenant creation and the alias used for searching by org name.
@@ -543,10 +517,6 @@ components:
           maxLength: 32
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           readOnly: true
-        orgName:
-          type: string
-          maxLength: 32
-          description: The name of the organization at time of tenant creation and the alias used for searching by org name.
         kubeNamespace:
           type: string
           maxLength: 32
@@ -556,23 +526,29 @@ components:
           type: string
           maxLength: 32
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
-          description: The UUID of this tenant's owner tenant
+          description: The UUID of this tenant's owner tenant. This value is equal to lordUUID for super tenants
+          readOnly: true
+        lordUUID:
+          type: string
+          maxLength: 32
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          description: The UUID of this tenant's lord tenant
           readOnly: true
         createTimestamp:
           type: string
           readOnly: true
-    mainTenantObject:
-      allOf:
-        - $ref: '#/components/schemas/mainTenantCreateBody'
-        - $ref: '#/components/schemas/extendedTenantObject'
-    superTenantObject:
-      allOf:
-        - $ref: '#/components/schemas/superTenantCreateBody'
-        - $ref: '#/components/schemas/extendedTenantObject'   
-    lordTenantObject:
+        createdBy:
+          type: string
+          readOnly: true
+    fullTenantObject:
       allOf:
         - $ref: '#/components/schemas/lordTenantCreateBody'
-        - $ref: '#/components/schemas/extendedTenantObject'
+        - $ref: '#/components/schemas/tenantCreateBody'
+        - $ref: '#/components/schemas/extendedTenantObject' 
+    # lordTenantObject:
+    #   allOf:
+    #     - $ref: '#/components/schemas/lordTenantCreateBody'
+    #     - $ref: '#/components/schemas/extendedTenantObject'
     httpResponseError:
       type: object
       properties:

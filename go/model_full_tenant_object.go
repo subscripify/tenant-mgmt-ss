@@ -9,21 +9,39 @@
  */
 package tenantapi
 
-type LordTenantCreateBody struct {
+type FullTenantObject struct {
+	// Indicate which type of tenant to establish, main or super.
+	TenantType string `json:"tenantType"`
 	// The alias name does not need to be unique and is used for quick reference when searching in UI. No starting spaces and no special characters.
-	TenantAlias string `json:"tenantAlias,omitempty"`
+	TenantAlias string `json:"tenantAlias"`
+	// The subdomain name string which used for the services namespace of the tenant and providing unique url for each tenant
+	Subdomain string `json:"subdomain"`
+	// The services config UUID to use for a super tenant. Must be a valid services config UUID. This value must be empty when creating a main tenant.
+	SuperServicesConfig string `json:"superServicesConfig"`
+	// The services config UUID to use for the tenant's public services. Must be a valid public services UUID.
+	PublicServicesConfig string `json:"publicServicesConfig"`
+	// The private access config UUID to use for the tenant's public services. Must be a valid private access UUID. This value must be empty when creating a main tenant.
+	PrivateAccessConfig string `json:"privateAccessConfig,omitempty"`
+	// The public access config UUID to use for the tenant's public services. Must be a valid public access UUID.
+	PublicAccessConfig string `json:"publicAccessConfig,omitempty"`
+
+	TenantUUID string `json:"tenantUUID,omitempty"`
+	// The name prefix for the Kubernetes namespaces and cloud resources that make up this tenant.
+	KubeNamespace string `json:"kubeNamespace,omitempty"`
+	// The UUID of this tenant's owner tenant. This value is equal to lordUUID for super tenants
+	LiegeUUID string `json:"liegeUUID,omitempty"`
+	// The UUID of this tenant's lord tenant
+	LordUUID string `json:"lordUUID,omitempty"`
+
+	CreateTimestamp string `json:"createTimestamp,omitempty"`
+
+	CreatedBy string `json:"createdBy,omitempty"`
 	// Sets the top level domain for the tenant - validates against ICANN/IANA list https://data.iana.org/TLD/tlds-alpha-by-domain.txt e.g. \"com\" from my-tenant.subscripify.com
 	TopLevelDomain string `json:"topLevelDomain,omitempty"`
 	// Sets the secondary domain name for the tenant. e.g. \"subscripify\" from my-tenant.subscripify.com
 	SecondaryDomain string `json:"secondaryDomain,omitempty"`
-	// Sets the secondary domain name for the tenant. e.g. \"my-tenant\" from my-tenant.subscripify.com. Also used for the kubernetes namespace prefix for this tenant
-	Subdomain string `json:"subdomain"`
 	// The services config UUID to use for the lord tenant. Must be a valid services config UUID
 	InternalServicesConfig string `json:"internalServicesConfig"`
-	// The services config UUID to use for the super-tenant. Must be a valid services config UUID
-	SuperServicesConfig string `json:"superServicesConfig"`
-	// The services config UUID to use for the main-tenant's public services. The services config UUID  used must be a publicServices UUID and belong to the liege tenant
-	PublicServicesConfig string `json:"publicServicesConfig"`
 	// The cloud provider to deploy to. e.g. The only cloud provider supported (currently) is azure.
 	SubscripifyDeploymentCloudLocation string `json:"subscripifyDeploymentCloudLocation"`
 }

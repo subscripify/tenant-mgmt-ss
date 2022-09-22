@@ -32,6 +32,10 @@ func NewLordTenant(
 
 	tdb := tenantdbserv.Tdb.Handle
 
+	nl, err := newLordTenant.getLordCreationObject()
+	if err != nil {
+		return err
+	}
 	insertStr := `INSERT INTO tenant (
 		tenant_uuid, 
 		org_name,
@@ -48,37 +52,23 @@ func NewLordTenant(
 		created_by
 			)
 		VALUES (
-			UUID_TO_BIN(?),
-			?,
-			?,
-			?,
-			?,
-			?,
-			UUID_TO_BIN(?),
-			UUID_TO_BIN(?),
-			UUID_TO_BIN(?),
-			?,
-			?,
-			?,
-			?
+		:tenant_uuid, 
+		:org_name,
+		:top_level_domain,
+		:secondary_domain,
+		:subdomain, 
+		:kube_namespace_prefix, 
+		:lord_services_config, 
+		:super_services_config,
+		:public_services_config,
+		:subscripify_deployment_cloud_location,
+		:is_lord_tenant,
+		:is_super_tenant,
+		:created_by
 		);
 			`
 
-	r, err := tdb.ExecContext(ctx, insertStr,
-		newLordTenant.getTenantUUID(),
-		newLordTenant.getAlias(),
-		newLordTenant.getTopLevelDomain(),
-		newLordTenant.getSecondaryDomainName(),
-		newLordTenant.getSubdomainName(),
-		newLordTenant.getKubeNamespacePrefix(),
-		newLordTenant.getLordServicesConfig(),
-		newLordTenant.getSuperServicesConfig(),
-		newLordTenant.getPublicServicesConfig(),
-		newLordTenant.getCloudLocation(),
-		newLordTenant.isLordTenant(),
-		newLordTenant.isSuperTenant(),
-		newLordTenant.getTenantCreator(),
-	)
+	r, err := tdb.ExecContext(ctx, insertStr, nl)
 	log.Print(newLordTenant.getTenantUUID().String())
 	log.Print(newLordTenant.getAlias())
 	if err != nil {
