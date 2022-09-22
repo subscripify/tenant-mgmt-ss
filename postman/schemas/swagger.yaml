@@ -128,7 +128,7 @@ paths:
       - tenant_auth:
         - write:lord-tenants
         - write:super-tenants
-  /tenants/{targetTenantGuid}:
+  /tenants/{targetTenantUUID}:
     get:
       summary: returns a tenant
       description: returns a tenant
@@ -169,16 +169,7 @@ paths:
         - "tenants"
       operationId: updateTenant
       parameters:
-        - name: tenantGuid
-          in: path
-          required: true
-          schema:
-            maxLength: 32
-            pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}\
-              -[0-9a-fA-F]{12}$'
-            type: string
-            description: The services config UUID to use for the lord tenant. Must
-              be a valid services config UUID
+        - $ref: '#/components/parameters/targetTenantUUID'
       responses:
         '200':
           description: return tenant
@@ -212,16 +203,7 @@ paths:
         - "tenants"
       operationId: deleteTenant
       parameters:
-        - name: tenantGuid
-          in: path
-          required: true
-          schema:
-            maxLength: 32
-            pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}\
-              -[0-9a-fA-F]{12}$'
-            type: string
-            description: The services config UUID to use for the lord tenant. Must
-              be a valid services config UUID
+        - $ref: '#/components/parameters/targetTenantUUID'
       responses:
         '200':
           description: return tenant
