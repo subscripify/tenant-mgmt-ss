@@ -1,0 +1,2552 @@
+{
+	"info": {
+		"_postman_id": "d2ca3d9e-658a-4704-838d-f5aa5a119d36",
+		"name": "Private Services API  - OpenAPI 3.0",
+		"description": "This is the set of api endpoints to support access to Subscripify Super Services. Super Services are those that are available to Subscripify super tenants. They provide higher capabilities to super tenants to manage across multiple main tenants within the context of the Super-Tenant.<br><br> These APIs act as the front end to Private Services engineered and hosted by super tenants that need to access the subscripify platform.<br><br>Examples of super services available only to Super Tenants through this API are- <br>Tenant Management<br>Subscription and Plan Management <br>Billing and Payments<br><br> Subscripify also maintains a set of api endpoints to support access to Subscripify Public Services. Subscripify public services are services required by all tenants and users on the subscripify platform. All tenants, regardless of type have access to these services.<br><br>Examples of private services available to Super Tenants and to Main Tenants are- <br>Identity Services<br>Usage Analytics Services<br>For more information about Subscripify tenant architecture click here.\n\nContact Support:\n Email: william.ohara@subscripify.com",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "tenants",
+			"item": [
+				{
+					"name": "{target Tenant UUID}",
+					"item": [
+						{
+							"name": "returns a tenant",
+							"id": "8f978b8a-4826-4697-b583-ae8ce59f79ef",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants",
+										":targetTenantUUID"
+									],
+									"variable": [
+										{
+											"id": "103592ef-a321-4f05-9777-dab40d993df4",
+											"key": "targetTenantUUID",
+											"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+											"description": "(Required) "
+										}
+									]
+								},
+								"description": "returns a tenant"
+							},
+							"response": [
+								{
+									"id": "e6c24265-15cf-4f96-b8b2-ee86bcf6a2dc",
+									"name": "return tenant",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"publicServicesConfig\": \"6C4ddC19-f422-306a-E05E-71ac6d54\",\n  \"subdomain\": \"my-tenant\",\n  \"superServicesConfig\": \"fBB0204b-cA00-6552-F1A6-DA47Fddf\",\n  \"tenantAlias\": \"my tenant alias\"\n}"
+								},
+								{
+									"id": "34c3e8e7-e1c5-4bdf-a32f-4a9114867a53",
+									"name": "Authorization Required",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "43a6a7d3-2322-4ecb-9303-9a2c1b7a5a94",
+									"name": "Forbidden",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "a8c2844f-922b-4d02-831e-451e837542ba",
+									"name": "Not Found",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "d2bb4f49-1cfa-4031-91cd-8d9853a4eebb",
+									"name": "Invalid input",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Method Not Allowed",
+									"code": 405,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "0683a3de-ac59-46ab-a200-ac74e4832fe8",
+									"name": "Improper Protocol",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Not Acceptable",
+									"code": 406,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "c5b275e0-0b14-4b92-93f4-e830ccb5901b",
+									"name": "Resource Already Exists",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Conflict",
+									"code": 409,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "e99d40da-72c4-4f9e-b6d6-0404a2f0fcda",
+									"name": "Improper media type",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Unsupported Media Type",
+									"code": 415,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "05f9c0d6-913a-4826-bb0b-9e5c8fc3e8d5",
+									"name": "too many requests",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Too Many Requests",
+									"code": 429,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "c843c6c9-d27d-489b-9fab-349904811cdb",
+									"name": "Unexpected error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								}
+							]
+						},
+						{
+							"name": "updates a tenant",
+							"id": "2f59d789-5f28-4278-9353-7daa5b8b9f8a",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants",
+										":targetTenantUUID"
+									],
+									"variable": [
+										{
+											"id": "055cf751-c6b6-4a1f-8005-af845d4cea43",
+											"key": "targetTenantUUID",
+											"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+											"description": "(Required) "
+										}
+									]
+								},
+								"description": "updates a tenant"
+							},
+							"response": [
+								{
+									"id": "df25d75d-c556-4d89-8f0b-92b826874a5f",
+									"name": "return tenant",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"publicServicesConfig\": \"6C4ddC19-f422-306a-E05E-71ac6d54\",\n  \"subdomain\": \"my-tenant\",\n  \"superServicesConfig\": \"fBB0204b-cA00-6552-F1A6-DA47Fddf\",\n  \"tenantAlias\": \"my tenant alias\"\n}"
+								},
+								{
+									"id": "a85439c4-b787-42c6-ab4b-f333d3b55e95",
+									"name": "Authorization Required",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "e4f52d40-c0aa-4f15-878c-089974bbe232",
+									"name": "Forbidden",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "378553ab-d998-4d88-a207-b922133e04a8",
+									"name": "Not Found",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "f43f2493-ea07-4198-b6e5-a5c808e5f468",
+									"name": "Invalid input",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Method Not Allowed",
+									"code": 405,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "7eeb0eb3-7b42-4dd1-a627-aa2e3b42574b",
+									"name": "Improper Protocol",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Not Acceptable",
+									"code": 406,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "9ad7cbed-20f9-46eb-90cc-a949ebe1c2f9",
+									"name": "Resource Already Exists",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Conflict",
+									"code": 409,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "521b18ee-bb60-4b2c-8dc6-60d2c4e9dd9b",
+									"name": "Improper media type",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Unsupported Media Type",
+									"code": 415,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "4789f302-e300-491b-860a-8d91d921615f",
+									"name": "too many requests",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Too Many Requests",
+									"code": 429,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "32157283-bf47-4491-8e94-b597751f9e1c",
+									"name": "Unexpected error",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								}
+							]
+						},
+						{
+							"name": "removes a tenant",
+							"id": "8981fdaf-1796-45db-a3bb-fccf92d89bf1",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants",
+										":targetTenantUUID"
+									],
+									"variable": [
+										{
+											"id": "a53c973a-94b0-488a-b15e-3c9e831ec0d2",
+											"key": "targetTenantUUID",
+											"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+											"description": "(Required) "
+										}
+									]
+								},
+								"description": "removes a tenant"
+							},
+							"response": [
+								{
+									"id": "b7a6dccf-0a9a-440b-b872-5df32806ad39",
+									"name": "return tenant",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"publicServicesConfig\": \"6C4ddC19-f422-306a-E05E-71ac6d54\",\n  \"subdomain\": \"my-tenant\",\n  \"superServicesConfig\": \"fBB0204b-cA00-6552-F1A6-DA47Fddf\",\n  \"tenantAlias\": \"my tenant alias\"\n}"
+								},
+								{
+									"id": "9cf842c3-557b-4d4b-a893-cedc0869279b",
+									"name": "Authorization Required",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "5a7da2e3-259f-4d51-8faf-8edaa1e4db68",
+									"name": "Forbidden",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "20c49708-550d-4c73-93f4-c68275d3b75a",
+									"name": "Not Found",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "b99dec44-053c-4dfd-9218-a3f7ec69e6f5",
+									"name": "Invalid input",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Method Not Allowed",
+									"code": 405,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "8472ba14-b28a-41e0-8614-ae9ec436394b",
+									"name": "Improper Protocol",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Not Acceptable",
+									"code": 406,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "ee428e8b-1c92-45eb-84dd-a2ac721a96f7",
+									"name": "Resource Already Exists",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Conflict",
+									"code": 409,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "c7d76cb2-f0c7-4a9f-9abf-051984553f0e",
+									"name": "Improper media type",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Unsupported Media Type",
+									"code": 415,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "cc6ac4fe-b05c-4770-b8cf-7aff486d928b",
+									"name": "too many requests",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Too Many Requests",
+									"code": 429,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								},
+								{
+									"id": "3a988981-1c73-457c-8c54-8f0b667b8a0e",
+									"name": "Unexpected error",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"tenants",
+												":targetTenantUUID"
+											],
+											"variable": [
+												{
+													"key": "targetTenantUUID",
+													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"responseTime": null,
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+								}
+							]
+						}
+					],
+					"id": "0df9f13f-3bc6-4345-912d-e1da1abe98eb"
+				},
+				{
+					"name": "Add a new main or super tenant",
+					"id": "20afa886-567c-48b2-af88-74b24859b651",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+								"key": "liegeUUID",
+								"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/tenants",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tenants"
+							]
+						},
+						"description": "Adds a new tenant to the selected liege tenant in liegeUUID header parameter. The liege UUID must be a lord tenant if creating a super tenant and liege UUID must be a super tenant if creating a main tenant."
+					},
+					"response": [
+						{
+							"id": "1fd9e066-8fe8-4ba5-985f-b38e1f009713",
+							"name": "Successful operation returns the new object UUID",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tenants",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"tenantUUID\": \"61Db9fcD-8043-a9a7-ABb2-Cbf9d1FC\"\n}"
+						},
+						{
+							"id": "e79cab5d-3e1f-4f00-becc-32d6d51d0d07",
+							"name": "Authorization Required",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tenants",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+						},
+						{
+							"id": "a137bcb5-8771-4dc8-91c4-ffa73675dcfb",
+							"name": "Forbidden",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tenants",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+						},
+						{
+							"id": "5866adee-e02a-454a-b69a-16dcd9ff7ab2",
+							"name": "Not Found",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tenants",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+						},
+						{
+							"id": "9cc00c72-c1be-40c5-9f88-406e83620563",
+							"name": "Invalid input",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tenants",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants"
+									]
+								}
+							},
+							"status": "Method Not Allowed",
+							"code": 405,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+						},
+						{
+							"id": "e84935b4-1955-4c43-8ea4-267f274704b4",
+							"name": "Improper Protocol",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tenants",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+						},
+						{
+							"id": "2de50d0a-ad5f-4838-80da-485d9c2660d8",
+							"name": "Resource Already Exists",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tenants",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+						},
+						{
+							"id": "04f55469-6c92-41d7-a640-89d57e411dc3",
+							"name": "Improper media type",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tenants",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants"
+									]
+								}
+							},
+							"status": "Unsupported Media Type",
+							"code": 415,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+						},
+						{
+							"id": "eaf7122b-ac50-4b3d-8c07-09a33c8326a1",
+							"name": "too many requests",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tenants",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants"
+									]
+								}
+							},
+							"status": "Too Many Requests",
+							"code": 429,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+						},
+						{
+							"id": "763f40d4-e6cf-404c-8ef2-c9367fb50999",
+							"name": "Unexpected error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/tenants",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Tenant Search",
+					"id": "0915cab0-9776-439c-9959-c4a9d8a09e57",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+								"key": "liegeUUID",
+								"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/tenants/search",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tenants",
+								"search"
+							]
+						},
+						"description": "Search for tenants based upon the input parameters available"
+					},
+					"response": [
+						{
+							"id": "e477160c-58c7-4b4a-8ccc-08df431c4ff1",
+							"name": "Successful operation returns full tenant data including generated felids",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tenants/search",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants",
+										"search"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "[\n  {\n    \"tenantUUID\": \"1e2Da852-ce54-1fd2-bc7d-bF5dE735\",\n    \"tenantAlias\": \"consequat sed\",\n    \"tenantType\": \"super\"\n  },\n  {\n    \"tenantUUID\": \"E4c01d8f-5605-Eb5A-d3ee-69244E14\",\n    \"tenantAlias\": \"tempor occaecat \",\n    \"tenantType\": \"super\"\n  }\n]"
+						},
+						{
+							"id": "0769d1a1-c5fd-4fc5-92c1-9d861ea57a8b",
+							"name": "Authorization Required",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tenants/search",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants",
+										"search"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+						},
+						{
+							"id": "77ac8fab-f2b1-4ba2-9aca-c7176b329d34",
+							"name": "Forbidden",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tenants/search",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants",
+										"search"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+						},
+						{
+							"id": "ca67ad78-6b1d-4203-8d60-742272ddc686",
+							"name": "Not Found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tenants/search",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants",
+										"search"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+						},
+						{
+							"id": "ba1e4290-9169-45f7-84dc-700c3804cf95",
+							"name": "Invalid input",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tenants/search",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants",
+										"search"
+									]
+								}
+							},
+							"status": "Method Not Allowed",
+							"code": 405,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+						},
+						{
+							"id": "f5b40053-176f-4c33-921e-2efb95906c3d",
+							"name": "Improper Protocol",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tenants/search",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants",
+										"search"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+						},
+						{
+							"id": "bddc05e7-ef3b-439a-afce-be98d203fe2b",
+							"name": "Resource Already Exists",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tenants/search",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants",
+										"search"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+						},
+						{
+							"id": "741823f9-5287-4e21-83d0-9e1b2825baad",
+							"name": "Improper media type",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tenants/search",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants",
+										"search"
+									]
+								}
+							},
+							"status": "Unsupported Media Type",
+							"code": 415,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+						},
+						{
+							"id": "31a818ad-9711-4d78-9677-55e475a92896",
+							"name": "too many requests",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tenants/search",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants",
+										"search"
+									]
+								}
+							},
+							"status": "Too Many Requests",
+							"code": 429,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+						},
+						{
+							"id": "d09c0c28-f111-46a6-97f8-4b1ea84716b4",
+							"name": "Unexpected error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
+										"key": "liegeUUID",
+										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/tenants/search",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"tenants",
+										"search"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+						}
+					]
+				}
+			],
+			"id": "0ab7bf01-45c1-4fc5-9ae0-86784da4c683"
+		},
+		{
+			"name": "Add a new lord tenant",
+			"id": "94be448f-041c-420d-9e4f-d2436385cb75",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/lord-tenants",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"lord-tenants"
+					]
+				},
+				"description": "Adds a new lord tenant to the subscripify tenant system. This will start a new Kubernetes cluster on the selected cloud service"
+			},
+			"response": [
+				{
+					"id": "4acba1b7-e5d4-4237-b47d-b857a80b8dc0",
+					"name": "Successful operation returns the new object UUID",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/lord-tenants",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lord-tenants"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"tenantUUID\": \"61Db9fcD-8043-a9a7-ABb2-Cbf9d1FC\"\n}"
+				},
+				{
+					"id": "27875a52-5106-4130-9b79-f66321a57230",
+					"name": "Authorization Required",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/lord-tenants",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lord-tenants"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+				},
+				{
+					"id": "f8ae3be1-7129-4bda-95b3-b5126e5dcbcd",
+					"name": "Forbidden",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/lord-tenants",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lord-tenants"
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+				},
+				{
+					"id": "b2012c87-baea-407d-b344-4d419e4b7346",
+					"name": "Not Found",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/lord-tenants",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lord-tenants"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+				},
+				{
+					"id": "0cd33e3a-679a-49cc-bb2e-d6b39bf5bde8",
+					"name": "Invalid input",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/lord-tenants",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lord-tenants"
+							]
+						}
+					},
+					"status": "Method Not Allowed",
+					"code": 405,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+				},
+				{
+					"id": "3d8ded19-20ca-43ee-b46d-7158092944b6",
+					"name": "Improper Protocol",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/lord-tenants",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lord-tenants"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+				},
+				{
+					"id": "22fc1ca9-a020-49d0-b836-bffb51baf439",
+					"name": "Resource Already Exists",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/lord-tenants",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lord-tenants"
+							]
+						}
+					},
+					"status": "Conflict",
+					"code": 409,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+				},
+				{
+					"id": "c41ed7ef-ee88-48ff-b0b4-fc8a080b334d",
+					"name": "Improper media type",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/lord-tenants",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lord-tenants"
+							]
+						}
+					},
+					"status": "Unsupported Media Type",
+					"code": 415,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+				},
+				{
+					"id": "0e426aef-8852-4059-aee3-d7b733cc724a",
+					"name": "too many requests",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/lord-tenants",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lord-tenants"
+							]
+						}
+					},
+					"status": "Too Many Requests",
+					"code": 429,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+				},
+				{
+					"id": "25735702-5c0a-4470-b00f-71d9344feb5f",
+					"name": "Unexpected error",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/lord-tenants",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lord-tenants"
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"id": "d0b4a274-ec3d-4fa8-94da-a160b9b2d868",
+			"key": "baseUrl",
+			"value": "https://lord-tenant.subscripify.com",
+			"type": "string"
+		}
+	]
+}
