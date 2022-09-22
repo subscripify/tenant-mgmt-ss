@@ -308,7 +308,7 @@ components:
   schemas:
     lordTenantCreateBody:
       required:
-      - internalServicesConfig
+      - lordServicesConfig
       - publicServicesConfig
       - superServicesConfig
       - subdomain
@@ -340,7 +340,7 @@ components:
           type: string
           description: 'Sets the secondary domain name for the tenant. e.g. "my-tenant" from my-tenant.subscripify.com. Also used for the kubernetes namespace prefix for this tenant'
           example: "my-tenant" 
-        internalServicesConfig:
+        lordServicesConfig:
           maxLength: 32
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           type: string

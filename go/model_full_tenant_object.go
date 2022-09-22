@@ -41,7 +41,7 @@ type FullTenantObject struct {
 	// Sets the secondary domain name for the tenant. e.g. \"subscripify\" from my-tenant.subscripify.com
 	SecondaryDomain string `json:"secondaryDomain,omitempty"`
 	// The services config UUID to use for the lord tenant. Must be a valid services config UUID
-	InternalServicesConfig string `json:"internalServicesConfig"`
+	LordServicesConfig string `json:"lordServicesConfig"`
 	// The cloud provider to deploy to. e.g. The only cloud provider supported (currently) is azure.
 	SubscripifyDeploymentCloudLocation string `json:"subscripifyDeploymentCloudLocation"`
 }

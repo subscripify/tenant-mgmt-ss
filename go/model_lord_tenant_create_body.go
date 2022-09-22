@@ -19,7 +19,7 @@ type LordTenantCreateBody struct {
 	// Sets the secondary domain name for the tenant. e.g. \"my-tenant\" from my-tenant.subscripify.com. Also used for the kubernetes namespace prefix for this tenant
 	Subdomain string `json:"subdomain"`
 	// The services config UUID to use for the lord tenant. Must be a valid services config UUID
-	InternalServicesConfig string `json:"internalServicesConfig"`
+	LordServicesConfig string `json:"lordServicesConfig"`
 	// The services config UUID to use for the super-tenant. Must be a valid services config UUID
 	SuperServicesConfig string `json:"superServicesConfig"`
 	// The services config UUID to use for the main-tenant's public services. The services config UUID  used must be a publicServices UUID and belong to the liege tenant
