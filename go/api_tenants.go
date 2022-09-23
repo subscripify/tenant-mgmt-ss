@@ -19,18 +19,24 @@ import (
 )
 
 func AddLordTenant(w http.ResponseWriter, r *http.Request) {
+	var wo TenantUuidCreatedObject
+	var eo HttpResponseError
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+	// w.WriteHeader(http.StatusOK)
 	defer r.Body.Close()
 	dec := json.NewDecoder(r.Body)
 	var lordTenantCreateBody LordTenantCreateBody
 	if err := dec.Decode(&lordTenantCreateBody); err != nil {
 		log.Printf("error: bad JSON: %s", err)
-		http.Error(w, "bad json", http.StatusBadRequest)
+		eo.Message = "bad json"
+		eo.ResponseCode = http.StatusBadRequest
+		jsonResp, _ := json.Marshal(eo)
+
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(jsonResp)
 		return
 	}
-	fmt.Fprintln(w, lordTenantCreateBody)
-	err := tenant.NewLordTenant(
+	nid, err := tenant.NewLordTenant(
 		lordTenantCreateBody.TenantAlias,
 		lordTenantCreateBody.TopLevelDomain,
 		lordTenantCreateBody.SecondaryDomain,
@@ -43,6 +49,9 @@ func AddLordTenant(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Print(err)
 	}
+	wo.TenantUUID = nid.String()
+	jsonResp, _ := json.Marshal(wo)
+	w.Write(jsonResp)
 }
 
 func AddTenant(w http.ResponseWriter, r *http.Request) {

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	tenantdbserv "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/tenantdb"
+	"github.com/google/uuid"
 )
 
 func NewLordTenant(
@@ -19,12 +20,12 @@ func NewLordTenant(
 	superServicesConfig string,
 	publicServicesConfig string,
 	cloudLocation CloudLocation,
-	createdBy string) error {
+	createdBy string) (uuid.UUID, error) {
 	//no special processing required - this is a pass through to maintain the pattern. the NewTenant function covers the factory for non lord tenant types
 	nlt, err := createLordTenant(tenantAlias, topLevelDomain, secondaryDomain, subdomain, lordServicesConfig, superServicesConfig, publicServicesConfig, cloudLocation, createdBy)
 	if err != nil {
 		log.Printf("new lord tenant object creation fail: %v", err)
-		return err
+		return uuid.UUID{}, err
 	}
 
 	//setting up a 10 second timeout (could be less)
@@ -36,7 +37,7 @@ func NewLordTenant(
 	if err != nil {
 		log.Printf("new lord tenant object get fail: %v", err)
 
-		return err
+		return uuid.UUID{}, err
 	}
 	insertStr := `INSERT INTO tenant (
 		tenant_uuid, 
@@ -70,12 +71,12 @@ func NewLordTenant(
 
 	if err != nil {
 		log.Printf("fail on insert: %v", err)
-		return err
+		return uuid.UUID{}, err
 	}
 
 	count, _ := r.RowsAffected()
 	log.Printf("number of rows inserted :%v", count)
-	return nil
+	return nlt.getTenantUUID(), nil
 }
 
 func NewTenant(
