@@ -35,7 +35,7 @@ func AddLordTenant(w http.ResponseWriter, r *http.Request) {
 		lordTenantCreateBody.TopLevelDomain,
 		lordTenantCreateBody.SecondaryDomain,
 		lordTenantCreateBody.Subdomain,
-		lordTenantCreateBody.InternalServicesConfig,
+		lordTenantCreateBody.LordServicesConfig,
 		lordTenantCreateBody.SuperServicesConfig,
 		lordTenantCreateBody.PublicServicesConfig,
 		tenant.Azure,
