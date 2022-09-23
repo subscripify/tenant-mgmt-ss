@@ -21,8 +21,9 @@ func NewLordTenant(
 	cloudLocation CloudLocation,
 	createdBy string) error {
 	//no special processing required - this is a pass through to maintain the pattern. the NewTenant function covers the factory for non lord tenant types
-	newLordTenant, err := createLordTenant(tenantAlias, topLevelDomain, secondaryDomain, subdomain, lordServicesConfig, superServicesConfig, publicServicesConfig, cloudLocation, createdBy)
+	nlt, err := createLordTenant(tenantAlias, topLevelDomain, secondaryDomain, subdomain, lordServicesConfig, superServicesConfig, publicServicesConfig, cloudLocation, createdBy)
 	if err != nil {
+		log.Printf("new lord tenant object creation fail: %v", err)
 		return err
 	}
 
@@ -32,13 +33,14 @@ func NewLordTenant(
 
 	tdb := tenantdbserv.Tdb.Handle
 
-	nl, err := newLordTenant.getLordCreationObject()
 	if err != nil {
+		log.Printf("new lord tenant object get fail: %v", err)
+
 		return err
 	}
 	insertStr := `INSERT INTO tenant (
 		tenant_uuid, 
-		org_name,
+		tenant_alias,
 		top_level_domain,
 		secondary_domain,
 		subdomain, 
@@ -48,30 +50,26 @@ func NewLordTenant(
 		public_services_config,
 		subscripify_deployment_cloud_location,
 		is_lord_tenant,
-		is_super_tenant,
 		created_by
 			)
-		VALUES (
-		:tenant_uuid, 
-		:org_name,
-		:top_level_domain,
-		:secondary_domain,
-		:subdomain, 
-		:kube_namespace_prefix, 
-		:lord_services_config, 
-		:super_services_config,
-		:public_services_config,
-		:subscripify_deployment_cloud_location,
-		:is_lord_tenant,
-		:is_super_tenant,
-		:created_by
-		);
-			`
+		VALUES (UUID_TO_BIN(?), ?,?,?,?, ?, UUID_TO_BIN(?), UUID_TO_BIN(?),UUID_TO_BIN(?),?,?,?);`
 
-	r, err := tdb.ExecContext(ctx, insertStr, nl)
-	log.Print(newLordTenant.getTenantUUID().String())
-	log.Print(newLordTenant.getAlias())
+	r, err := tdb.ExecContext(ctx, insertStr,
+		nlt.getTenantUUID(),
+		nlt.getAlias(),
+		nlt.getTopLevelDomain(),
+		nlt.getSecondaryDomainName(),
+		nlt.getSubdomainName(),
+		nlt.getKubeNamespacePrefix(),
+		nlt.getLordServicesConfig(),
+		nlt.getSuperServicesConfig(),
+		nlt.getPublicServicesConfig(),
+		nlt.getCloudLocation(),
+		nlt.isLordTenant(),
+		nlt.getTenantCreator())
+
 	if err != nil {
+		log.Printf("fail on insert: %v", err)
 		return err
 	}
 

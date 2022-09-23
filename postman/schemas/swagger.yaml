@@ -284,7 +284,7 @@ components:
       in: path
       required: true
       schema:
-        maxLength: 32
+        maxLength: 36
         pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
         type: string
         description: 'This is the UUID of the target tenant. The target tenant must belong to the liege tenant in the liegeUUID header.'
@@ -341,25 +341,25 @@ components:
           description: 'Sets the secondary domain name for the tenant. e.g. "my-tenant" from my-tenant.subscripify.com. Also used for the kubernetes namespace prefix for this tenant'
           example: "my-tenant" 
         lordServicesConfig:
-          maxLength: 32
+          maxLength: 36
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           type: string
           description: The services config UUID to use for the lord tenant. Must be a valid services config UUID
         superServicesConfig:
-          maxLength: 32
+          maxLength: 36
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           type: string
           description: The services config UUID to use for the super-tenant. Must
             be a valid services config UUID
         publicServicesConfig:
-          maxLength: 32
+          maxLength: 36
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           type: string
           description: The services config UUID to use for the main-tenant's public
             services. The services config UUID  used must be a publicServices UUID
             and belong to the liege tenant
         subscripifyDeploymentCloudLocation:
-          maxLength: 32
+          maxLength: 10
           pattern: azure
           type: string
           description: The cloud provider to deploy to. e.g. The only cloud provider
@@ -394,25 +394,25 @@ components:
             of the tenant and providing unique url for each tenant
           example: subscripify
         superServicesConfig:
-          maxLength: 32
+          maxLength: 36
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           type: string
           description: The services config UUID to use for a super tenant. Must
             be a valid services config UUID. This value must be empty when creating a main tenant.
         publicServicesConfig:
-          maxLength: 32
+          maxLength: 36
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           type: string
           description: The services config UUID to use for the tenant's public
             services. Must be a valid public services UUID. 
         privateAccessConfig:
-          maxLength: 32
+          maxLength: 36
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           type: string
           description: The private access config UUID to use for the tenant's public
             services. Must be a valid private access UUID. This value must be empty when creating a main tenant.
         publicAccessConfig:
-          maxLength: 32
+          maxLength: 36
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           type: string
           description: The public access config UUID to use for the tenant's public
@@ -423,7 +423,7 @@ components:
       properties:
         tenantUUID:
           type: string
-          maxLength: 32
+          maxLength: 36
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
     tenantSearchResults:
       type: array
@@ -432,7 +432,7 @@ components:
         properties:
           tenantUUID:
             type: string
-            maxLength: 32
+            maxLength: 36
             pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
             readOnly: true
           tenantAlias:
@@ -450,7 +450,7 @@ components:
       properties:
         tenantUUID:
           type: string
-          maxLength: 32
+          maxLength: 36
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           readOnly: true
         kubeNamespace:
@@ -460,13 +460,13 @@ components:
           readOnly: true
         liegeUUID:
           type: string
-          maxLength: 32
+          maxLength: 36
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           description: The UUID of this tenant's owner tenant. This value is equal to lordUUID for super tenants
           readOnly: true
         lordUUID:
           type: string
-          maxLength: 32
+          maxLength: 36
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           description: The UUID of this tenant's lord tenant
           readOnly: true

@@ -2,7 +2,6 @@ package tenant
 
 import (
 	"fmt"
-	"reflect"
 	"regexp"
 	"time"
 
@@ -46,7 +45,6 @@ type iTenant interface {
 	isSuperTenant() bool
 	getTenantCreator() string
 	getCreateTime() time.Time
-	getLordCreationObject() (*lordTenantCreation, error)
 }
 
 type tenant struct {
@@ -70,21 +68,6 @@ type tenant struct {
 	createdBy            string
 }
 
-type lordTenantCreation struct {
-	tenantUUID           []byte        `db:"tenant_uuid"`
-	alias                string        `db:"tenant_alias"`
-	subdomain            string        `db:"subdomain"`
-	secondaryDomain      string        `db:"secondary_domain"`
-	topLevelDomain       string        `db:"top_level_domain"`
-	kubeNamespacePrefix  string        `db:"kube_namespace_prefix"`
-	lordServicesConfig   []byte        `db:"lord_services_uuid"`
-	superServicesConfig  []byte        `db:"super_services_uuid"`
-	publicServicesConfig []byte        `db:"public_services_uuid"`
-	cloudLocation        CloudLocation `db:"subscripify_deployment_cloud_location"`
-	lordTenant           bool          `db:"is_lord_tenant"`
-	createdBy            string        `db:"created_by"`
-}
-
 type TenantType string
 
 const (
@@ -100,80 +83,6 @@ const (
 	ACS   CloudLocation = "ACS"
 	GCP   CloudLocation = "GCP"
 )
-
-// this returns a full lord tenant creation object for an INSERT to the tenants table
-func (t *tenant) getLordCreationObject() (*lordTenantCreation, error) {
-
-	malFormedLordTenant := true
-	switch false {
-	case reflect.ValueOf(t.tenantUUID).IsZero():
-		malFormedLordTenant = true
-	case reflect.ValueOf(t.alias).IsZero():
-		malFormedLordTenant = true
-	case reflect.ValueOf(t.topLevelDomain).IsZero():
-		malFormedLordTenant = true
-	case reflect.ValueOf(t.secondaryDomain).IsZero():
-		malFormedLordTenant = true
-	case reflect.ValueOf(t.subdomain).IsZero():
-		malFormedLordTenant = true
-	case reflect.ValueOf(t.kubeNamespacePrefix).IsZero():
-		malFormedLordTenant = true
-	case reflect.ValueOf(t.lordServicesConfig).IsZero():
-		malFormedLordTenant = true
-	case reflect.ValueOf(t.superServicesConfig).IsZero():
-		malFormedLordTenant = true
-	case reflect.ValueOf(t.publicServicesConfig).IsZero():
-		malFormedLordTenant = true
-	case reflect.ValueOf(t.cloudLocation).IsZero():
-		malFormedLordTenant = true
-	case (reflect.ValueOf(t.lordTenant).IsZero() || !t.lordTenant):
-		malFormedLordTenant = true
-	case reflect.ValueOf(t.createdBy).IsZero():
-		malFormedLordTenant = true
-	default:
-		malFormedLordTenant = false
-	}
-	insertRec := &lordTenantCreation{}
-	if malFormedLordTenant {
-		err := fmt.Errorf("mal formed lord tenant object - can not create")
-		return nil, err
-	}
-
-	bin, err := t.tenantUUID.MarshalBinary()
-	if err != nil {
-		return nil, err
-	}
-	insertRec.tenantUUID = bin
-
-	insertRec.alias = t.alias
-	insertRec.topLevelDomain = t.topLevelDomain
-	insertRec.secondaryDomain = t.secondaryDomain
-	insertRec.subdomain = t.subdomain
-	insertRec.kubeNamespacePrefix = t.kubeNamespacePrefix
-
-	bin, err = t.lordServicesConfig.MarshalBinary()
-	if err != nil {
-		return nil, err
-	}
-	insertRec.lordServicesConfig = bin
-
-	bin, err = t.superServicesConfig.MarshalBinary()
-	if err != nil {
-		return nil, err
-	}
-	insertRec.superServicesConfig = bin
-
-	bin, err = t.superServicesConfig.MarshalBinary()
-	if err != nil {
-		return nil, err
-	}
-	insertRec.publicServicesConfig = bin
-	insertRec.cloudLocation = t.cloudLocation
-	insertRec.lordTenant = t.lordTenant
-	insertRec.createdBy = t.createdBy
-	return insertRec, nil
-
-}
 
 // this is the only place in the application this value is created
 func (t *tenant) setNewTenantUUID() {

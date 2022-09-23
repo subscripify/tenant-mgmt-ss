@@ -30,13 +30,14 @@ func createLordTenant(
 	if err := l.setTopLevelDomain(topLevelDomain); err != nil {
 		return nil, err
 	}
-	if err := l.setLordServicesConfig(lordServicesConfig); err != nil {
-		return nil, err
-	}
+
 	if err := l.setSuperServicesConfig(superServicesConfig); err != nil {
 		return nil, err
 	}
 	if err := l.setPublicServicesConfig(publicServicesConfig); err != nil {
+		return nil, err
+	}
+	if err := l.setLordServicesConfig(lordServicesConfig); err != nil {
 		return nil, err
 	}
 	if err := l.setCloudLocation(cloudLocation); err != nil {
