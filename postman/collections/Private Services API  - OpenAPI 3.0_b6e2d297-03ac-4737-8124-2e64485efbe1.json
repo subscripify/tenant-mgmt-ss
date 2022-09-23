@@ -37,7 +37,6 @@
 									],
 									"variable": [
 										{
-											"id": "103592ef-a321-4f05-9777-dab40d993df4",
 											"key": "targetTenantUUID",
 											"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
 											"description": "(Required) "
@@ -77,12 +76,13 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"publicServicesConfig\": \"6C4ddC19-f422-306a-E05E-71ac6d54\",\n  \"subdomain\": \"my-tenant\",\n  \"superServicesConfig\": \"fBB0204b-cA00-6552-F1A6-DA47Fddf\",\n  \"tenantAlias\": \"my tenant alias\"\n}"
+									"body": "{\n \"publicServicesConfig\": \"aF6923f3-CDcC-eDf4-c2E5-fE1E5F9dF1Ad\",\n \"subdomain\": \"my-tenant\",\n \"superServicesConfig\": \"f6CdBcA7-A30E-28Fa-7AF4-EBD5e42bA2DA\",\n \"tenantAlias\": \"my tenant alias\"\n}"
 								},
 								{
 									"id": "34c3e8e7-e1c5-4bdf-a32f-4a9114867a53",
@@ -114,7 +114,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -151,7 +152,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -188,7 +190,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -225,7 +228,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -262,7 +266,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -299,7 +304,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -336,7 +342,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -373,7 +380,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -410,7 +418,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -444,7 +453,6 @@
 									],
 									"variable": [
 										{
-											"id": "055cf751-c6b6-4a1f-8005-af845d4cea43",
 											"key": "targetTenantUUID",
 											"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
 											"description": "(Required) "
@@ -484,12 +492,13 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"publicServicesConfig\": \"6C4ddC19-f422-306a-E05E-71ac6d54\",\n  \"subdomain\": \"my-tenant\",\n  \"superServicesConfig\": \"fBB0204b-cA00-6552-F1A6-DA47Fddf\",\n  \"tenantAlias\": \"my tenant alias\"\n}"
+									"body": "{\n \"publicServicesConfig\": \"aF6923f3-CDcC-eDf4-c2E5-fE1E5F9dF1Ad\",\n \"subdomain\": \"my-tenant\",\n \"superServicesConfig\": \"f6CdBcA7-A30E-28Fa-7AF4-EBD5e42bA2DA\",\n \"tenantAlias\": \"my tenant alias\"\n}"
 								},
 								{
 									"id": "a85439c4-b787-42c6-ab4b-f333d3b55e95",
@@ -521,7 +530,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -558,7 +568,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -595,7 +606,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -632,7 +644,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -669,7 +682,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -706,7 +720,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -743,7 +758,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -780,7 +796,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -817,7 +834,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -851,7 +869,6 @@
 									],
 									"variable": [
 										{
-											"id": "a53c973a-94b0-488a-b15e-3c9e831ec0d2",
 											"key": "targetTenantUUID",
 											"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
 											"description": "(Required) "
@@ -891,12 +908,13 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"publicServicesConfig\": \"6C4ddC19-f422-306a-E05E-71ac6d54\",\n  \"subdomain\": \"my-tenant\",\n  \"superServicesConfig\": \"fBB0204b-cA00-6552-F1A6-DA47Fddf\",\n  \"tenantAlias\": \"my tenant alias\"\n}"
+									"body": "{\n \"publicServicesConfig\": \"aF6923f3-CDcC-eDf4-c2E5-fE1E5F9dF1Ad\",\n \"subdomain\": \"my-tenant\",\n \"superServicesConfig\": \"f6CdBcA7-A30E-28Fa-7AF4-EBD5e42bA2DA\",\n \"tenantAlias\": \"my tenant alias\"\n}"
 								},
 								{
 									"id": "9cf842c3-557b-4d4b-a893-cedc0869279b",
@@ -928,7 +946,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -965,7 +984,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -1002,7 +1022,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -1039,7 +1060,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -1076,7 +1098,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -1113,7 +1136,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -1150,7 +1174,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -1187,7 +1212,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -1224,7 +1250,8 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json"
+											"value": "application/json",
+											"enabled": true
 										}
 									],
 									"cookie": [],
@@ -1261,7 +1288,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+							"raw": "{\n \"tenantType\": \"main\",\n \"tenantAlias\": \"my tenant alias\",\n \"subdomain\": \"subscripify\",\n \"publicServicesConfig\": \"44ED6Aa2-E2Cf-A5DF-6B0E-DDAED41fC5Da\",\n \"superServicesConfig\": \"9a79e3b0-F899-f6ed-6Fd6-Fc4BE5A1E9fe\",\n \"privateAccessConfig\": \"Ae3cEafe-D53b-2AEc-f1C4-fd33F9f2E0df\",\n \"publicAccessConfig\": \"0f9e7A1a-d7be-A460-8bEA-FAF1AFEfA9D0\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1317,12 +1344,13 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"tenantUUID\": \"61Db9fcD-8043-a9a7-ABb2-Cbf9d1FC\"\n}"
+							"body": "{\n \"tenantUUID\": \"0E4FaBB8-2a13-Ba49-07BF-afd0cf6fDa4F\"\n}"
 						},
 						{
 							"id": "e79cab5d-3e1f-4f00-becc-32d6d51d0d07",
@@ -1361,7 +1389,8 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
@@ -1405,7 +1434,8 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
@@ -1449,7 +1479,8 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
@@ -1493,7 +1524,8 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
@@ -1537,7 +1569,8 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
@@ -1581,7 +1614,8 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
@@ -1625,7 +1659,8 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
@@ -1669,7 +1704,8 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
@@ -1713,7 +1749,8 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
@@ -1783,12 +1820,13 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "[\n  {\n    \"tenantUUID\": \"1e2Da852-ce54-1fd2-bc7d-bF5dE735\",\n    \"tenantAlias\": \"consequat sed\",\n    \"tenantType\": \"super\"\n  },\n  {\n    \"tenantUUID\": \"E4c01d8f-5605-Eb5A-d3ee-69244E14\",\n    \"tenantAlias\": \"tempor occaecat \",\n    \"tenantType\": \"super\"\n  }\n]"
+							"body": "[\n {\n  \"tenantUUID\": \"4d49cfaA-cf73-eACA-ceA3-58eeF043d7E2\",\n  \"tenantAlias\": \"consequat sed\",\n  \"tenantType\": \"super\"\n },\n {\n  \"tenantUUID\": \"D28daAAA-03A3-9147-fB68-52a524b2a6ce\",\n  \"tenantAlias\": \"tempor occaecat \",\n  \"tenantType\": \"super\"\n }\n]"
 						},
 						{
 							"id": "0769d1a1-c5fd-4fc5-92c1-9d861ea57a8b",
@@ -1819,7 +1857,8 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
@@ -1855,7 +1894,8 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
@@ -1891,7 +1931,8 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
@@ -1927,7 +1968,8 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
@@ -1963,7 +2005,8 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
@@ -1999,7 +2042,8 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
@@ -2035,7 +2079,8 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
@@ -2071,7 +2116,8 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
@@ -2107,7 +2153,8 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json"
+									"value": "application/json",
+									"enabled": true
 								}
 							],
 							"cookie": [],
@@ -2123,7 +2170,8 @@
 			"name": "Add a new lord tenant",
 			"id": "94be448f-041c-420d-9e4f-d2436385cb75",
 			"protocolProfileBehavior": {
-				"disableBodyPruning": true
+				"disableBodyPruning": true,
+				"followOriginalHttpMethod": true
 			},
 			"request": {
 				"method": "POST",
@@ -2139,7 +2187,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+					"raw": "{\n \"lordServicesConfig\": \"60135d7c-3857-11ed-907f-f5001f9bae96\",\n \"publicServicesConfig\": \"6a24689f-385a-11ed-907f-f5001f9bae96\",\n \"superServicesConfig\": \"432ead01-385a-11ed-907f-f5001f9bae96\",\n \"subdomain\": \"my-tenant\",\n \"subscripifyDeploymentCloudLocation\": \"azure\",\n \"tenantAlias\": \"my tenant alias\",\n \"topLevelDomain\": \"com\",\n \"secondaryDomain\": \"subscripify\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2189,12 +2237,13 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json"
+							"value": "application/json",
+							"enabled": true
 						}
 					],
 					"cookie": [],
 					"responseTime": null,
-					"body": "{\n  \"tenantUUID\": \"61Db9fcD-8043-a9a7-ABb2-Cbf9d1FC\"\n}"
+					"body": "{\n \"tenantUUID\": \"0E4FaBB8-2a13-Ba49-07BF-afd0cf6fDa4F\"\n}"
 				},
 				{
 					"id": "27875a52-5106-4130-9b79-f66321a57230",
@@ -2227,7 +2276,8 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json"
+							"value": "application/json",
+							"enabled": true
 						}
 					],
 					"cookie": [],
@@ -2265,7 +2315,8 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json"
+							"value": "application/json",
+							"enabled": true
 						}
 					],
 					"cookie": [],
@@ -2303,7 +2354,8 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json"
+							"value": "application/json",
+							"enabled": true
 						}
 					],
 					"cookie": [],
@@ -2341,7 +2393,8 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json"
+							"value": "application/json",
+							"enabled": true
 						}
 					],
 					"cookie": [],
@@ -2379,7 +2432,8 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json"
+							"value": "application/json",
+							"enabled": true
 						}
 					],
 					"cookie": [],
@@ -2417,7 +2471,8 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json"
+							"value": "application/json",
+							"enabled": true
 						}
 					],
 					"cookie": [],
@@ -2455,7 +2510,8 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json"
+							"value": "application/json",
+							"enabled": true
 						}
 					],
 					"cookie": [],
@@ -2493,7 +2549,8 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json"
+							"value": "application/json",
+							"enabled": true
 						}
 					],
 					"cookie": [],
@@ -2531,7 +2588,8 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json"
+							"value": "application/json",
+							"enabled": true
 						}
 					],
 					"cookie": [],
@@ -2543,10 +2601,9 @@
 	],
 	"variable": [
 		{
-			"id": "d0b4a274-ec3d-4fa8-94da-a160b9b2d868",
+			"id": "ef012877-187f-423a-97e5-d06503b43939",
 			"key": "baseUrl",
-			"value": "https://lord-tenant.subscripify.com",
-			"type": "string"
+			"value": "https://lord-tenant.subscripify.com"
 		}
 	]
 }
