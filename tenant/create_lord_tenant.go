@@ -13,46 +13,55 @@ func createLordTenant(
 	superServicesConfig string,
 	publicServicesConfig string,
 	cloudLocation CloudLocation,
-	createdBy string) (iTenant, error) {
+	createdBy string) (iTenant, iHttpResponse) {
 	var l lordTenant
-
-	//parse the UUID strings to ensure that they are UUIDs
-
+	var r httpResponseData
+	//all of these are due to first level validation failures and should be 400s
 	if err := l.setTenantType(LordTenant); err != nil {
-		return nil, err
+
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setTenantType")
+		return nil, &r
 	}
 	if err := l.setSubdomainName(subdomain); err != nil {
-		return nil, err
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setSubdomainName")
+		return nil, &r
 	}
 	if err := l.setSecondaryDomainName(secondaryDomain); err != nil {
-		return nil, err
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setSecondaryDomainName")
+		return nil, &r
 	}
 	if err := l.setTopLevelDomain(topLevelDomain); err != nil {
-		return nil, err
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setTopLevelDomain")
+		return nil, &r
 	}
-
 	if err := l.setSuperServicesConfig(superServicesConfig); err != nil {
-		return nil, err
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setSuperServicesConfig")
+		return nil, &r
 	}
 	if err := l.setPublicServicesConfig(publicServicesConfig); err != nil {
-		return nil, err
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setPublicServicesConfig")
+		return nil, &r
 	}
 	if err := l.setLordServicesConfig(lordServicesConfig); err != nil {
-		return nil, err
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setLordServicesConfig")
+		return nil, &r
 	}
 	if err := l.setCloudLocation(cloudLocation); err != nil {
-		return nil, err
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setCloudLocation")
+		return nil, &r
 	}
 	if err := l.setCreatedBy(createdBy); err != nil {
-		return nil, err
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setCreatedBy")
+		return nil, &r
 	}
 	if err := l.setAlias(tenantAlias); err != nil {
-		return nil, err
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setAlias")
+		return nil, &r
 	}
 
 	l.setNewTenantUUID()
 
-	return &l, nil
+	return &l, &r
 
 }
 

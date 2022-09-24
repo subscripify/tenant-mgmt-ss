@@ -15,43 +15,53 @@ import (
 	"log"
 	"net/http"
 
-	"dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/tenant"
+	tenant "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/tenant"
 )
 
+// reads the generated response from the tenant package and sends the response
 func AddLordTenant(w http.ResponseWriter, r *http.Request) {
 	var wo TenantUuidCreatedObject
-	var eo HttpResponseError
+	var hr HttpResponseError
+	var jsonResp []byte
+
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	// w.WriteHeader(http.StatusOK)
+
 	defer r.Body.Close()
 	dec := json.NewDecoder(r.Body)
 	var lordTenantCreateBody LordTenantCreateBody
 	if err := dec.Decode(&lordTenantCreateBody); err != nil {
 		log.Printf("error: bad JSON: %s", err)
-		eo.Message = "bad json"
-		eo.ResponseCode = http.StatusBadRequest
-		jsonResp, _ := json.Marshal(eo)
+		hr.Message = "bad json"
+		hr.ResponseCode = http.StatusBadRequest
+		jsonResp, _ = json.Marshal(hr)
+	} else {
+		resp := tenant.NewLordTenant(
+			lordTenantCreateBody.TenantAlias,
+			lordTenantCreateBody.TopLevelDomain,
+			lordTenantCreateBody.SecondaryDomain,
+			lordTenantCreateBody.Subdomain,
+			lordTenantCreateBody.LordServicesConfig,
+			lordTenantCreateBody.SuperServicesConfig,
+			lordTenantCreateBody.PublicServicesConfig,
+			tenant.Azure,
+			"william.ohara@subscripify.com").GetHttpResponse()
 
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(jsonResp)
-		return
+		hr.Message = resp.Message
+		hr.ResponseCode = int32(resp.HttpResponseCode)
+		if hr.ResponseCode == 200 {
+			wo.TenantUUID = resp.NewTenant.TenantUUID
+
+			jsonResp, _ = json.Marshal(wo)
+
+		} else {
+			jsonResp, _ = json.Marshal(hr)
+		}
+
 	}
-	nid, err := tenant.NewLordTenant(
-		lordTenantCreateBody.TenantAlias,
-		lordTenantCreateBody.TopLevelDomain,
-		lordTenantCreateBody.SecondaryDomain,
-		lordTenantCreateBody.Subdomain,
-		lordTenantCreateBody.LordServicesConfig,
-		lordTenantCreateBody.SuperServicesConfig,
-		lordTenantCreateBody.PublicServicesConfig,
-		tenant.Azure,
-		"william.ohara@subscripify.com")
-	if err != nil {
-		log.Print(err)
-	}
-	wo.TenantUUID = nid.String()
-	jsonResp, _ := json.Marshal(wo)
+
+	w.WriteHeader(int(hr.ResponseCode))
 	w.Write(jsonResp)
+
 }
 
 func AddTenant(w http.ResponseWriter, r *http.Request) {

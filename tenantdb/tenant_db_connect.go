@@ -4,7 +4,6 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"database/sql"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -60,7 +59,7 @@ func getNewMySQLTenantDbHandle() *sql.DB {
 	if pingErr != nil {
 		log.Fatal(pingErr)
 	}
-	fmt.Println("connected to tenants db on server")
+	log.Println("connected to tenants db on server")
 	return tenantsDbHandle
 }
 
