@@ -103,7 +103,7 @@ func NewLordTenant(
 			)
 		VALUES (UUID_TO_BIN(?), ?,?,?,?, ?, UUID_TO_BIN(?), UUID_TO_BIN(?),UUID_TO_BIN(?),?,?,?);`
 
-		_, rc, message := tenantdbserv.InsertResponseHelper(tdb.ExecContext(ctx, insertStr,
+		_, rc, message := tenantdbserv.ResponseMakerFromInsert(tdb.ExecContext(ctx, insertStr,
 			nlt.getTenantUUID(),
 			nlt.getAlias(),
 			nlt.getTopLevelDomain(),

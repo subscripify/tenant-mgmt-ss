@@ -18,7 +18,9 @@ import (
 	tenant "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/tenant"
 )
 
-// reads the generated response from the tenant package and sends the response
+// reads the request body, decodes JSON and sends data to tenant package.
+// the tenant Package generates and send the appropriate response data
+// this function sends then sends the data
 func AddLordTenant(w http.ResponseWriter, r *http.Request) {
 	var wo TenantUuidCreatedObject
 	var hr HttpResponseError
