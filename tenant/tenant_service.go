@@ -2,8 +2,6 @@ package tenant
 
 import (
 	"context"
-	"database/sql"
-	"fmt"
 	"log"
 	"reflect"
 	"strings"
@@ -130,7 +128,7 @@ func NewLordTenant(
 }
 
 func NewTenant(
-	tenantType TenantType,
+	tenantType string,
 	tenantAlias string,
 	subdomain string,
 	superServicesConfig string,
@@ -138,39 +136,130 @@ func NewTenant(
 	privateAccessConfig string,
 	customAccessConfig string,
 	liegeUUID string,
-	createdBy string) (iTenant, error) {
+	createdBy string) iHttpResponse {
 	// factory function for new super or main tenants. this function will also look up lord tenants using liege tenant value
 
 	//setting up a 10 second timeout (could be less)
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
 
-	var lordUUID string
-	var isSupperTenant bool = false
-	var isLordTenant bool = false
-	t := tenantdbserv.Tdb.Handle
-	if tenantType == MainTenant {
-		err := t.QueryRowContext(ctx, "SELECT lord_uuid, is_super_tenant from tenants where tenant_uuid = ?", liegeUUID).Scan(&lordUUID, &isSupperTenant)
-		if err == sql.ErrNoRows {
-			return nil, fmt.Errorf("could not find the liege tenant specified")
+	if tenantType == string(MainTenant) {
+
+		nmt, resp := createMainTenant(tenantAlias, subdomain, publicServicesConfig, customAccessConfig, liegeUUID, createdBy)
+
+		if !isNil(nmt) {
+			//setting up a 10 second timeout (could be less)
+			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+			defer cancel()
+
+			tdb := tenantdbserv.Tdb.Handle
+
+			insertStr := `INSERT INTO tenant (
+			tenant_uuid, 
+			tenant_alias,
+			top_level_domain,
+			secondary_domain,
+			subscripify_deployment_cloud_location,
+			subdomain, 
+			kube_namespace_prefix, 
+			public_services_config,
+			custom_access_config,
+		  created_by
+				)
+			VALUES (UUID_TO_BIN(?),
+			 ?,
+			 (SELECT top_level_domain, secondary_domain, subscripify_deployment_cloud_location FROM tenants WHERE tenant_uuid = ? LIMIT 1),  
+			 ?, 
+			 ?, 
+			 UUID_TO_BIN(?), 
+			 UUID_TO_BIN(?),
+			 ?;`
+
+			_, rc, message := tenantdbserv.InsertResponseHelper(tdb.ExecContext(ctx, insertStr,
+				nmt.getTenantUUID(),
+				nmt.getAlias(),
+				nmt.getLiegeUUID(),
+				nmt.getSubdomainName(),
+				nmt.getKubeNamespacePrefix(),
+				nmt.getPublicServicesConfig(),
+				nmt.getCustomAccessConfig(),
+				nmt.getTenantCreator()))
+
+			//if the response is not a 200 then an insert error ocurred
+			if rc != 200 {
+				resp.logAndGenerateHttpResponseData(rc, message, "NewTenant:main")
+			} else {
+				resp.logAndGenerateHttpResponseData(200, "created new main tenant", "NewTenant:main")
+				resp.logAndGenerateNewTenantResponse(nmt.getTenantUUID(), "NewTenant:main")
+			}
 		}
-		if !isSupperTenant {
-			return nil, fmt.Errorf("this not a valid liege tenant for a main tenant, must use a super tenant")
+
+		return resp
+
+	} else if tenantType == string(SuperTenant) {
+		nst, resp := createSuperTenant(tenantAlias, subdomain, superServicesConfig, publicServicesConfig, privateAccessConfig, customAccessConfig, liegeUUID, createdBy)
+
+		if !isNil(nst) {
+			//setting up a 10 second timeout (could be less)
+			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+			defer cancel()
+
+			tdb := tenantdbserv.Tdb.Handle
+
+			insertStr := `INSERT INTO tenant (
+			tenant_uuid, 
+			tenant_alias,
+			top_level_domain,
+			secondary_domain,
+			subscripify_deployment_cloud_location,
+			subdomain, 
+			kube_namespace_prefix,
+			super_services_config, 
+			public_services_config,
+			private_access_config,
+			custom_access_config,
+		  created_by
+				)
+			VALUES (UUID_TO_BIN(?),
+			 ?,
+			 (SELECT top_level_domain, secondary_domain, subscripify_deployment_cloud_location FROM tenants WHERE tenant_uuid = ? LIMIT 1),  
+			 ?, 
+			 ?, 
+			 UUID_TO_BIN(?),
+			 UUID_TO_BIN(?),
+			 UUID_TO_BIN(?), 
+			 UUID_TO_BIN(?),
+			 ?;`
+
+			_, rc, message := tenantdbserv.InsertResponseHelper(tdb.ExecContext(ctx, insertStr,
+				nst.getTenantUUID(),
+				nst.getAlias(),
+				nst.getLiegeUUID(),
+				nst.getSubdomainName(),
+				nst.getKubeNamespacePrefix(),
+				nst.getSuperServicesConfig(),
+				nst.getPublicServicesConfig(),
+				nst.getPrivateAccessConfig(),
+				nst.getCustomAccessConfig(),
+				nst.getTenantCreator()))
+
+			//if the response is not a 200 then an insert error ocurred
+			if rc != 200 {
+				resp.logAndGenerateHttpResponseData(rc, message, "NewTenant:main")
+			} else {
+				resp.logAndGenerateHttpResponseData(200, "created new main tenant", "NewTenant:main")
+				resp.logAndGenerateNewTenantResponse(nst.getTenantUUID(), "NewTenant:main")
+			}
 		}
-		return createMainTenant(tenantAlias, subdomain, publicServicesConfig, customAccessConfig, liegeUUID, lordUUID, createdBy), nil
-	} else if tenantType == SuperTenant {
-		err := t.QueryRowContext(ctx, "SELECT is_lord_tenant from tenants where tenant_uuid = ?", liegeUUID).Scan(&isLordTenant)
-		if err == sql.ErrNoRows {
-			return nil, fmt.Errorf("could not find the liege tenant specified")
-		}
-		if !isLordTenant {
-			return nil, fmt.Errorf("this not a valid liege tenant for a super tenant, must use a lord tenant")
-		}
-		return createSuperTenant(tenantAlias, subdomain, superServicesConfig, publicServicesConfig, privateAccessConfig, customAccessConfig, liegeUUID, lordUUID, createdBy), nil
-	} else if tenantType == LordTenant {
-		err := fmt.Errorf("lord tenants need to be created using the NewLordTenant function")
-		return nil, err
+
+		return resp
+
+	} else if tenantType == string(LordTenant) {
+		var resp iHttpResponse
+		resp.logAndGenerateHttpResponseData(405, "lord tenants need to be created using the NewLordTenant function a POST to /lord-tenants", "NewTenant:Lord")
+
+		return resp
 	}
+	var resp iHttpResponse
+	resp.logAndGenerateHttpResponseData(405, "this does not seem to be a valid tenant type - only super or main tenants can be created with this endpoint", "NewTenant:Lord")
 
-	return nil, fmt.Errorf("no such tenant type")
+	return resp
 }

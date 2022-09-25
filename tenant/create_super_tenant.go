@@ -21,16 +21,56 @@ func createSuperTenant(
 	privateAccessConfig string,
 	customAccessConfig string,
 	liegeUUID string,
-	lordUUID string,
-	createdBy string) iTenant {
-	return &superTenant{
-		tenant: tenant{
-			alias:               tenantAlias,
-			subdomain:           subdomain,
-			createdBy:           createdBy,
-			kubeNamespacePrefix: "newKube",
-		},
+	createdBy string) (iTenant, iHttpResponse) {
+
+	var s superTenant
+	var r httpResponseData
+
+	//all of these checks would fail due to first level validation and should be 400s
+	if err := s.setTenantType(MainTenant); err != nil {
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setTenantType")
+		return nil, &r
 	}
+	if err := s.setAlias(tenantAlias); err != nil {
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setAlias")
+		return nil, &r
+	}
+	if err := s.setSubdomainName(subdomain); err != nil {
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setSubdomainName")
+		return nil, &r
+	}
+
+	if err := s.setSuperServicesConfig(superServicesConfig); err != nil {
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setSuperServicesConfig")
+		return nil, &r
+	}
+
+	if err := s.setPublicServicesConfig(publicServicesConfig); err != nil {
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setPublicServicesConfig")
+		return nil, &r
+	}
+	//there is no Private Access config for main tenants only custom configs
+	if err := s.setPrivateAccessConfig(privateAccessConfig); err != nil {
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setPrivateAccessConfig")
+		return nil, &r
+	}
+	if err := s.setCustomAccessConfig(customAccessConfig); err != nil {
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setCustomAccessConfig")
+		return nil, &r
+	}
+	if err := s.setCreatedBy(createdBy); err != nil {
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setCreatedBy")
+		return nil, &r
+	}
+	if err := s.setLiegeUUID(liegeUUID); err != nil {
+		r.logAndGenerateHttpResponseData(400, err.Error(), "setLiegeUUID")
+		return nil, &r
+	}
+
+	// if all pass - set the new tenant id
+	s.setNewTenantUUID()
+	return &s, &r
+
 }
 
 //createSuperTenant

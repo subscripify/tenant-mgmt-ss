@@ -11,7 +11,6 @@ package tenantapi
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -30,7 +29,7 @@ func AddLordTenant(w http.ResponseWriter, r *http.Request) {
 	dec := json.NewDecoder(r.Body)
 	var lordTenantCreateBody LordTenantCreateBody
 	if err := dec.Decode(&lordTenantCreateBody); err != nil {
-		log.Printf("error: bad JSON: %s", err)
+
 		hr.Message = "bad json"
 		hr.ResponseCode = http.StatusBadRequest
 		jsonResp, _ = json.Marshal(hr)
@@ -65,17 +64,46 @@ func AddLordTenant(w http.ResponseWriter, r *http.Request) {
 }
 
 func AddTenant(w http.ResponseWriter, r *http.Request) {
+	var wo TenantUuidCreatedObject
+	var hr HttpResponseError
+	var jsonResp []byte
+	log.Print("this is happening")
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+
 	defer r.Body.Close()
 	dec := json.NewDecoder(r.Body)
-	var mainTenantCreateBody TenantCreateBody
-	if err := dec.Decode(&mainTenantCreateBody); err != nil {
-		log.Printf("error: bad JSON: %s", err)
-		http.Error(w, "bad json", http.StatusBadRequest)
-		return
+	var tenantCreateBody TenantCreateBody
+	if err := dec.Decode(&tenantCreateBody); err != nil {
+		hr.Message = "bad json"
+		hr.ResponseCode = http.StatusBadRequest
+		jsonResp, _ = json.Marshal(hr)
+	} else {
+		resp := tenant.NewTenant(
+			tenantCreateBody.TenantType,
+			tenantCreateBody.TenantAlias,
+			tenantCreateBody.Subdomain,
+			tenantCreateBody.SuperServicesConfig,
+			tenantCreateBody.PublicServicesConfig,
+			tenantCreateBody.PrivateAccessConfig,
+			tenantCreateBody.PublicAccessConfig,
+			r.Header.Get("liegeUUID"),
+			"william.ohara@subscripify.com").GetHttpResponse()
+
+		hr.Message = resp.Message
+		hr.ResponseCode = int32(resp.HttpResponseCode)
+		if hr.ResponseCode == 200 {
+			wo.TenantUUID = resp.NewTenant.TenantUUID
+
+			jsonResp, _ = json.Marshal(wo)
+
+		} else {
+			jsonResp, _ = json.Marshal(hr)
+		}
+
 	}
-	fmt.Fprintln(w, mainTenantCreateBody)
+
+	w.WriteHeader(int(hr.ResponseCode))
+	w.Write(jsonResp)
 }
 
 func DeleteTenant(w http.ResponseWriter, r *http.Request) {

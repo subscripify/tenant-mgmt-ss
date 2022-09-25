@@ -371,7 +371,7 @@ components:
       - tenantAlias
       - subdomain
       - publicServicesConfig
-      - subscripifyDeploymentCloudLocation
+      - publicAccessConfig
       type: object
       properties:
         tenantType:

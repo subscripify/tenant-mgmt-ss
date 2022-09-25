@@ -305,12 +305,13 @@ func (t *tenant) getCloudLocation() CloudLocation {
 func (t *tenant) setLiegeUUID(liegeUUID string) error {
 	liegeUUIDParsedUUID, err := uuid.Parse(liegeUUID)
 	if err != nil {
-		return fmt.Errorf("custom services config uuid failed to parse: %s", err)
+		return fmt.Errorf("liege uuid failed to parse: %s", err)
 	}
 	if t.lordTenant {
-		err := fmt.Errorf("invalid tenant type for setting custom services config - super tenants and main tenants only")
+		err := fmt.Errorf("invalid tenant type for setting liege - super tenants and main tenants only")
 		return err
 	}
+
 	t.liegeUUID = liegeUUIDParsedUUID
 	return nil
 }
