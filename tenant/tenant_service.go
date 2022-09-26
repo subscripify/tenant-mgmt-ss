@@ -153,35 +153,31 @@ func NewTenant(
 			tdb := tenantdbserv.Tdb.Handle
 
 			insertStr := `INSERT INTO tenant (
-			tenant_uuid, 
-			tenant_alias,
-			top_level_domain,
-			secondary_domain,
-			subscripify_deployment_cloud_location,
-			subdomain, 
-			kube_namespace_prefix, 
-			public_services_config,
-			custom_access_config,
-		  created_by
-				)
-			VALUES (UUID_TO_BIN(?),
-			 ?,
-			 (SELECT top_level_domain, secondary_domain, subscripify_deployment_cloud_location FROM tenants WHERE tenant_uuid = ? LIMIT 1),  
-			 ?, 
-			 ?, 
-			 UUID_TO_BIN(?), 
-			 UUID_TO_BIN(?),
-			 ?;`
+				tenant_uuid, 
+				tenant_alias,
+				top_level_domain,
+				secondary_domain,
+				subscripify_deployment_cloud_location,
+				subdomain, 
+				kube_namespace_prefix,
+				public_services_config,
+				custom_access_config,
+				liege_uuid,
+				lord_uuid,
+				created_by
+					)   SELECT UUID_TO_BIN(?), ?, top_level_domain, secondary_domain, subscripify_deployment_cloud_location, ?, ?, UUID_TO_BIN(?),
+				 UUID_TO_BIN(?), UUID_TO_BIN(?), lord_uuid, ? FROM tenant WHERE tenant_uuid = UUID_to_bin(?);`
 
 			_, rc, message := tenantdbserv.InsertResponseHelper(tdb.ExecContext(ctx, insertStr,
 				nmt.getTenantUUID(),
 				nmt.getAlias(),
-				nmt.getLiegeUUID(),
 				nmt.getSubdomainName(),
 				nmt.getKubeNamespacePrefix(),
 				nmt.getPublicServicesConfig(),
 				nmt.getCustomAccessConfig(),
-				nmt.getTenantCreator()))
+				nmt.getLiegeUUID(),
+				nmt.getTenantCreator(),
+				nmt.getLiegeUUID()))
 
 			//if the response is not a 200 then an insert error ocurred
 			if rc != 200 {
@@ -195,6 +191,7 @@ func NewTenant(
 		return resp
 
 	} else if tenantType == string(SuperTenant) {
+
 		nst, resp := createSuperTenant(tenantAlias, subdomain, superServicesConfig, publicServicesConfig, privateAccessConfig, customAccessConfig, liegeUUID, createdBy)
 
 		if !isNil(nst) {
@@ -205,41 +202,38 @@ func NewTenant(
 			tdb := tenantdbserv.Tdb.Handle
 
 			insertStr := `INSERT INTO tenant (
-			tenant_uuid, 
-			tenant_alias,
-			top_level_domain,
-			secondary_domain,
-			subscripify_deployment_cloud_location,
-			subdomain, 
-			kube_namespace_prefix,
-			super_services_config, 
-			public_services_config,
-			private_access_config,
-			custom_access_config,
-		  created_by
-				)
-			VALUES (UUID_TO_BIN(?),
-			 ?,
-			 (SELECT top_level_domain, secondary_domain, subscripify_deployment_cloud_location FROM tenants WHERE tenant_uuid = ? LIMIT 1),  
-			 ?, 
-			 ?, 
-			 UUID_TO_BIN(?),
-			 UUID_TO_BIN(?),
-			 UUID_TO_BIN(?), 
-			 UUID_TO_BIN(?),
-			 ?;`
+				tenant_uuid, 
+				tenant_alias,
+				top_level_domain,
+				secondary_domain,
+				subscripify_deployment_cloud_location,
+				subdomain, 
+				kube_namespace_prefix,
+				super_services_config, 
+				public_services_config,
+				private_access_config,
+				custom_access_config,
+				is_super_tenant,
+				liege_uuid,
+				lord_uuid,
+				created_by
+					)   SELECT UUID_TO_BIN(?), ?, top_level_domain, secondary_domain, subscripify_deployment_cloud_location, ?, ?, UUID_TO_BIN(?),
+				 UUID_TO_BIN(?), UUID_TO_BIN(?), UUID_TO_BIN(?), ?, UUID_TO_BIN(?), UUID_TO_BIN(?), ? FROM tenant WHERE tenant_uuid = UUID_to_bin(?);`
 
 			_, rc, message := tenantdbserv.InsertResponseHelper(tdb.ExecContext(ctx, insertStr,
 				nst.getTenantUUID(),
 				nst.getAlias(),
-				nst.getLiegeUUID(),
 				nst.getSubdomainName(),
 				nst.getKubeNamespacePrefix(),
 				nst.getSuperServicesConfig(),
 				nst.getPublicServicesConfig(),
 				nst.getPrivateAccessConfig(),
 				nst.getCustomAccessConfig(),
-				nst.getTenantCreator()))
+				nst.isSuperTenant(),
+				nst.getLiegeUUID(),
+				nst.getLiegeUUID(),
+				nst.getTenantCreator(),
+				nst.getLiegeUUID()))
 
 			//if the response is not a 200 then an insert error ocurred
 			if rc != 200 {
@@ -253,13 +247,14 @@ func NewTenant(
 		return resp
 
 	} else if tenantType == string(LordTenant) {
-		var resp iHttpResponse
-		resp.logAndGenerateHttpResponseData(405, "lord tenants need to be created using the NewLordTenant function a POST to /lord-tenants", "NewTenant:Lord")
+		var r httpResponseData
+		r.logAndGenerateHttpResponseData(405, "lord tenants need to be created using the NewLordTenant function a POST to /lord-tenants", "NewTenant:Lord")
 
-		return resp
+		return &r
 	}
-	var resp iHttpResponse
-	resp.logAndGenerateHttpResponseData(405, "this does not seem to be a valid tenant type - only super or main tenants can be created with this endpoint", "NewTenant:Lord")
+	var r httpResponseData
 
-	return resp
+	r.logAndGenerateHttpResponseData(405, "this does not seem to be a valid tenant type - only super or main tenants can be created with this endpoint", "NewTenant:Lord")
+
+	return &r
 }

@@ -11,7 +11,6 @@ package tenantapi
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	tenant "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/tenant"
@@ -67,7 +66,7 @@ func AddTenant(w http.ResponseWriter, r *http.Request) {
 	var wo TenantUuidCreatedObject
 	var hr HttpResponseError
 	var jsonResp []byte
-	log.Print("this is happening")
+
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 
 	defer r.Body.Close()

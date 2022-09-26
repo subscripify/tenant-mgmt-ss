@@ -210,7 +210,10 @@ BEGIN
 END$$
 DELIMITER ;
 
+
 DELIMITER $$
+
+
 
 CREATE TRIGGER force_proper_relationship_insert
 BEFORE INSERT
@@ -242,7 +245,7 @@ BEGIN
       WHEN !(SELECT is_lord_tenant FROM tenant WHERE tenant_uuid = NEW.lord_uuid) THEN SIGNAL SQLSTATE '45000' SET message_text = 'lord_uuid must be the tenant_UUID of a lord tenant'; 
       WHEN NEW.liege_uuid IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'a main tenant liege_uuid field must have a super tenant UUID';
       WHEN !(SELECT is_super_tenant FROM tenant WHERE tenant_uuid = NEW.liege_uuid) THEN SIGNAL SQLSTATE '45000' SET message_text = 'a main tenant liege_uuid must be the tenant_UUID of a super tenant';
-      WHEN !((SELECT liege_uuid FROM tenants WHERE tenant_uuid = NEW.liege_uuid) = NEW.lord_uuid) THEN SIGNAL SQLSTATE '45000' SET message_text = 'liege_uuid must belong to the lord_UUID';
+      WHEN !((SELECT liege_uuid FROM tenant WHERE tenant_uuid = NEW.liege_uuid) = NEW.lord_uuid) THEN SIGNAL SQLSTATE '45000' SET message_text = 'liege_uuid must belong to the lord_UUID';
       ELSE BEGIN END;
     END CASE;
   END IF;

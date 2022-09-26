@@ -27,7 +27,7 @@ func createSuperTenant(
 	var r httpResponseData
 
 	//all of these checks would fail due to first level validation and should be 400s
-	if err := s.setTenantType(MainTenant); err != nil {
+	if err := s.setTenantType(SuperTenant); err != nil {
 		r.logAndGenerateHttpResponseData(400, err.Error(), "setTenantType")
 		return nil, &r
 	}

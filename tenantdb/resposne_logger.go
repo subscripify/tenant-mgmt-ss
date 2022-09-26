@@ -14,7 +14,7 @@ func InsertResponseHelper(inner sql.Result, sqlErr error) (r sql.Result, httpRes
 		//parse the sql error - add special cases here as needed
 		me, ok := sqlErr.(*mysql.MySQLError)
 		if !ok {
-			return inner, 500, "server error"
+			return inner, 500, "db server error"
 		}
 		if me.Number == 1062 {
 			return inner, 409, fmt.Sprintf("fail on db insert: %s", sqlErr.Error())
