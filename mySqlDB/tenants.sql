@@ -213,8 +213,6 @@ DELIMITER ;
 
 DELIMITER $$
 
-
-
 CREATE TRIGGER force_proper_relationship_insert
 BEFORE INSERT
 ON tenant FOR EACH ROW
