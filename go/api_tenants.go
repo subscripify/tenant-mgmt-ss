@@ -11,9 +11,12 @@ package tenantapi
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	tenant "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/tenant"
+	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 )
 
 // reads the generated response from the tenant package and sends the response
@@ -33,6 +36,8 @@ func AddLordTenant(w http.ResponseWriter, r *http.Request) {
 		hr.ResponseCode = http.StatusBadRequest
 		jsonResp, _ = json.Marshal(hr)
 	} else {
+		log.Println("I am here")
+		log.Println(lordTenantCreateBody.TenantAlias)
 		resp := tenant.NewLordTenant(
 			lordTenantCreateBody.TenantAlias,
 			lordTenantCreateBody.TopLevelDomain,
@@ -56,7 +61,7 @@ func AddLordTenant(w http.ResponseWriter, r *http.Request) {
 		}
 
 	}
-
+	log.Println("I am here too")
 	w.WriteHeader(int(hr.ResponseCode))
 	w.Write(jsonResp)
 
@@ -111,8 +116,73 @@ func DeleteTenant(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetTenant(w http.ResponseWriter, r *http.Request) {
+	var wo FullTenantObject
+	var hr HttpResponseError
+	var jsonResp []byte
+
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+	targetTenantUUID := mux.Vars(r)["targetTenantUUID"]
+	resp := tenant.GetTenant(targetTenantUUID, "william.ohara@subscripify.com").GetHttpResponse()
+	hr.Message = resp.Message
+	hr.ResponseCode = int32(resp.HttpResponseCode)
+	if hr.ResponseCode == 200 {
+		if resp.FullTenant.TenantType != "" {
+			wo.TenantType = resp.FullTenant.TenantType
+		}
+		if resp.FullTenant.Alias != "" {
+			wo.TenantAlias = resp.FullTenant.Alias
+		}
+		if resp.FullTenant.Subdomain != "" {
+			wo.Subdomain = resp.FullTenant.Subdomain
+		}
+		if resp.FullTenant.SecondaryDomain != "" {
+			wo.SecondaryDomain = resp.FullTenant.SecondaryDomain
+		}
+		if resp.FullTenant.KubeNamespacePrefix != "" {
+			wo.KubeNamespacePrefix = resp.FullTenant.KubeNamespacePrefix
+		}
+		if resp.FullTenant.TopLevelDomain != "" {
+			wo.TopLevelDomain = resp.FullTenant.TopLevelDomain
+		}
+		if resp.FullTenant.SubscripifyDeploymentCloudLocation != "" {
+			wo.SubscripifyDeploymentCloudLocation = resp.FullTenant.SubscripifyDeploymentCloudLocation
+		}
+		if resp.FullTenant.CreatedBy != "" {
+			wo.CreatedBy = resp.FullTenant.CreatedBy
+		}
+		if resp.FullTenant.TenantUUID != uuid.Nil {
+			wo.TenantUUID = resp.FullTenant.TenantUUID.String()
+		}
+		if resp.FullTenant.SuperServicesConfig != uuid.Nil {
+			wo.SuperServicesConfig = resp.FullTenant.SuperServicesConfig.String()
+		}
+		if resp.FullTenant.LordServicesConfig != uuid.Nil {
+			wo.LordServicesConfig = resp.FullTenant.LordServicesConfig.String()
+		}
+		if resp.FullTenant.PublicServicesConfig != uuid.Nil {
+			wo.PublicServicesConfig = resp.FullTenant.PublicServicesConfig.String()
+		}
+		if resp.FullTenant.PrivateAccessConfig != uuid.Nil {
+			wo.PrivateAccessConfig = resp.FullTenant.PrivateAccessConfig.String()
+		}
+		if resp.FullTenant.CustomAccessConfig != uuid.Nil {
+			wo.CustomAccessConfig = resp.FullTenant.CustomAccessConfig.String()
+		}
+		if resp.FullTenant.LordUUID != uuid.Nil {
+			wo.LordUUID = resp.FullTenant.LordUUID.String()
+		}
+		if resp.FullTenant.LiegeUUID != uuid.Nil {
+			wo.LiegeUUID = resp.FullTenant.LiegeUUID.String()
+		}
+		wo.CreateTimestamp = resp.FullTenant.CreateTimestamp.String()
+
+		jsonResp, _ = json.Marshal(wo)
+
+	} else {
+		jsonResp, _ = json.Marshal(hr)
+	}
+	w.WriteHeader(int(hr.ResponseCode))
+	w.Write(jsonResp)
 }
 
 func SearchTenant(w http.ResponseWriter, r *http.Request) {

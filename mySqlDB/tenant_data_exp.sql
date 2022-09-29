@@ -3,7 +3,8 @@ lord_services_config, super_services_config, public_services_config, private_acc
 bin_to_uuid(liege_uuid), bin_to_uuid(lord_uuid), is_lord_tenant, is_super_tenant from tenant ORDER BY create_timestamp DESC;
 
 -- DELETE FROM tenant WHERE tenant_uuid = UUID_TO_BIN('2f40a6e4-ede4-41f5-aeba-b8d34ca1d06a');
-
+DELETE FROM tenant WHERE alias = "testing-123" AND is_lord_tenant IS NULL AND is_super_tenant = false;
+SELECT count(tenant_uuid) as count FROM tenant WHERE tenant_uuid = UUID_TO_BIN('5c0ee1f6-6b3f-46c8-a62e-fca70d460bf0');
 
 INSERT INTO tenant (
 			tenant_uuid, 
@@ -118,6 +119,27 @@ VALUES (
   (SELECT b.secondary_domain FROM tenant a INNER JOIN tenant b on a.tenant_uuid = b.tenant_uuid WHERE b.tenant_uuid = UUID_to_bin('0904ba44-9d41-418a-bbd8-2c70506c3432')));
 -- SELECT BIN_TO_UUID(org_id), org_name, subdomain, kube_namespace_prefix, subscription_type FROM organizations WHERE BIN_TO_UUID(org_id) = '67e1e031-2ef5-11ed-833b-6636daa5a961';
 
+SELECT 
+	BIN_TO_UUID(tenant_uuid),
+	 tenant_alias,
+	 top_level_domain,
+	 secondary_domain,
+	 subdomain,
+	 kube_namespace_prefix,
+	 BIN_TO_UUID(lord_services_config),
+	 BIN_TO_UUID(super_services_config),
+	 BIN_TO_UUID(public_services_config),
+	 BIN_TO_UUID(private_access_config),
+	 BIN_TO_UUID(custom_access_config),
+	 subscripify_deployment_cloud_location,
+	 BIN_TO_UUID(liege_uuid),
+	 BIN_TO_UUID(lord_uuid),
+	 is_lord_tenant,
+	 is_super_tenant,
+	 create_timestamp,
+	 created_by
+	 FROM tenant WHERE tenant_uuid = UUID_TO_BIN('0904ba44-9d41-418a-bbd8-2c70506c343');
+												  
 
 INSERT INTO tenant (
 				tenant_uuid, 

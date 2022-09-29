@@ -307,12 +307,6 @@ components:
         description: 'A partial or whole organization name/ alias given when the tenant was created.'
   schemas:
     lordTenantCreateBody:
-      required:
-      - lordServicesConfig
-      - publicServicesConfig
-      - superServicesConfig
-      - subdomain
-      - subscripifyDeploymentCloudLocation
       type: object
       properties:
         tenantAlias: 
@@ -366,12 +360,6 @@ components:
             supported (currently) is azure.
       additionalProperties: false
     tenantCreateBody:
-      required:
-      - tenantType
-      - tenantAlias
-      - subdomain
-      - publicServicesConfig
-      - publicAccessConfig
       type: object
       properties:
         tenantType:
@@ -411,7 +399,7 @@ components:
           type: string
           description: The private access config UUID to use for the tenant's public
             services. Must be a valid private access UUID. This value must be empty when creating a main tenant.
-        publicAccessConfig:
+        customAccessConfig:
           maxLength: 36
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           type: string
@@ -453,7 +441,7 @@ components:
           maxLength: 36
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           readOnly: true
-        kubeNamespace:
+        kubeNamespacePrefix:
           type: string
           maxLength: 32
           description: The name prefix for the Kubernetes namespaces and cloud resources that make up this tenant.

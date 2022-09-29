@@ -2,65 +2,14 @@ package tenant
 
 import (
 	"context"
-	"log"
-	"reflect"
-	"strings"
 	"time"
 
 	tenantdbserv "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/tenantdb"
-	"github.com/google/uuid"
 )
 
-type iHttpResponse interface {
-	GetHttpResponse() *httpResponseData
-	logAndGenerateHttpResponseData(responseCode int, message string, location string)
-	logAndGenerateNewTenantResponse(nID uuid.UUID, location string)
-}
-
-type newTenantResponse struct {
-	TenantUUID string
-}
-
-type httpResponseData struct {
-	HttpResponseCode int
-	Message          string
-	NewTenant        newTenantResponse
-}
-
-func (r *httpResponseData) GetHttpResponse() *httpResponseData {
-	return r
-}
-
-// this function generates the data for http responses, regardless if the api uses them in a response or not
-func (hr *httpResponseData) logAndGenerateHttpResponseData(responseCode int, message string, location string) {
-
-	hr.HttpResponseCode = responseCode
-	hr.Message = message
-	log.Printf(
-		"tenant service generated http response : %v %s %s",
-		responseCode,
-		strings.ToLower(message),
-		location,
-	)
-
-}
-
-// this function generates a new tenant response and assigns it to a
-func (tr *httpResponseData) logAndGenerateNewTenantResponse(nID uuid.UUID, location string) {
-
-	tr.NewTenant.TenantUUID = nID.String()
-
-	log.Printf(
-		"tenant service generated tenant:%s %s",
-		nID.String(),
-		location,
-	)
-
-}
-
-func isNil(i interface{}) bool {
-	return i == nil || reflect.ValueOf(i).IsNil()
-}
+// func isNil(i interface{}) bool {
+// 	return i == nil || reflect.ValueOf(i).IsNil()
+// }
 
 // this function creates a new lord tenant object and then attempts to insert the object into the database. if it fails it will generate an response
 // structure interface for to use for generating an http response
@@ -75,10 +24,14 @@ func NewLordTenant(
 	cloudLocation CloudLocation,
 	createdBy string) iHttpResponse {
 	//no special processing required - this is a pass through to maintain the pattern. the NewTenant function covers the factory for non lord tenant types
-	nlt, resp := createLordTenant(tenantAlias, topLevelDomain, secondaryDomain, subdomain, lordServicesConfig, superServicesConfig, publicServicesConfig, cloudLocation, createdBy)
+	var resp httpResponseData
+	nlt, responseCode, err := createLordTenant(tenantAlias, topLevelDomain, secondaryDomain, subdomain, lordServicesConfig, superServicesConfig, publicServicesConfig, cloudLocation, createdBy)
 
-	//if new lord tenant object is successful then try to insert into the database
-	if !isNil(nlt) {
+	if err != nil {
+
+		resp.generateHttpResponseCodeAndMessage(responseCode, err.Error())
+
+	} else {
 		//setting up a 10 second timeout (could be less)
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
@@ -101,7 +54,7 @@ func NewLordTenant(
 			)
 		VALUES (UUID_TO_BIN(?), ?,?,?,?, ?, UUID_TO_BIN(?), UUID_TO_BIN(?),UUID_TO_BIN(?),?,?,?);`
 
-		_, rc, message := tenantdbserv.InsertResponseHelper(tdb.ExecContext(ctx, insertStr,
+		_, rc, err := tenantdbserv.HttpResponseHelperSQLInsert(tdb.ExecContext(ctx, insertStr,
 			nlt.getTenantUUID(),
 			nlt.getAlias(),
 			nlt.getTopLevelDomain(),
@@ -116,15 +69,16 @@ func NewLordTenant(
 			nlt.getTenantCreator()))
 
 		//if the response is not a 200 then an insert error ocurred
-		if rc != 200 {
-			resp.logAndGenerateHttpResponseData(rc, message, "NewLordTenant")
+		if err != nil {
+			resp.generateHttpResponseCodeAndMessage(rc, err.Error())
+
 		} else {
-			resp.logAndGenerateHttpResponseData(200, "created new tenant", "NewLordTenant")
-			resp.logAndGenerateNewTenantResponse(nlt.getTenantUUID(), "NewLordTenant")
+			resp.generateHttpResponseCodeAndMessage(200, "created new tenant")
+			resp.generateNewTenantResponse(nlt.getTenantUUID())
 		}
 	}
 
-	return resp
+	return &resp
 }
 
 func NewTenant(
@@ -139,13 +93,13 @@ func NewTenant(
 	createdBy string) iHttpResponse {
 	// factory function for new super or main tenants. this function will also look up lord tenants using liege tenant value
 
-	//setting up a 10 second timeout (could be less)
-
+	var resp httpResponseData
 	if tenantType == string(MainTenant) {
 
-		nmt, resp := createMainTenant(tenantAlias, subdomain, publicServicesConfig, customAccessConfig, liegeUUID, createdBy)
-
-		if !isNil(nmt) {
+		nmt, responseCode, err := createMainTenant(tenantAlias, subdomain, publicServicesConfig, customAccessConfig, liegeUUID, createdBy)
+		if err != nil {
+			resp.generateHttpResponseCodeAndMessage(responseCode, err.Error())
+		} else {
 			//setting up a 10 second timeout (could be less)
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
@@ -168,7 +122,7 @@ func NewTenant(
 					)   SELECT UUID_TO_BIN(?), ?, top_level_domain, secondary_domain, subscripify_deployment_cloud_location, ?, ?, UUID_TO_BIN(?),
 				 UUID_TO_BIN(?), UUID_TO_BIN(?), lord_uuid, ? FROM tenant WHERE tenant_uuid = UUID_to_bin(?);`
 
-			_, rc, message := tenantdbserv.InsertResponseHelper(tdb.ExecContext(ctx, insertStr,
+			_, rc, err := tenantdbserv.HttpResponseHelperSQLInsert(tdb.ExecContext(ctx, insertStr,
 				nmt.getTenantUUID(),
 				nmt.getAlias(),
 				nmt.getSubdomainName(),
@@ -180,21 +134,22 @@ func NewTenant(
 				nmt.getLiegeUUID()))
 
 			//if the response is not a 200 then an insert error ocurred
-			if rc != 200 {
-				resp.logAndGenerateHttpResponseData(rc, message, "NewTenant:main")
+			if err != nil {
+				resp.generateHttpResponseCodeAndMessage(rc, err.Error())
 			} else {
-				resp.logAndGenerateHttpResponseData(200, "created new main tenant", "NewTenant:main")
-				resp.logAndGenerateNewTenantResponse(nmt.getTenantUUID(), "NewTenant:main")
+				resp.generateHttpResponseCodeAndMessage(200, "created new main tenant")
+				resp.generateNewTenantResponse(nmt.getTenantUUID())
 			}
 		}
 
-		return resp
+		return &resp
 
 	} else if tenantType == string(SuperTenant) {
 
-		nst, resp := createSuperTenant(tenantAlias, subdomain, superServicesConfig, publicServicesConfig, privateAccessConfig, customAccessConfig, liegeUUID, createdBy)
-
-		if !isNil(nst) {
+		nst, responseCode, err := createSuperTenant(tenantAlias, subdomain, superServicesConfig, publicServicesConfig, privateAccessConfig, customAccessConfig, liegeUUID, createdBy)
+		if err != nil {
+			resp.generateHttpResponseCodeAndMessage(responseCode, err.Error())
+		} else {
 			//setting up a 10 second timeout (could be less)
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
@@ -220,7 +175,7 @@ func NewTenant(
 					)   SELECT UUID_TO_BIN(?), ?, top_level_domain, secondary_domain, subscripify_deployment_cloud_location, ?, ?, UUID_TO_BIN(?),
 				 UUID_TO_BIN(?), UUID_TO_BIN(?), UUID_TO_BIN(?), ?, UUID_TO_BIN(?), UUID_TO_BIN(?), ? FROM tenant WHERE tenant_uuid = UUID_to_bin(?);`
 
-			_, rc, message := tenantdbserv.InsertResponseHelper(tdb.ExecContext(ctx, insertStr,
+			_, rc, err := tenantdbserv.HttpResponseHelperSQLInsert(tdb.ExecContext(ctx, insertStr,
 				nst.getTenantUUID(),
 				nst.getAlias(),
 				nst.getSubdomainName(),
@@ -236,25 +191,40 @@ func NewTenant(
 				nst.getLiegeUUID()))
 
 			//if the response is not a 200 then an insert error ocurred
-			if rc != 200 {
-				resp.logAndGenerateHttpResponseData(rc, message, "NewTenant:main")
+			if err != nil {
+				resp.generateHttpResponseCodeAndMessage(rc, err.Error())
 			} else {
-				resp.logAndGenerateHttpResponseData(200, "created new main tenant", "NewTenant:main")
-				resp.logAndGenerateNewTenantResponse(nst.getTenantUUID(), "NewTenant:main")
+				resp.generateHttpResponseCodeAndMessage(200, "created new super tenant")
+
+				resp.generateNewTenantResponse(nst.getTenantUUID())
 			}
 		}
 
-		return resp
+		return &resp
 
 	} else if tenantType == string(LordTenant) {
-		var r httpResponseData
-		r.logAndGenerateHttpResponseData(405, "lord tenants need to be created using the NewLordTenant function a POST to /lord-tenants", "NewTenant:Lord")
-
-		return &r
+		resp.generateHttpResponseCodeAndMessage(405, "lord tenants need to be created using the NewLordTenant function a POST to /lord-tenants")
+		return &resp
+	} else {
+		resp.generateHttpResponseCodeAndMessage(405, "this does not seem to be a valid tenant type - only super or main tenants can be created with this endpoint")
+		return &resp
 	}
-	var r httpResponseData
 
-	r.logAndGenerateHttpResponseData(405, "this does not seem to be a valid tenant type - only super or main tenants can be created with this endpoint", "NewTenant:Lord")
+}
 
-	return &r
+func GetTenant(
+	tenantUUID string,
+	creator string) iHttpResponse {
+	var resp httpResponseData
+
+	l, responseCode, err := loadOneTenantFromDatabase(tenantUUID, creator)
+
+	if err != nil {
+		resp.generateHttpResponseCodeAndMessage(responseCode, err.Error())
+
+	} else {
+		resp.generateHttpResponseCodeAndMessage(200, "successful object sent")
+		resp.generateLoadedTenantResponse(l, GET)
+	}
+	return &resp
 }

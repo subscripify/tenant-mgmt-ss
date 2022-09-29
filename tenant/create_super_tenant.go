@@ -21,55 +21,54 @@ func createSuperTenant(
 	privateAccessConfig string,
 	customAccessConfig string,
 	liegeUUID string,
-	createdBy string) (iTenant, iHttpResponse) {
+	createdBy string) (iTenant, int, error) {
 
 	var s superTenant
-	var r httpResponseData
 
 	//all of these checks would fail due to first level validation and should be 400s
 	if err := s.setTenantType(SuperTenant); err != nil {
-		r.logAndGenerateHttpResponseData(400, err.Error(), "setTenantType")
-		return nil, &r
+
+		return nil, 400, err
 	}
 	if err := s.setAlias(tenantAlias); err != nil {
-		r.logAndGenerateHttpResponseData(400, err.Error(), "setAlias")
-		return nil, &r
+
+		return nil, 400, err
 	}
 	if err := s.setSubdomainName(subdomain); err != nil {
-		r.logAndGenerateHttpResponseData(400, err.Error(), "setSubdomainName")
-		return nil, &r
+
+		return nil, 400, err
 	}
 
 	if err := s.setSuperServicesConfig(superServicesConfig); err != nil {
-		r.logAndGenerateHttpResponseData(400, err.Error(), "setSuperServicesConfig")
-		return nil, &r
+
+		return nil, 400, err
 	}
 
 	if err := s.setPublicServicesConfig(publicServicesConfig); err != nil {
-		r.logAndGenerateHttpResponseData(400, err.Error(), "setPublicServicesConfig")
-		return nil, &r
+
+		return nil, 400, err
 	}
 	//there is no Private Access config for main tenants only custom configs
 	if err := s.setPrivateAccessConfig(privateAccessConfig); err != nil {
-		r.logAndGenerateHttpResponseData(400, err.Error(), "setPrivateAccessConfig")
-		return nil, &r
+
+		return nil, 400, err
 	}
 	if err := s.setCustomAccessConfig(customAccessConfig); err != nil {
-		r.logAndGenerateHttpResponseData(400, err.Error(), "setCustomAccessConfig")
-		return nil, &r
+
+		return nil, 400, err
 	}
 	if err := s.setCreatedBy(createdBy); err != nil {
-		r.logAndGenerateHttpResponseData(400, err.Error(), "setCreatedBy")
-		return nil, &r
+
+		return nil, 400, err
 	}
 	if err := s.setLiegeUUID(liegeUUID); err != nil {
-		r.logAndGenerateHttpResponseData(400, err.Error(), "setLiegeUUID")
-		return nil, &r
+
+		return nil, 400, err
 	}
 
 	// if all pass - set the new tenant id
 	s.setNewTenantUUID()
-	return &s, &r
+	return &s, 200, nil
 
 }
 

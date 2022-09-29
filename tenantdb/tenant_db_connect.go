@@ -5,9 +5,9 @@ import (
 	"crypto/x509"
 	"database/sql"
 	"io/ioutil"
-	"log"
 	"os"
 
+	subscripifylogger "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/subscripify-logger"
 	"github.com/go-sql-driver/mysql"
 )
 
@@ -33,7 +33,7 @@ func getNewMySQLTenantDbHandle() *sql.DB {
 	pem, _ := ioutil.ReadFile(os.Getenv("DBAPPCERTLOCATION")) // this is the only one that one can use with AzureMYSQL
 
 	if ok := rootCertPool.AppendCertsFromPEM(pem); !ok {
-		log.Fatal("Failed to append PEM.")
+		subscripifylogger.FatalLog.Fatal("Failed to append PEM.")
 	}
 
 	mysql.RegisterTLSConfig("custom", &tls.Config{RootCAs: rootCertPool})
@@ -46,27 +46,28 @@ func getNewMySQLTenantDbHandle() *sql.DB {
 		DBName:               "tenants",
 		AllowNativePasswords: true,
 		TLSConfig:            "custom",
+		ParseTime:            true,
 	}
 
 	// Get a database handle.
 	var err error
 	tenantsDbHandle, err = sql.Open("mysql", cfgdb.FormatDSN())
 	if err != nil {
-		log.Fatal(err)
+		subscripifylogger.FatalLog.Fatal(err)
 	}
 
 	pingErr := tenantsDbHandle.Ping()
 	if pingErr != nil {
-		log.Fatal(pingErr)
+		subscripifylogger.FatalLog.Fatal(pingErr)
 	}
-	log.Println("connected to tenants db on server")
+	subscripifylogger.InfoLog.Printf("connected to tenants db on server:%s", os.Getenv("DBHOST"))
 	return tenantsDbHandle
 }
 
 func (tdb *tenantDb) PingDb() error {
 	err := tdb.Handle.Ping()
 	if err != nil {
-		log.Fatal(err)
+		subscripifylogger.FatalLog.Printf(err.Error())
 		return err
 	}
 	return nil
