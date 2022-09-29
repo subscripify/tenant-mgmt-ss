@@ -14,10 +14,11 @@ import (
 	"net/http"
 
 	tenantapi "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/go"
+	subscripifylogger "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/subscripify-logger"
 )
 
 func main() {
-	log.Printf("Server started")
+	subscripifylogger.InfoLog.Printf("tenant management service started")
 
 	router := tenantapi.NewRouter()
 

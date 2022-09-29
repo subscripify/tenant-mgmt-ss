@@ -25,7 +25,7 @@ CREATE TABLE tenant (
   lord_uuid                               BINARY(16),                                   -- the lord tenant of the secondary domain in which this tenant resides
   is_lord_tenant                          BOOL DEFAULT NULL,                            -- holds an true value if lord tenant otherwise it MUST be null
   is_super_tenant                         BOOL DEFAULT FALSE NOT NULL,                  -- holds true or false to indicate if tenant is a super tenant - this field can not be null
-  create_timestamp                        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,  -- the create date 
+  create_timestamp                        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,  -- the create date 
   created_by                              CHAR(60),                                     -- the identity of the individual or application that created the tenant
   CONSTRAINT fk_lord_services_config
   FOREIGN KEY (lord_services_config)
@@ -281,4 +281,13 @@ BEGIN
   END IF;
 END$$
 DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER copy_deleted_for_recovery
+BEFORE DELETE
+ON tenant FOR EACH ROW
+BEGIN
+  INSERT INTO tenant_deleted SELECT *, current_timestamp() as deleted_timestamp	 FROM tenant WHERE tenant_uuid = OLD.tenant_uuid;
+END$$
+DELIMITER ;
 
+-- DROP TRIGGER tenants.copy_deleted_for_recovery;

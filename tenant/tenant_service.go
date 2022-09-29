@@ -228,3 +228,32 @@ func GetTenant(
 	}
 	return &resp
 }
+
+func DeleteTenant(tenantUUID string,
+	creator string) iHttpResponse {
+	var resp httpResponseData
+
+	//this will take care of validating inputs and loading the object
+	l, responseCode, err := loadOneTenantFromDatabase(tenantUUID, creator)
+
+	if err != nil {
+		resp.generateHttpResponseCodeAndMessage(responseCode, err.Error())
+
+	} else {
+		deleteStr := `DELETE FROM tenant WHERE tenant_uuid = UUID_TO_BIN(?)`
+		//setting up a 10 second timeout (could be less)
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
+		tdb := tenantdbserv.Tdb.Handle
+		_, rc, err := tenantdbserv.HttpResponseHelperSQLDelete(tdb.ExecContext(ctx, deleteStr, l.tenantUUID.String()))
+		if err != nil {
+			resp.generateHttpResponseCodeAndMessage(rc, err.Error())
+		} else {
+			resp.generateHttpResponseCodeAndMessage(200, "successful object removed")
+			resp.generateLoadedTenantResponse(l, DELETE)
+		}
+
+	}
+	return &resp
+}
