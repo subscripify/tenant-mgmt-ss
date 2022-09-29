@@ -19,7 +19,7 @@ type FullTenantObject struct {
 	// The services config UUID to use for a super tenant. Must be a valid services config UUID. This value must be empty when creating a main tenant.
 	SuperServicesConfig string `json:"superServicesConfig,omitempty"`
 	// The services config UUID to use for the tenant's public services. Must be a valid public services UUID.
-	PublicServicesConfig string `json:"publicServicesConfig"`
+	PublicServicesConfig string `json:"publicServicesConfig,omitempty"`
 	// The private access config UUID to use for the tenant's public services. Must be a valid private access UUID. This value must be empty when creating a main tenant.
 	PrivateAccessConfig string `json:"privateAccessConfig,omitempty"`
 	// The public access config UUID to use for the tenant's public services. Must be a valid public access UUID.

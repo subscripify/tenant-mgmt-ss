@@ -89,7 +89,7 @@ func AddTenant(w http.ResponseWriter, r *http.Request) {
 			tenantCreateBody.SuperServicesConfig,
 			tenantCreateBody.PublicServicesConfig,
 			tenantCreateBody.PrivateAccessConfig,
-			tenantCreateBody.PublicAccessConfig,
+			tenantCreateBody.CustomAccessConfig,
 			r.Header.Get("liegeUUID"),
 			"william.ohara@subscripify.com").GetHttpResponse()
 

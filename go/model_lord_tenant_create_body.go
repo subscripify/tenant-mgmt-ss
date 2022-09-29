@@ -17,13 +17,13 @@ type LordTenantCreateBody struct {
 	// Sets the secondary domain name for the tenant. e.g. \"subscripify\" from my-tenant.subscripify.com
 	SecondaryDomain string `json:"secondaryDomain,omitempty"`
 	// Sets the secondary domain name for the tenant. e.g. \"my-tenant\" from my-tenant.subscripify.com. Also used for the kubernetes namespace prefix for this tenant
-	Subdomain string `json:"subdomain"`
+	Subdomain string `json:"subdomain,omitempty"`
 	// The services config UUID to use for the lord tenant. Must be a valid services config UUID
-	LordServicesConfig string `json:"lordServicesConfig"`
+	LordServicesConfig string `json:"lordServicesConfig,omitempty"`
 	// The services config UUID to use for the super-tenant. Must be a valid services config UUID
-	SuperServicesConfig string `json:"superServicesConfig"`
+	SuperServicesConfig string `json:"superServicesConfig,omitempty"`
 	// The services config UUID to use for the main-tenant's public services. The services config UUID  used must be a publicServices UUID and belong to the liege tenant
-	PublicServicesConfig string `json:"publicServicesConfig"`
+	PublicServicesConfig string `json:"publicServicesConfig,omitempty"`
 	// The cloud provider to deploy to. e.g. The only cloud provider supported (currently) is azure.
-	SubscripifyDeploymentCloudLocation string `json:"subscripifyDeploymentCloudLocation"`
+	SubscripifyDeploymentCloudLocation string `json:"subscripifyDeploymentCloudLocation,omitempty"`
 }

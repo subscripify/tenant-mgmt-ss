@@ -11,17 +11,17 @@ package tenantapi
 
 type TenantCreateBody struct {
 	// Indicate which type of tenant to establish, main or super.
-	TenantType string `json:"tenantType"`
+	TenantType string `json:"tenantType,omitempty"`
 	// The alias name does not need to be unique and is used for quick reference when searching in UI. No starting spaces and no special characters.
-	TenantAlias string `json:"tenantAlias"`
+	TenantAlias string `json:"tenantAlias,omitempty"`
 	// The subdomain name string which used for the services namespace of the tenant and providing unique url for each tenant
-	Subdomain string `json:"subdomain"`
+	Subdomain string `json:"subdomain,omitempty"`
 	// The services config UUID to use for a super tenant. Must be a valid services config UUID. This value must be empty when creating a main tenant.
 	SuperServicesConfig string `json:"superServicesConfig,omitempty"`
 	// The services config UUID to use for the tenant's public services. Must be a valid public services UUID.
-	PublicServicesConfig string `json:"publicServicesConfig"`
+	PublicServicesConfig string `json:"publicServicesConfig,omitempty"`
 	// The private access config UUID to use for the tenant's public services. Must be a valid private access UUID. This value must be empty when creating a main tenant.
 	PrivateAccessConfig string `json:"privateAccessConfig,omitempty"`
 	// The public access config UUID to use for the tenant's public services. Must be a valid public access UUID.
-	PublicAccessConfig string `json:"publicAccessConfig,omitempty"`
+	CustomAccessConfig string `json:"customAccessConfig,omitempty"`
 }
