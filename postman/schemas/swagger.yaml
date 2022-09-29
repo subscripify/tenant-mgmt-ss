@@ -170,6 +170,12 @@ paths:
       operationId: updateTenant
       parameters:
         - $ref: '#/components/parameters/targetTenantUUID'
+      requestBody:
+        description: All data required to start a new super or main  tenant
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tenantPatchBody'
       responses:
         '200':
           description: return tenant
