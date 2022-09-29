@@ -306,6 +306,46 @@ components:
         type: string
         description: 'A partial or whole organization name/ alias given when the tenant was created.'
   schemas:
+    tenantPatchBody:
+      type: object
+      properties:
+        tenantAlias: 
+          maxLength: 36
+          pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$'
+          type: string
+          description: The alias name does not need to be unique and is used for quick reference when searching in UI. 
+            No starting spaces and no special characters.
+          example: "my tenant alias"
+        lordServicesConfig:
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          type: string
+          description: The services config UUID to use for the lord tenant. Must be a valid services config UUID
+        superServicesConfig:
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          type: string
+          description: The services config UUID to use for the super-tenant. Must
+            be a valid services config UUID
+        publicServicesConfig:
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          type: string
+          description: The services config UUID to use for the main-tenant's public
+            services. The services config UUID  used must be a publicServices UUID
+            and belong to the liege tenant
+        privateAccessConfig:
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          type: string
+          description: The private access config UUID to use for the tenant's public
+            services. Must be a valid private access UUID. This value must be empty when creating a main tenant.
+        customAccessConfig:
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          type: string
+          description: The public access config UUID to use for the tenant's public
+            services. Must be a valid public access UUID.
     lordTenantCreateBody:
       type: object
       properties:
