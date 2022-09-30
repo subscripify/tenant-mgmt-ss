@@ -11,7 +11,6 @@ package tenantapi
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	tenant "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/tenant"
@@ -36,8 +35,7 @@ func AddLordTenant(w http.ResponseWriter, r *http.Request) {
 		hr.ResponseCode = http.StatusBadRequest
 		jsonResp, _ = json.Marshal(hr)
 	} else {
-		log.Println("I am here")
-		log.Println(lordTenantCreateBody.TenantAlias)
+
 		resp := tenant.NewLordTenant(
 			lordTenantCreateBody.TenantAlias,
 			lordTenantCreateBody.TopLevelDomain,
@@ -61,7 +59,7 @@ func AddLordTenant(w http.ResponseWriter, r *http.Request) {
 		}
 
 	}
-	log.Println("I am here too")
+
 	w.WriteHeader(int(hr.ResponseCode))
 	w.Write(jsonResp)
 
