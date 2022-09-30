@@ -38,7 +38,7 @@
 									"variable": [
 										{
 											"key": "targetTenantUUID",
-											"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+											"value": "5c0ee1f6-6b3f-46c8-a62e-fca70d460bf0",
 											"description": "(Required) "
 										}
 									]
@@ -426,6 +426,14 @@
 									"responseTime": null,
 									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
 								}
+							],
+							"variable": [
+								{
+									"id": "61788fb0-ab90-4a8e-aa7f-c99c7b067151",
+									"key": "targetTenantUUID",
+									"value": "5c0ee1f6-6b3f-46c8-a62e-fca70d460bf0",
+									"description": "(Required) "
+								}
 							]
 						},
 						{
@@ -439,6 +447,10 @@
 								"header": [
 									{
 										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
 										"value": "application/json"
 									}
 								],
@@ -842,13 +854,22 @@
 									"responseTime": null,
 									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
 								}
+							],
+							"variable": [
+								{
+									"id": "920141df-a2cc-4054-a4c0-13dea0101aa5",
+									"key": "targetTenantUUID",
+									"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+									"description": "(Required) "
+								}
 							]
 						},
 						{
 							"name": "removes a tenant",
 							"id": "8981fdaf-1796-45db-a3bb-fccf92d89bf1",
 							"protocolProfileBehavior": {
-								"disableBodyPruning": true
+								"disableBodyPruning": true,
+								"followOriginalHttpMethod": true
 							},
 							"request": {
 								"method": "DELETE",
@@ -870,7 +891,7 @@
 									"variable": [
 										{
 											"key": "targetTenantUUID",
-											"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+											"value": "dcb36195-78d6-45b2-9bbf-c3a082a17305",
 											"description": "(Required) "
 										}
 									]
@@ -1267,7 +1288,8 @@
 					"name": "Add a new main or super tenant",
 					"id": "20afa886-567c-48b2-af88-74b24859b651",
 					"protocolProfileBehavior": {
-						"disableBodyPruning": true
+						"disableBodyPruning": true,
+						"followOriginalHttpMethod": true
 					},
 					"request": {
 						"method": "POST",
@@ -1275,7 +1297,7 @@
 							{
 								"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 								"key": "liegeUUID",
-								"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+								"value": "dcb36195-78d6-45b2-9bbf-c3a082a17305"
 							},
 							{
 								"key": "Content-Type",
@@ -1288,7 +1310,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n \"tenantType\": \"main\",\n \"tenantAlias\": \"my tenant alias\",\n \"subdomain\": \"subscripify\",\n \"publicServicesConfig\": \"44ED6Aa2-E2Cf-A5DF-6B0E-DDAED41fC5Da\",\n \"superServicesConfig\": \"9a79e3b0-F899-f6ed-6Fd6-Fc4BE5A1E9fe\",\n \"privateAccessConfig\": \"Ae3cEafe-D53b-2AEc-f1C4-fd33F9f2E0df\",\n \"publicAccessConfig\": \"0f9e7A1a-d7be-A460-8bEA-FAF1AFEfA9D0\"\n}",
+							"raw": "{\n \"tenantType\": \"super\",\n \"tenantAlias\": \"my tenant alias\",\n \"subdomain\": \"subscripify\",\n \"superServicesConfig\": \"35F8D5D1-B30a-5B5D-DC14-E0d9fA6d4b25\",\n \"publicServicesConfig\": \"4428b3e8-6620-ece9-BbFF-4A5fFEAF46DE\",\n \"privateAccessConfig\": \"c669dDDf-Ca7c-ADD0-098B-3d9c2CA5869D\",\n \"customAccessConfig\": \"E2Eb82ae-A971-2a2b-50ba-F7a5Eb1B280C\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2171,7 +2193,8 @@
 			"id": "94be448f-041c-420d-9e4f-d2436385cb75",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true,
-				"followOriginalHttpMethod": true
+				"followOriginalHttpMethod": true,
+				"removeRefererHeaderOnRedirect": true
 			},
 			"request": {
 				"method": "POST",
@@ -2187,7 +2210,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n \"lordServicesConfig\": \"60135d7c-3857-11ed-907f-f5001f9bae96\",\n \"publicServicesConfig\": \"6a24689f-385a-11ed-907f-f5001f9bae96\",\n \"superServicesConfig\": \"432ead01-385a-11ed-907f-f5001f9bae96\",\n \"subdomain\": \"my-tenant\",\n \"subscripifyDeploymentCloudLocation\": \"azure\",\n \"tenantAlias\": \"my tenant alias\",\n \"topLevelDomain\": \"com\",\n \"secondaryDomain\": \"subscripify\"\n}",
+					"raw": "{\n \"lordServicesConfig\": \"60135d7c-3857-11ed-907f-f5001f9bae96\",\n \"publicServicesConfig\": \"6a24689f-385a-11ed-907f-f5001f9bae96\",\n \"superServicesConfig\": \"432ead01-385a-11ed-907f-f5001f9bae96\",\n \"subdomain\": \"my-tenant\",\n \"subscripifyDeploymentCloudLocation\": \"azure\",\n \"tenantAlias\": \"my tenant alias\",\n \"topLevelDomain\": \"net\",\n \"secondaryDomain\": \"subscripify4\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2601,7 +2624,7 @@
 	],
 	"variable": [
 		{
-			"id": "e2f840c4-5fc2-4a1f-882c-3daa7cdd0632",
+			"id": "17e22d37-42b5-4de6-a37f-a1fcfe7fbde4",
 			"key": "baseUrl",
 			"value": "https://lord-tenant.subscripify.com"
 		}
