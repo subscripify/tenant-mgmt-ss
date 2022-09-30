@@ -423,7 +423,8 @@
 							"name": "updates a tenant",
 							"id": "8328a71e-87a9-49c8-bf54-b39a6140474e",
 							"protocolProfileBehavior": {
-								"disableBodyPruning": true
+								"disableBodyPruning": true,
+								"followOriginalHttpMethod": true
 							},
 							"request": {
 								"method": "PATCH",
@@ -457,9 +458,8 @@
 									],
 									"variable": [
 										{
-											"id": "21169723-e617-4770-b7e7-c0c93a78ea6a",
 											"key": "targetTenantUUID",
-											"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
+											"value": "49259c86-3db3-11ed-bd88-3e0f90a488be",
 											"description": "(Required) "
 										}
 									]
@@ -931,9 +931,22 @@
 						},
 						{
 							"name": "removes a tenant",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "9ed6cca6-ef08-4fdc-b4fa-a374884be17d",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"id": "8f74506e-5948-4b21-9f74-59da18d4393a",
 							"protocolProfileBehavior": {
-								"disableBodyPruning": true
+								"disableBodyPruning": true,
+								"followOriginalHttpMethod": true
 							},
 							"request": {
 								"method": "DELETE",
@@ -944,21 +957,13 @@
 									}
 								],
 								"url": {
-									"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+									"raw": "{{baseUrl}}/tenants/{{targetTenantUUID}}",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"tenants",
-										":targetTenantUUID"
-									],
-									"variable": [
-										{
-											"id": "8cfd9a58-d9db-4826-a976-86f715d383d7",
-											"key": "targetTenantUUID",
-											"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
-											"description": "(Required) "
-										}
+										"{{targetTenantUUID}}"
 									]
 								},
 								"description": "removes a tenant"
@@ -1343,7 +1348,8 @@
 					"name": "Add a new main or super tenant",
 					"id": "30eaf2de-f471-4f53-8872-c0c733ca24ca",
 					"protocolProfileBehavior": {
-						"disableBodyPruning": true
+						"disableBodyPruning": true,
+						"followOriginalHttpMethod": true
 					},
 					"request": {
 						"method": "POST",
@@ -1364,7 +1370,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"superServicesConfig\": \"aBF972Ea-Cc4D-0df2-2Db4-c8ca2c5C299b\",\n  \"publicServicesConfig\": \"f6E2bb9C-723D-3376-02d0-9c92E746EfdD\",\n  \"privateAccessConfig\": \"A9f68014-B4aA-D799-70F3-E57cCDA9F4aB\",\n  \"customAccessConfig\": \"6208FC0d-7e23-3685-681c-cEBcA2D38a6B\"\n}",
+							"raw": "{\n  \"tenantType\": \"lord\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"superServicesConfig\": \"aBF972Ea-Cc4D-0df2-2Db4-c8ca2c5C299b\",\n  \"publicServicesConfig\": \"f6E2bb9C-723D-3376-02d0-9c92E746EfdD\",\n  \"privateAccessConfig\": \"A9f68014-B4aA-D799-70F3-E57cCDA9F4aB\",\n  \"customAccessConfig\": \"6208FC0d-7e23-3685-681c-cEBcA2D38a6B\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2226,7 +2232,8 @@
 			"name": "Add a new lord tenant",
 			"id": "69f922c6-402a-48f1-a433-e867eaf3b165",
 			"protocolProfileBehavior": {
-				"disableBodyPruning": true
+				"disableBodyPruning": true,
+				"followOriginalHttpMethod": true
 			},
 			"request": {
 				"method": "POST",
@@ -2242,7 +2249,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\",\n  \"subdomain\": \"my-tenant\",\n  \"lordServicesConfig\": \"A5209867-E313-07f8-D687-8C273D9F9341\",\n  \"superServicesConfig\": \"4b76fa6e-aeA5-c377-373F-F7044Cac7af9\",\n  \"publicServicesConfig\": \"Df34C7f4-5Ce7-DD27-f86c-20c7FBF671C4\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\"\n}",
+					"raw": "{\n  \"tenantAlias\": \"{{testAlias}}\",\n  \"topLevelDomain\": \"{{topLevelDomain}}\",\n  \"secondaryDomain\": \"{{secondaryDomain}}\",\n  \"subdomain\": \"{{subdomain}}\",\n  \"lordServicesConfig\": \"{{lordServicesConfig}}\",\n  \"superServicesConfig\": \"{{superServicesConfig}}\",\n  \"publicServicesConfig\": \"{{publicServicesConfig}}\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
