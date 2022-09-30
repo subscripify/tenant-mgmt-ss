@@ -110,8 +110,10 @@ BEGIN
   END IF;
 END$$
 
+DELIMITER ;
 
 -- these triggers ensure that all fields are required based upon tenant type
+
 DELIMITER $$
 CREATE TRIGGER force_proper_tenant_config_update
 BEFORE UPDATE
@@ -122,9 +124,12 @@ BEGIN
   IF (NEW.is_lord_tenant OR OLD.is_lord_tenant) THEN
     CASE
       -- rules for lord tenatns
-      WHEN NEW.lord_services_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'internal services config is required for lord tenant';
+      WHEN NEW.lord_services_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'lord services config is required for lord tenant';
+      WHEN !((SELECT deployment_level FROM tenant_service_configs WHERE tenant_config_uuid = NEW.lord_services_config) = 'lord') THEN SIGNAL SQLSTATE '45000' SET message_text = 'lord services config requires lord services type';
       WHEN NEW.super_services_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'super services config is required for lord tenant';
+      WHEN !((SELECT deployment_level FROM tenant_service_configs WHERE tenant_config_uuid = NEW.super_services_config) = 'super') THEN SIGNAL SQLSTATE '45000' SET message_text = 'super services config requires super services type';
       WHEN NEW.public_services_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'public services config is required for lord tenant';
+      WHEN !((SELECT deployment_level FROM tenant_service_configs WHERE tenant_config_uuid = NEW.public_services_config) = 'public') THEN SIGNAL SQLSTATE '45000' SET message_text = 'public services config requires public services type';
       WHEN NEW.private_access_config IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'private access configs are for super tenants only';
       WHEN NEW.custom_access_config IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'custom access configs are for super tenants and main tenants only';
       ELSE BEGIN END;
@@ -134,13 +139,15 @@ BEGIN
   IF (NEW.is_super_tenant OR OLD.is_super_tenant) THEN
     CASE
       -- rules for super tenants
-      WHEN NEW.lord_services_config IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'internal services config is not allowed for super tenants';
+      WHEN NEW.lord_services_config IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'lord services config is not allowed for super tenants';
       WHEN NEW.super_services_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'super services config is required for super tenant';
+	  WHEN !((SELECT deployment_level FROM tenant_service_configs WHERE tenant_config_uuid = NEW.super_services_config) = 'super') THEN SIGNAL SQLSTATE '45000' SET message_text = 'super services config requires super services type';
       WHEN NEW.public_services_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'public services config is required for super tenant';
+      WHEN !((SELECT deployment_level FROM tenant_service_configs WHERE tenant_config_uuid = NEW.public_services_config) = 'public') THEN SIGNAL SQLSTATE '45000' SET message_text = 'public services config requires public services type';
       WHEN NEW.private_access_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'private access config is required for super tenants ';
       WHEN !((SELECT access_type FROM access_configs WHERE access_config_uuid = NEW.private_access_config) = 'private') THEN SIGNAL SQLSTATE '45000' SET message_text = 'private access config requires private access_type';
       WHEN NEW.custom_access_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'custom access configs is required for super tenants ';
-      WHEN !((SELECT access_type FROM access_configs WHERE access_config_uuid = NEW.custom_access_config) = 'public') THEN SIGNAL SQLSTATE '45000' SET message_text = 'public access config requires public access_type';
+      WHEN !((SELECT access_type FROM access_configs WHERE access_config_uuid = NEW.custom_access_config) = 'custom') THEN SIGNAL SQLSTATE '45000' SET message_text = 'custom access config requires custom access_type';
       ELSE BEGIN END;
     END CASE;
   END IF;
@@ -150,12 +157,13 @@ BEGIN
     ((NEW.is_super_tenant IS FALSE OR NEW.is_super_tenant IS NULL) OR (OLD.is_super_tenant IS FALSE OR OLD.is_super_tenant IS NULL)) THEN
     CASE
       -- rules for main-tenants
-      WHEN NEW.lord_services_config IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'internal services config is not allowed for main tenants';
+      WHEN NEW.lord_services_config IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'lord services config is not allowed for main tenants';
       WHEN NEW.super_services_config IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'super services config is not allowed for main tenants';
       WHEN NEW.public_services_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'public services config is required for main tenants';
+      WHEN !((SELECT deployment_level FROM tenant_service_configs WHERE tenant_config_uuid = NEW.public_services_config) = 'public') THEN SIGNAL SQLSTATE '45000' SET message_text = 'public services config requires public services type';
       WHEN NEW.private_access_config IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'private access config is not allowed for main tenants';
       WHEN NEW.custom_access_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'custom access config is required for main tenants ';
-      WHEN !((SELECT access_type FROM access_configs WHERE access_config_uuid = NEW.custom_access_config) = 'public') THEN SIGNAL SQLSTATE '45000' SET message_text = 'public access config requires public access_type';
+      WHEN !((SELECT access_type FROM access_configs WHERE access_config_uuid = NEW.custom_access_config) = 'custom') THEN SIGNAL SQLSTATE '45000' SET message_text = 'custom access config requires custom access_type';
       ELSE BEGIN END;
     END CASE;
   END IF;
@@ -163,6 +171,7 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
+
 CREATE TRIGGER force_proper_tenant_config_insert
 BEFORE INSERT
 ON tenant FOR EACH ROW
@@ -172,9 +181,12 @@ BEGIN
   IF (NEW.is_lord_tenant) THEN
     CASE
       -- rules for lord tenatns
-      WHEN NEW.lord_services_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'internal services config is required for lord tenant';
+      WHEN NEW.lord_services_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'lord services config is required for lord tenant';
+      WHEN !((SELECT deployment_level FROM tenant_service_configs WHERE tenant_config_uuid = NEW.lord_services_config) = 'lord') THEN SIGNAL SQLSTATE '45000' SET message_text = 'lord services config requires lord services type';
       WHEN NEW.super_services_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'super services config is required for lord tenant';
+      WHEN !((SELECT deployment_level FROM tenant_service_configs WHERE tenant_config_uuid = NEW.super_services_config) = 'super') THEN SIGNAL SQLSTATE '45000' SET message_text = 'super services config requires super services type';
       WHEN NEW.public_services_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'public services config is required for lord tenant';
+      WHEN !((SELECT deployment_level FROM tenant_service_configs WHERE tenant_config_uuid = NEW.public_services_config) = 'public') THEN SIGNAL SQLSTATE '45000' SET message_text = 'public services config requires public services type';
       WHEN NEW.private_access_config IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'private access configs are for super tenants only';
       WHEN NEW.custom_access_config IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'custom access configs are for super tenants and main tenants only';
       ELSE BEGIN END;
@@ -184,13 +196,15 @@ BEGIN
   IF (NEW.is_super_tenant) THEN
     CASE
 	  -- rules for super tenants
-      WHEN NEW.lord_services_config IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'internal services config is not allowed for super tenants';
+	  WHEN NEW.lord_services_config IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'lord services config is not allowed for super tenants';
       WHEN NEW.super_services_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'super services config is required for super tenant';
+	  WHEN !((SELECT deployment_level FROM tenant_service_configs WHERE tenant_config_uuid = NEW.super_services_config) = 'super') THEN SIGNAL SQLSTATE '45000' SET message_text = 'super services config requires super services type';
       WHEN NEW.public_services_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'public services config is required for super tenant';
+      WHEN !((SELECT deployment_level FROM tenant_service_configs WHERE tenant_config_uuid = NEW.public_services_config) = 'public') THEN SIGNAL SQLSTATE '45000' SET message_text = 'public services config requires public services type';
       WHEN NEW.private_access_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'private access config is required for super tenants ';
       WHEN !((SELECT access_type FROM access_configs WHERE access_config_uuid = NEW.private_access_config) = 'private') THEN SIGNAL SQLSTATE '45000' SET message_text = 'private access config requires private access_type';
       WHEN NEW.custom_access_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'custom access configs is required for super tenants ';
-      WHEN !((SELECT access_type FROM access_configs WHERE access_config_uuid = NEW.custom_access_config) = 'public') THEN SIGNAL SQLSTATE '45000' SET message_text = 'public access config requires public access_type';
+      WHEN !((SELECT access_type FROM access_configs WHERE access_config_uuid = NEW.custom_access_config) = 'custom') THEN SIGNAL SQLSTATE '45000' SET message_text = 'custom access config requires custom access_type';
       ELSE BEGIN END;
     END CASE;
   END IF;
@@ -198,12 +212,13 @@ BEGIN
   IF (NEW.is_lord_tenant IS FALSE OR NEW.is_lord_tenant IS NULL) AND (NEW.is_super_tenant IS FALSE OR NEW.is_super_tenant IS NULL) THEN
     CASE
       -- rules for main-tenants
-      WHEN NEW.lord_services_config IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'internal services config is not allowed for main tenants';
+      WHEN NEW.lord_services_config IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'lord services config is not allowed for main tenants';
       WHEN NEW.super_services_config IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'super services config is not allowed for main tenants';
       WHEN NEW.public_services_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'public services config is required for main tenants';
+      WHEN !((SELECT deployment_level FROM tenant_service_configs WHERE tenant_config_uuid = NEW.public_services_config) = 'public') THEN SIGNAL SQLSTATE '45000' SET message_text = 'public services config requires public services type';
       WHEN NEW.private_access_config IS NOT NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'private access config is not allowed for main tenants';
       WHEN NEW.custom_access_config IS NULL THEN SIGNAL SQLSTATE '45000' SET message_text = 'custom access config is required for main tenants ';
-      WHEN !((SELECT access_type FROM access_configs WHERE access_config_uuid = NEW.custom_access_config) = 'public') THEN SIGNAL SQLSTATE '45000' SET message_text = 'public access config requires public access_type';
+      WHEN !((SELECT access_type FROM access_configs WHERE access_config_uuid = NEW.custom_access_config) = 'custom') THEN SIGNAL SQLSTATE '45000' SET message_text = 'custom access config requires custom access_type';
       ELSE BEGIN END;
     END CASE;
   END IF;

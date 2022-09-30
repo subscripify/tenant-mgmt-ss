@@ -1,4 +1,4 @@
-DROP TABLE tenant_deleted;
+-- DROP TABLE tenant_deleted;
 CREATE TABLE tenant_deleted (
   tenant_uuid                             BINARY(16) NOT NULL UNIQUE PRIMARY KEY,       -- the unique id for the tenant
   tenant_alias                            CHAR(36) NOT NULL,                            -- arbitrary alias used for search and easier search ui - this does not need to be the true name of the org

@@ -56,3 +56,18 @@ func HttpResponseHelperSQLDelete(inner sql.Result, sqlErr error) (sql.Result, in
 
 	return inner, 200, nil
 }
+
+func HttpResponseHelperSQLUpdate(inner sql.Result, sqlErr error) (sql.Result, int, error) {
+
+	if sqlErr != nil {
+		//parse the sql error - add special cases here as needed
+		_, ok := sqlErr.(*mysql.MySQLError)
+		if !ok {
+			return inner, 500, fmt.Errorf("db server error")
+		}
+
+		return inner, 400, fmt.Errorf("fail on db update: %s", sqlErr.Error())
+	}
+
+	return inner, 200, nil
+}

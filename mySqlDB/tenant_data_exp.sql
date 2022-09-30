@@ -2,6 +2,9 @@ select bin_to_uuid(tenant_uuid) as tenant_uuid, tenant_alias,secondary_domain, s
 lord_services_config, super_services_config, public_services_config, private_access_config, custom_access_config, 
 bin_to_uuid(liege_uuid), bin_to_uuid(lord_uuid), is_lord_tenant, is_super_tenant from tenant ORDER BY create_timestamp DESC;
 
+UPDATE tenant SET tenant_alias = 'my tenant alias' , super_services_config = uuid_to_bin('432ead01-385a-11ed-907f-f5001f9bae96') WHERE tenant_uuid = UUID_TO_BIN('49259c86-3db3-11ed-bd88-3e0f90a488be');
+UPDATE tenant SET tenant_alias = 'my tenant alias', lord_services_config = UUID_TO_BIN('046a5c26-d5cf-e882-f3aa-bd6fc9bed049'), super_services_config = UUID_TO_BIN('62cb85da-d10c-0fe0-b8e6-dfadeaf0fbeb'), public_services_config = UUID_TO_BIN('e19c17db-2dc3-91c1-0244-1f73daa5b18b'), private_access_config = UUID_TO_BIN('2a994bd3-d05c-e56b-e95b-bca74ee6effa'), custom_access_config = UUID_TO_BIN('22bbadeb-3ba9-cacd-59fb-f425fb257caf') WHERE tenant_uuid = UUID_TO_BIN('49259c86-3db3-11ed-bd88-3e0f90a488be');
+
 -- DELETE FROM tenant WHERE tenant_uuid = UUID_TO_BIN('2f40a6e4-ede4-41f5-aeba-b8d34ca1d06a');
 DELETE FROM tenant WHERE alias = "testing-123" AND is_lord_tenant IS NULL AND is_super_tenant = false;
 SELECT count(tenant_uuid) as count FROM tenant WHERE tenant_uuid = UUID_TO_BIN('5c0ee1f6-6b3f-46c8-a62e-fca70d460bf0');
@@ -21,7 +24,7 @@ INSERT INTO tenant (
             is_super_tenant,
             liege_uuid,
             lord_uuid,
-		  created_by
+		    created_by
 				)
 			VALUES (UUID_TO_BIN(UUID()),
 			 'mybadtenant5',
@@ -138,7 +141,7 @@ SELECT
 	 is_super_tenant,
 	 create_timestamp,
 	 created_by
-	 FROM tenant WHERE tenant_uuid = UUID_TO_BIN('0904ba44-9d41-418a-bbd8-2c70506c343');
+	 FROM tenant ;
 												  
 
 INSERT INTO tenant (

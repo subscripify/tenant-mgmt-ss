@@ -2,9 +2,12 @@ package tenant
 
 import (
 	"context"
+	"fmt"
+	"strings"
 	"time"
 
 	tenantdbserv "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/tenantdb"
+	"github.com/google/uuid"
 )
 
 // func isNil(i interface{}) bool {
@@ -258,7 +261,14 @@ func DeleteTenant(tenantUUID string,
 	return &resp
 }
 
-func UpdateTenant(tenantUUID string,
+func UpdateTenant(
+	tenantUUID string,
+	tenantAlias string,
+	lordServicesConfig string,
+	superServicesConfig string,
+	publicServicesConfig string,
+	privateAccessConfig string,
+	customAccessConfig string,
 	creator string) iHttpResponse {
 	var resp httpResponseData
 
@@ -269,18 +279,42 @@ func UpdateTenant(tenantUUID string,
 		resp.generateHttpResponseCodeAndMessage(responseCode, err.Error())
 
 	} else {
-		deleteStr := `SELECT FROM tenant WHERE tenant_uuid = UUID_TO_BIN(?)`
+
+		var setString strings.Builder
+		fmt.Fprintf(&setString, "UPDATE tenant SET")
+		if tenantAlias != "" {
+			fmt.Fprintf(&setString, " tenant_alias = '%s',", tenantAlias)
+		}
+		if parsedLordServicesConfig, err := uuid.Parse(lordServicesConfig); err == nil {
+			fmt.Fprintf(&setString, " lord_services_config = UUID_TO_BIN('%s'),", parsedLordServicesConfig)
+		}
+		if parsedSuperServicesConfig, err := uuid.Parse(superServicesConfig); err == nil {
+			fmt.Fprintf(&setString, " super_services_config = UUID_TO_BIN('%s'),", parsedSuperServicesConfig)
+		}
+		if parsedPublicServicesConfig, err := uuid.Parse(publicServicesConfig); err == nil {
+			fmt.Fprintf(&setString, " public_services_config = UUID_TO_BIN('%s'),", parsedPublicServicesConfig)
+		}
+		if parsedPrivateAccessConfig, err := uuid.Parse(privateAccessConfig); err == nil {
+			fmt.Fprintf(&setString, " private_access_config = UUID_TO_BIN('%s'),", parsedPrivateAccessConfig)
+		}
+		if parsedCustomAccessConfig, err := uuid.Parse(customAccessConfig); err == nil {
+			fmt.Fprintf(&setString, " custom_access_config = UUID_TO_BIN('%s'),", parsedCustomAccessConfig)
+		}
+		var updateString strings.Builder
+
+		fmt.Fprint(&updateString, strings.TrimSuffix(setString.String(), ","), " WHERE tenant_uuid = UUID_TO_BIN(?)")
+
 		//setting up a 10 second timeout (could be less)
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
 		tdb := tenantdbserv.Tdb.Handle
-		_, rc, err := tenantdbserv.HttpResponseHelperSQLDelete(tdb.ExecContext(ctx, deleteStr, l.tenantUUID.String()))
+		_, rc, err := tenantdbserv.HttpResponseHelperSQLUpdate(tdb.ExecContext(ctx, updateString.String(), l.tenantUUID.String()))
 		if err != nil {
 			resp.generateHttpResponseCodeAndMessage(rc, err.Error())
 		} else {
-			resp.generateHttpResponseCodeAndMessage(200, "successful object removed")
-			resp.generateLoadedTenantResponse(l, DELETE)
+			resp.generateHttpResponseCodeAndMessage(200, "successful object updated")
+			resp.generateLoadedTenantResponse(l, PATCH)
 		}
 
 	}
