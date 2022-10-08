@@ -39,58 +39,6 @@ type fullTenantResponse struct {
 	CreatedBy                          string
 }
 
-// type mainTenantSend struct {
-// 	TenantType                         string
-// 	TenantUUID                         string
-// 	Alias                              string
-// 	TopLevelDomain                     string
-// 	SecondaryDomain                    string
-// 	Subdomain                          string
-// 	KubeNamespacePrefix                string
-// 	SubscripifyDeploymentCloudLocation string
-// 	PublicServicesConfig               string
-// 	CustomAccessConfig                 string
-// 	LiegeUUID                          string
-// 	LordUUID                           string
-// 	CreateTimestamp                    string
-// 	CreatedBy                          string
-// }
-
-// type superTenantSend struct {
-// 	TenantType                         string
-// 	TenantUUID                         string
-// 	Alias                              string
-// 	TopLevelDomain                     string
-// 	SecondaryDomain                    string
-// 	Subdomain                          string
-// 	KubeNamespacePrefix                string
-// 	SubscripifyDeploymentCloudLocation string
-// 	SuperServicesConfig                string
-// 	PublicServicesConfig               string
-// 	PrivateAccessConfig                string
-// 	CustomAccessConfig                 string
-// 	LiegeUUID                          string
-// 	LordUUID                           string
-// 	CreateTimestamp                    string
-// 	CreatedBy                          string
-// }
-
-// type lordTenantSend struct {
-// 	TenantType                         string
-// 	TenantUUID                         string
-// 	Alias                              string
-// 	TopLevelDomain                     string
-// 	SecondaryDomain                    string
-// 	Subdomain                          string
-// 	KubeNamespacePrefix                string
-// 	SubscripifyDeploymentCloudLocation string
-// 	LordServiceConfig                  string
-// 	SuperServicesConfig                string
-// 	PublicServicesConfig               string
-// 	CreateTimestamp                    string
-// 	CreatedBy                          string
-// }
-
 type httpResponseData struct {
 	HttpResponseCode int
 	Message          string

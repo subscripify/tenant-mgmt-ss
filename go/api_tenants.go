@@ -250,7 +250,29 @@ func GetTenant(w http.ResponseWriter, r *http.Request) {
 
 func SearchTenant(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+
+	var hr HttpResponseError
+	var jsonResp []byte
+
+	resp := tenant.ListTenants(
+		"8df030a1-a057-4f53-a011-a2b1cff673a1|9df030a1-a057-4f53-a011-a2b1cff673a1",
+		"tenantAlias1|tenantAlias2", "sub1|sub2|sub3|sub4",
+		"8df030a1-a057-4f53-a011-a2b1cff673a1|9df030a1-a057-4f53-a011-a2b1cff673a1",
+		"lordconfigalias1|lordconfigalias2",
+		"8df030a1-a057-4f53-a011-a2b1cff673a1|9df030a1-a057-4f53-a011-a2b1cff673a1",
+		"superc1|superc2",
+		"8df030a1-a057-4f53-a011-a2b1cff673a1|9df030a1-a057-4f53-a011-a2b1cff673a1",
+		"publicc1|publicc2",
+		"8df030a1-a057-4f53-a011-a2b1cff673a1|9df030a1-a057-4f53-a011-a2b1cff673a1",
+		"privAC1|privac2",
+		"8df030a1-a057-4f53-a011-a2b1cff673a1|9df030a1-a057-4f53-a011-a2b1cff673a1",
+		"cus1|cus2").GetHttpResponse()
+
+	hr.ResponseCode = int32(resp.HttpResponseCode)
+	hr.Message = resp.Message
+	jsonResp, _ = json.Marshal(hr)
+	w.WriteHeader(int(hr.ResponseCode))
+	w.Write(jsonResp)
 }
 
 func UpdateTenant(w http.ResponseWriter, r *http.Request) {

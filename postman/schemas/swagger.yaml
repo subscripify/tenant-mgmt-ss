@@ -40,7 +40,7 @@ tags:
     description: Find out more about our store
     url: http://wiki.subscripify.com/tenant-architecture
 paths:
-  /lord-tenants:
+  /tenants/lord-tenants:
     post:
       tags:
       - tenants
@@ -80,9 +80,9 @@ paths:
           $ref: '#/components/responses/429'
         default:
           $ref: '#/components/responses/default'
-      security:
-      - tenant_auth:
-        - write:lord-tenants
+      # security:
+      # - tenant_auth:
+      #   - write:lord-tenants
   /tenants:
     post:
       tags:
@@ -91,7 +91,7 @@ paths:
       description: Adds a new tenant to the selected liege tenant in liegeUUID header parameter. The liege UUID must be a lord tenant if creating a super tenant and liege UUID must be a super tenant if creating a main tenant.
       operationId: addTenant 
       parameters:
-        - $ref: '#/components/parameters/liegeUUID'
+        - $ref: '#/components/parameters/liegeUUIDHeader'
       requestBody:
         description: All data required to start a new super or main  tenant
         content:
@@ -124,10 +124,10 @@ paths:
           $ref: '#/components/responses/429'
         default:
           $ref: '#/components/responses/default'
-      security:
-      - tenant_auth:
-        - write:lord-tenants
-        - write:super-tenants
+      # security:
+      # - tenant_auth:
+      #   - write:lord-tenants
+      #   - write:super-tenants
   /tenants/{targetTenantUUID}:
     get:
       summary: returns a tenant
@@ -136,7 +136,7 @@ paths:
         - "tenants"
       operationId: getTenant
       parameters:
-        - $ref: '#/components/parameters/targetTenantUUID'
+        - $ref: '#/components/parameters/targetTenantUUIDPath'
       responses:
         '200':
           description: return tenant
@@ -169,7 +169,7 @@ paths:
         - "tenants"
       operationId: updateTenant
       parameters:
-        - $ref: '#/components/parameters/targetTenantUUID'
+        - $ref: '#/components/parameters/targetTenantUUIDPath'
       requestBody:
         description: All data required to start a new super or main  tenant
         content:
@@ -209,7 +209,7 @@ paths:
         - "tenants"
       operationId: deleteTenant
       parameters:
-        - $ref: '#/components/parameters/targetTenantUUID'
+        - $ref: '#/components/parameters/targetTenantUUIDPath'
       responses:
         '200':
           description: return tenant
@@ -244,7 +244,7 @@ paths:
       description: Search for tenants based upon the input parameters available
       operationId: searchTenant
       parameters:
-        - $ref: '#/components/parameters/liegeUUID'
+        - $ref: '#/components/parameters/liegeUUIDHeader'
       responses: 
         '200':
           description: Successful operation returns full tenant data including generated
@@ -273,7 +273,7 @@ paths:
           $ref: '#/components/responses/default'
 components:
   parameters:
-    liegeUUID:
+    liegeUUIDHeader:
       name: liegeUUID
       description: 'Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required 
         and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or 
@@ -285,7 +285,7 @@ components:
       schema: 
         type: string
         pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
-    targetTenantUUID:
+    targetTenantUUIDPath:
       name: targetTenantUUID
       in: path
       required: true
@@ -294,23 +294,96 @@ components:
         pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
         type: string
         description: 'This is the UUID of the target tenant. The target tenant must belong to the liege tenant in the liegeUUID header.'
-    searchSubdomain:
+    searchSubdomainQuery:
       name: subdmn
       in: query
       required: false
       schema:
-        maxLength: 61
-        pattern: ^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$
-        type: string
-        description: 'A partial or whole subdomain name. Use of this field for search adheres to naming rules outlined in <a href="https://www.rfc-editor.org/rfc/rfc3986#section-3.2.2">RFC3986</a> for subdomains.'
-    searchTenantAlias:
-      name: tenantAlias
+        type: array
+        items: 
+          type: string
+          maxLength: 61
+          pattern: ^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$
+          description: 'A partial or whole subdomain name. Use of this field for search adheres to naming rules outlined in <a href="https://www.rfc-editor.org/rfc/rfc3986#section-3.2.2">RFC3986</a> for subdomains.'    
+        minItems: 1
+      style: pipeDelimited  
+    searchTenantAliasQuery:
+      name: tal
       in: query
       required: false
       schema:
-        maxLength: 20
-        type: string
-        description: 'A partial or whole organization name/ alias given when the tenant was created.'
+        type: array
+        items:
+          maxLength: 36
+          type: string
+          description: 'A partial or whole organization name/ alias given when the tenant was created.'
+        minItems: 1
+      style: pipeDelimited
+    searchConfigAliasQuery:
+      name: cal
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          maxLength: 36
+          type: string
+          description: 'A partial or whole alias for a lord, super, or public services config. can have multiple aliases in the same 
+            query string using it more than once'
+        minItems: 1
+      style: pipeDelimited
+    searchConfigQuery:
+      name: cid
+      in: query
+      required: false
+      schema:
+        type: array
+        items: 
+          type: string
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          description: 'A  whole UUID for a lord, super, or public services config. No partials, must be full UUID or search will fail.
+            Can have up to three cids in the same url'
+        minItems: 1
+      style: pipeDelimited
+        
+    searchAccessQuery:
+      name: aid
+      in: query
+      required: false
+      schema:
+        type: array
+        minItems: 1
+        items:
+          type: string
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          description: A whole UUID for a private or custom access config id. No partials, must be a full UUID or search will fail. Can have up to two in a URL. Any more will be ignored.
+      style: pipeDelimited
+    searchPrivateAccessAliasQuery:
+      name: aal 
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          maxLength: 36
+          description: 'A partial or whole alias for a private or custom access config. Can have multiple.'
+        minItems: 1
+      style: pipeDelimited
+    searchTypeQuery:
+      name: type 
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          maxLength: 36
+          description: 'A full name for either a main, lord, or super tenant for a private or custom access config. Can have multiple.'
+        minItems: 1
+      style: pipeDelimited
   schemas:
     tenantPatchBody:
       type: object
@@ -479,6 +552,7 @@ components:
             type: string
             description: Indicate which type of tenant. Lord tenants will see both "super" and "main" tenant types. 
               Super tenants will only see "main" tenant types.
+      maxItems: 100
     extendedTenantObject:
       type: object
       properties:
@@ -555,7 +629,7 @@ components:
           schema:
             $ref: '#/components/schemas/httpResponseError'
     '405':
-      description: Invalid input
+      description: Invalid method
       content:
         application/json:
           schema:

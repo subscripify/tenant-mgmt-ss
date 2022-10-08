@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS tenant;
 CREATE TABLE tenant (
   tenant_uuid                             BINARY(16) NOT NULL UNIQUE PRIMARY KEY,       -- the unique id for the tenant
   tenant_alias                            CHAR(36) NOT NULL,                            -- arbitrary alias used for search and easier search ui - this does not need to be the true name of the org
-  top_level_domain                        CHAR(3)  NOT NULL,                            -- the top level domain (eg com, net, io, tv, etc.)
+  top_level_domain                        CHAR(24)  NOT NULL,                            -- the top level domain (eg com, net, io, tv, etc.)
   secondary_domain                        CHAR(36) NOT NULL,                            -- every lord tenant must produce a secondary domain name (e.g. subscripify.com)
   subdomain                               CHAR(36) NOT NULL,                            -- sudomains must be unique for each secondary domain name
   kube_namespace_prefix                   CHAR(36) NOT NULL,                            -- tenants may need more than one k8 namespace depending upon config - but they must all start with this
