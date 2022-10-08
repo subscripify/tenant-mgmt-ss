@@ -10,7 +10,7 @@ import (
 
 type iTenantSearch interface {
 	mapTenantUUID(pipedString string) error
-	GetTenantUUIDQueryInString() string
+	getTenantUUIDQueryInString() string
 	mapTenantAlias(pipedString string) error
 	getTenantAliasQueryLikeString() string
 	mapSubdomain(pipedString string) error
@@ -69,7 +69,7 @@ func (ts *tenantSearch) mapTenantUUID(pipedString string) error {
 	return nil
 }
 
-func (ts *tenantSearch) GetTenantUUIDQueryInString() string {
+func (ts *tenantSearch) getTenantUUIDQueryInString() string {
 	inString := ""
 	if ts.tenantUUID != nil {
 		inString = inString + `(tenant_uuid IN (`

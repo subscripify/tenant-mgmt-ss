@@ -365,38 +365,44 @@ func ListTenants(
 	pipedCustomAccessUUIDs string,
 	pipedCustomAccessAliases string) iHttpResponse {
 	var resp httpResponseData
+
 	so, responseCode, err := createTenantSearchObject(pipedTenantUUIDs, pipedTenantAliases,
 		pipedSubdomains, pipedLordConfigUUIDs, pipedLordConfigAliases, pipedSuperConfigUUIDs, pipedSuperConfigAliases,
 		pipedPublicConfigUUIDs, pipedPublicConfigAliases, pipedPrivateAccessUUIDs, pipedPrivateAccessAliases,
 		pipedCustomAccessUUIDs, pipedCustomAccessAliases)
+
 	if err != nil {
 		resp.generateHttpResponseCodeAndMessage(responseCode, err.Error())
 		return &resp
 	}
 	selectString := `SELECT tenant_UUID, tenant_alias, is_lord_tenant, is_super_tenant FROM tenant_search WHERE `
 
-	isFirst := true
+	// isFirst := true
 
-	t := reflect.TypeOf(so)
-	log.Println("I am here++++++++++++++++++++++++++++++++++++++++++")
-	log.Println(t)
-	log.Println("I am here++++++++++++++++++++++++++++++++++++++++++")
+	t := reflect.TypeOf(&so).Elem()
+
 	for i := 0; i < t.NumMethod(); i++ {
-		log.Println("I am here++++++++++++++++++++++++++++++++++++++++++")
+
 		method := t.Method(i)
 		if strings.HasPrefix(method.Name, "get") {
-			whereVal := reflect.ValueOf(so).MethodByName(method.Name).Call(nil)
-			whereString := whereVal[0].String()
-			if whereString != "" {
-				if !isFirst {
-					selectString = selectString + `AND `
-				}
-				selectString = selectString + string(whereString)
-				isFirst = false
-			}
+			log.Println("I am here+++++++++++++++++++++++++++++++++++++++++3")
+			log.Println(method.Name)
+			whereVal := reflect.ValueOf(&so).MethodByName(method.Name).Call(nil)
+			log.Println(whereVal)
+			// whereVal := reflect.ValueOf(&so).MethodByName(method.Name).Call([]reflect.Value{})
+
+			// whereString := whereVal[0].String()
+			// if whereString != "" {
+			// 	if !isFirst {
+			// 		selectString = selectString + `AND `
+			// 	}
+			// 	selectString = selectString + string(whereString)
+			// 	isFirst = false
+			// }
 		}
 
 	}
+	log.Println(selectString)
 	resp.generateHttpResponseCodeAndMessage(200, "i think this works")
 
 	return &resp
