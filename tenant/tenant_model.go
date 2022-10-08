@@ -13,6 +13,7 @@ import (
 
 type iTenant interface {
 	setNewTenantUUID()
+	setTenantUUID(tenantUUID string) error
 	setAlias(alias string) error
 	setSubdomainName(subdomain string) error
 	setSecondaryDomainName(secondaryDomain string) error
@@ -48,24 +49,24 @@ type iTenant interface {
 }
 
 type tenant struct {
-	tenantUUID           uuid.UUID
-	alias                string
-	subdomain            string
-	secondaryDomain      string
-	topLevelDomain       string
-	kubeNamespacePrefix  string
-	lordServicesConfig   uuid.UUID
-	superServicesConfig  uuid.UUID
-	publicServicesConfig uuid.UUID
-	privateAccessConfig  uuid.UUID
-	customAccessConfig   uuid.UUID
-	cloudLocation        CloudLocation
-	liegeUUID            uuid.UUID
-	lordUUID             uuid.UUID
-	lordTenant           bool
-	superTenant          bool
-	createTimestamp      time.Time
-	createdBy            string
+	tenantUUID           uuid.UUID     `db:"tenant.tenant_uuid"`
+	alias                string        `db:"tenant.tenant_alias"`
+	subdomain            string        `db:"tenant.subdomain"`
+	secondaryDomain      string        `db:"tenant.secondary_domain"`
+	topLevelDomain       string        `db:"tenant.top_level_domain"`
+	kubeNamespacePrefix  string        `db:"tenant.kube_namespace_prefix"`
+	lordServicesConfig   uuid.UUID     `db:"tenant.lord_services_config,omitempty"`
+	superServicesConfig  uuid.UUID     `db:"tenant.super_services_config,omitempty"`
+	publicServicesConfig uuid.UUID     `db:"tenant.public_services_config"`
+	privateAccessConfig  uuid.UUID     `db:"tenant.private_access_config,omitempty"`
+	customAccessConfig   uuid.UUID     `db:"tenant.custom_access_config,omitempty"`
+	cloudLocation        CloudLocation `db:"tenant.subscripify_deployment_cloud_location"`
+	liegeUUID            uuid.UUID     `db:"tenant.liege_uuid,omitempty"`
+	lordUUID             uuid.UUID     `db:"tenant.lord_uuid,omitempty"`
+	lordTenant           bool          `db:"tenant.is_lord_tenant,omitempty"`
+	superTenant          bool          `db:"tenant.is_super_tenant,omitempty"`
+	createTimestamp      time.Time     `db:"tenant.create_timestamp"`
+	createdBy            string        `db:"tenant.created_by"`
 }
 
 type TenantType string
@@ -80,13 +81,25 @@ type CloudLocation string
 
 const (
 	Azure CloudLocation = "Azure"
-	ACS   CloudLocation = "ACS"
+	AWS   CloudLocation = "AWS"
 	GCP   CloudLocation = "GCP"
 )
 
 // this is the only place in the application this value is created
 func (t *tenant) setNewTenantUUID() {
 	t.tenantUUID = uuid.New()
+}
+
+// this function loads a previously created UUID from a tenant record retrieved from the database
+// this is used for loading a tenant object from db - not for creating a new tenant
+func (t *tenant) setTenantUUID(tenantUUID string) error {
+
+	loadedTenantUUID, err := uuid.Parse(tenantUUID)
+	if err != nil {
+		return fmt.Errorf("the tenant UUID failed to parse: %s", err)
+	}
+	t.tenantUUID = loadedTenantUUID
+	return nil
 }
 
 // returns the byte[16] of the tenant uuid
@@ -289,7 +302,7 @@ func (t *tenant) getCustomAccessConfig() uuid.UUID {
 
 // limited to Azure, ACS, GCP
 func (t *tenant) setCloudLocation(cloudLocation CloudLocation) error {
-	if cloudLocation == Azure || cloudLocation == ACS || cloudLocation == GCP {
+	if cloudLocation == Azure || cloudLocation == AWS || cloudLocation == GCP {
 		t.cloudLocation = cloudLocation
 		return nil
 	}
@@ -305,12 +318,13 @@ func (t *tenant) getCloudLocation() CloudLocation {
 func (t *tenant) setLiegeUUID(liegeUUID string) error {
 	liegeUUIDParsedUUID, err := uuid.Parse(liegeUUID)
 	if err != nil {
-		return fmt.Errorf("custom services config uuid failed to parse: %s", err)
+		return fmt.Errorf("liege uuid failed to parse: %s", err)
 	}
 	if t.lordTenant {
-		err := fmt.Errorf("invalid tenant type for setting custom services config - super tenants and main tenants only")
+		err := fmt.Errorf("invalid tenant type for setting liege - super tenants and main tenants only")
 		return err
 	}
+
 	t.liegeUUID = liegeUUIDParsedUUID
 	return nil
 }

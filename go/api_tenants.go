@@ -11,11 +11,11 @@ package tenantapi
 
 import (
 	"encoding/json"
-	"fmt"
-	"log"
 	"net/http"
 
 	tenant "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/tenant"
+	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 )
 
 // reads the request body, decodes JSON and sends data to tenant package.
@@ -32,11 +32,12 @@ func AddLordTenant(w http.ResponseWriter, r *http.Request) {
 	dec := json.NewDecoder(r.Body)
 	var lordTenantCreateBody LordTenantCreateBody
 	if err := dec.Decode(&lordTenantCreateBody); err != nil {
-		log.Printf("error: bad JSON: %s", err)
+
 		hr.Message = "bad json"
 		hr.ResponseCode = http.StatusBadRequest
 		jsonResp, _ = json.Marshal(hr)
 	} else {
+
 		resp := tenant.NewLordTenant(
 			lordTenantCreateBody.TenantAlias,
 			lordTenantCreateBody.TopLevelDomain,
@@ -67,35 +68,301 @@ func AddLordTenant(w http.ResponseWriter, r *http.Request) {
 }
 
 func AddTenant(w http.ResponseWriter, r *http.Request) {
+	var wo TenantUuidCreatedObject
+	var hr HttpResponseError
+	var jsonResp []byte
+
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+
 	defer r.Body.Close()
 	dec := json.NewDecoder(r.Body)
-	var mainTenantCreateBody TenantCreateBody
-	if err := dec.Decode(&mainTenantCreateBody); err != nil {
-		log.Printf("error: bad JSON: %s", err)
-		http.Error(w, "bad json", http.StatusBadRequest)
-		return
+	var tenantCreateBody TenantCreateBody
+	if err := dec.Decode(&tenantCreateBody); err != nil {
+		hr.Message = "bad json"
+		hr.ResponseCode = http.StatusBadRequest
+		jsonResp, _ = json.Marshal(hr)
+	} else {
+		resp := tenant.NewTenant(
+			tenantCreateBody.TenantType,
+			tenantCreateBody.TenantAlias,
+			tenantCreateBody.Subdomain,
+			tenantCreateBody.SuperServicesConfig,
+			tenantCreateBody.PublicServicesConfig,
+			tenantCreateBody.PrivateAccessConfig,
+			tenantCreateBody.CustomAccessConfig,
+			r.Header.Get("liegeUUID"),
+			"william.ohara@subscripify.com").GetHttpResponse()
+
+		hr.Message = resp.Message
+		hr.ResponseCode = int32(resp.HttpResponseCode)
+		if hr.ResponseCode == 200 {
+			wo.TenantUUID = resp.NewTenant.TenantUUID
+
+			jsonResp, _ = json.Marshal(wo)
+
+		} else {
+			jsonResp, _ = json.Marshal(hr)
+		}
+
 	}
-	fmt.Fprintln(w, mainTenantCreateBody)
+
+	w.WriteHeader(int(hr.ResponseCode))
+	w.Write(jsonResp)
 }
 
 func DeleteTenant(w http.ResponseWriter, r *http.Request) {
+	var wo FullTenantObject
+	var hr HttpResponseError
+	var jsonResp []byte
+
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+	targetTenantUUID := mux.Vars(r)["targetTenantUUID"]
+	resp := tenant.DeleteTenant(targetTenantUUID, "william.ohara@subscripify.com").GetHttpResponse()
+	hr.Message = resp.Message
+	hr.ResponseCode = int32(resp.HttpResponseCode)
+	if hr.ResponseCode == 200 {
+		if resp.FullTenant.TenantType != "" {
+			wo.TenantType = resp.FullTenant.TenantType
+		}
+		if resp.FullTenant.Alias != "" {
+			wo.TenantAlias = resp.FullTenant.Alias
+		}
+		if resp.FullTenant.Subdomain != "" {
+			wo.Subdomain = resp.FullTenant.Subdomain
+		}
+		if resp.FullTenant.SecondaryDomain != "" {
+			wo.SecondaryDomain = resp.FullTenant.SecondaryDomain
+		}
+		if resp.FullTenant.KubeNamespacePrefix != "" {
+			wo.KubeNamespacePrefix = resp.FullTenant.KubeNamespacePrefix
+		}
+		if resp.FullTenant.TopLevelDomain != "" {
+			wo.TopLevelDomain = resp.FullTenant.TopLevelDomain
+		}
+		if resp.FullTenant.SubscripifyDeploymentCloudLocation != "" {
+			wo.SubscripifyDeploymentCloudLocation = resp.FullTenant.SubscripifyDeploymentCloudLocation
+		}
+		if resp.FullTenant.CreatedBy != "" {
+			wo.CreatedBy = resp.FullTenant.CreatedBy
+		}
+		if resp.FullTenant.TenantUUID != uuid.Nil {
+			wo.TenantUUID = resp.FullTenant.TenantUUID.String()
+		}
+		if resp.FullTenant.SuperServicesConfig != uuid.Nil {
+			wo.SuperServicesConfig = resp.FullTenant.SuperServicesConfig.String()
+		}
+		if resp.FullTenant.LordServicesConfig != uuid.Nil {
+			wo.LordServicesConfig = resp.FullTenant.LordServicesConfig.String()
+		}
+		if resp.FullTenant.PublicServicesConfig != uuid.Nil {
+			wo.PublicServicesConfig = resp.FullTenant.PublicServicesConfig.String()
+		}
+		if resp.FullTenant.PrivateAccessConfig != uuid.Nil {
+			wo.PrivateAccessConfig = resp.FullTenant.PrivateAccessConfig.String()
+		}
+		if resp.FullTenant.CustomAccessConfig != uuid.Nil {
+			wo.CustomAccessConfig = resp.FullTenant.CustomAccessConfig.String()
+		}
+		if resp.FullTenant.LordUUID != uuid.Nil {
+			wo.LordUUID = resp.FullTenant.LordUUID.String()
+		}
+		if resp.FullTenant.LiegeUUID != uuid.Nil {
+			wo.LiegeUUID = resp.FullTenant.LiegeUUID.String()
+		}
+		wo.CreateTimestamp = resp.FullTenant.CreateTimestamp.String()
+
+		jsonResp, _ = json.Marshal(wo)
+
+	} else {
+		jsonResp, _ = json.Marshal(hr)
+	}
+	w.WriteHeader(int(hr.ResponseCode))
+	w.Write(jsonResp)
 }
 
 func GetTenant(w http.ResponseWriter, r *http.Request) {
+	var wo FullTenantObject
+	var hr HttpResponseError
+	var jsonResp []byte
+
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+	targetTenantUUID := mux.Vars(r)["targetTenantUUID"]
+	resp := tenant.GetTenant(targetTenantUUID, "william.ohara@subscripify.com").GetHttpResponse()
+	hr.Message = resp.Message
+	hr.ResponseCode = int32(resp.HttpResponseCode)
+	if hr.ResponseCode == 200 {
+		if resp.FullTenant.TenantType != "" {
+			wo.TenantType = resp.FullTenant.TenantType
+		}
+		if resp.FullTenant.Alias != "" {
+			wo.TenantAlias = resp.FullTenant.Alias
+		}
+		if resp.FullTenant.Subdomain != "" {
+			wo.Subdomain = resp.FullTenant.Subdomain
+		}
+		if resp.FullTenant.SecondaryDomain != "" {
+			wo.SecondaryDomain = resp.FullTenant.SecondaryDomain
+		}
+		if resp.FullTenant.KubeNamespacePrefix != "" {
+			wo.KubeNamespacePrefix = resp.FullTenant.KubeNamespacePrefix
+		}
+		if resp.FullTenant.TopLevelDomain != "" {
+			wo.TopLevelDomain = resp.FullTenant.TopLevelDomain
+		}
+		if resp.FullTenant.SubscripifyDeploymentCloudLocation != "" {
+			wo.SubscripifyDeploymentCloudLocation = resp.FullTenant.SubscripifyDeploymentCloudLocation
+		}
+		if resp.FullTenant.CreatedBy != "" {
+			wo.CreatedBy = resp.FullTenant.CreatedBy
+		}
+		if resp.FullTenant.TenantUUID != uuid.Nil {
+			wo.TenantUUID = resp.FullTenant.TenantUUID.String()
+		}
+		if resp.FullTenant.SuperServicesConfig != uuid.Nil {
+			wo.SuperServicesConfig = resp.FullTenant.SuperServicesConfig.String()
+		}
+		if resp.FullTenant.LordServicesConfig != uuid.Nil {
+			wo.LordServicesConfig = resp.FullTenant.LordServicesConfig.String()
+		}
+		if resp.FullTenant.PublicServicesConfig != uuid.Nil {
+			wo.PublicServicesConfig = resp.FullTenant.PublicServicesConfig.String()
+		}
+		if resp.FullTenant.PrivateAccessConfig != uuid.Nil {
+			wo.PrivateAccessConfig = resp.FullTenant.PrivateAccessConfig.String()
+		}
+		if resp.FullTenant.CustomAccessConfig != uuid.Nil {
+			wo.CustomAccessConfig = resp.FullTenant.CustomAccessConfig.String()
+		}
+		if resp.FullTenant.LordUUID != uuid.Nil {
+			wo.LordUUID = resp.FullTenant.LordUUID.String()
+		}
+		if resp.FullTenant.LiegeUUID != uuid.Nil {
+			wo.LiegeUUID = resp.FullTenant.LiegeUUID.String()
+		}
+		wo.CreateTimestamp = resp.FullTenant.CreateTimestamp.String()
+
+		jsonResp, _ = json.Marshal(wo)
+
+	} else {
+		jsonResp, _ = json.Marshal(hr)
+	}
+	w.WriteHeader(int(hr.ResponseCode))
+	w.Write(jsonResp)
 }
 
 func SearchTenant(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+
+	var hr HttpResponseError
+	var jsonResp []byte
+
+	resp := tenant.ListTenants(
+		"8df030a1-a057-4f53-a011-a2b1cff673a1|9df030a1-a057-4f53-a011-a2b1cff673a1",
+		"tenantAlias1|tenantAlias2", "sub1|sub2|sub3|sub4",
+		"8df030a1-a057-4f53-a011-a2b1cff673a1|9df030a1-a057-4f53-a011-a2b1cff673a1",
+		"lordconfigalias1|lordconfigalias2",
+		"8df030a1-a057-4f53-a011-a2b1cff673a1|9df030a1-a057-4f53-a011-a2b1cff673a1",
+		"superc1|superc2",
+		"8df030a1-a057-4f53-a011-a2b1cff673a1|9df030a1-a057-4f53-a011-a2b1cff673a1",
+		"publicc1|publicc2",
+		"8df030a1-a057-4f53-a011-a2b1cff673a1|9df030a1-a057-4f53-a011-a2b1cff673a1",
+		"privAC1|privac2",
+		"8df030a1-a057-4f53-a011-a2b1cff673a1|9df030a1-a057-4f53-a011-a2b1cff673a1",
+		"cus1|cus2").GetHttpResponse()
+
+	hr.ResponseCode = int32(resp.HttpResponseCode)
+	hr.Message = resp.Message
+	jsonResp, _ = json.Marshal(hr)
+	w.WriteHeader(int(hr.ResponseCode))
+	w.Write(jsonResp)
 }
 
 func UpdateTenant(w http.ResponseWriter, r *http.Request) {
+	var tenantPatchBody TenantPatchBody
+	var wo FullTenantObject
+	var hr HttpResponseError
+	var jsonResp []byte
+
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+	targetTenantUUID := mux.Vars(r)["targetTenantUUID"]
+
+	dec := json.NewDecoder(r.Body)
+
+	if err := dec.Decode(&tenantPatchBody); err != nil {
+		hr.Message = "bad json"
+		hr.ResponseCode = http.StatusBadRequest
+		jsonResp, _ = json.Marshal(hr)
+	} else {
+
+		resp := tenant.UpdateTenant(targetTenantUUID,
+			tenantPatchBody.TenantAlias,
+			tenantPatchBody.LordServicesConfig,
+			tenantPatchBody.SuperServicesConfig,
+			tenantPatchBody.PublicServicesConfig,
+			tenantPatchBody.PrivateAccessConfig,
+			tenantPatchBody.CustomAccessConfig,
+			"william.ohara@subscripify.com").GetHttpResponse()
+
+		hr.Message = resp.Message
+		hr.ResponseCode = int32(resp.HttpResponseCode)
+		if hr.ResponseCode == 200 {
+			if resp.FullTenant.TenantType != "" {
+				wo.TenantType = resp.FullTenant.TenantType
+			}
+			if resp.FullTenant.Alias != "" {
+				wo.TenantAlias = resp.FullTenant.Alias
+			}
+			if resp.FullTenant.Subdomain != "" {
+				wo.Subdomain = resp.FullTenant.Subdomain
+			}
+			if resp.FullTenant.SecondaryDomain != "" {
+				wo.SecondaryDomain = resp.FullTenant.SecondaryDomain
+			}
+			if resp.FullTenant.KubeNamespacePrefix != "" {
+				wo.KubeNamespacePrefix = resp.FullTenant.KubeNamespacePrefix
+			}
+			if resp.FullTenant.TopLevelDomain != "" {
+				wo.TopLevelDomain = resp.FullTenant.TopLevelDomain
+			}
+			if resp.FullTenant.SubscripifyDeploymentCloudLocation != "" {
+				wo.SubscripifyDeploymentCloudLocation = resp.FullTenant.SubscripifyDeploymentCloudLocation
+			}
+			if resp.FullTenant.CreatedBy != "" {
+				wo.CreatedBy = resp.FullTenant.CreatedBy
+			}
+			if resp.FullTenant.TenantUUID != uuid.Nil {
+				wo.TenantUUID = resp.FullTenant.TenantUUID.String()
+			}
+			if resp.FullTenant.SuperServicesConfig != uuid.Nil {
+				wo.SuperServicesConfig = resp.FullTenant.SuperServicesConfig.String()
+			}
+			if resp.FullTenant.LordServicesConfig != uuid.Nil {
+				wo.LordServicesConfig = resp.FullTenant.LordServicesConfig.String()
+			}
+			if resp.FullTenant.PublicServicesConfig != uuid.Nil {
+				wo.PublicServicesConfig = resp.FullTenant.PublicServicesConfig.String()
+			}
+			if resp.FullTenant.PrivateAccessConfig != uuid.Nil {
+				wo.PrivateAccessConfig = resp.FullTenant.PrivateAccessConfig.String()
+			}
+			if resp.FullTenant.CustomAccessConfig != uuid.Nil {
+				wo.CustomAccessConfig = resp.FullTenant.CustomAccessConfig.String()
+			}
+			if resp.FullTenant.LordUUID != uuid.Nil {
+				wo.LordUUID = resp.FullTenant.LordUUID.String()
+			}
+			if resp.FullTenant.LiegeUUID != uuid.Nil {
+				wo.LiegeUUID = resp.FullTenant.LiegeUUID.String()
+			}
+			wo.CreateTimestamp = resp.FullTenant.CreateTimestamp.String()
+
+			jsonResp, _ = json.Marshal(wo)
+
+		} else {
+			jsonResp, _ = json.Marshal(hr)
+		}
+
+	}
+	w.WriteHeader(int(hr.ResponseCode))
+	w.Write(jsonResp)
 }

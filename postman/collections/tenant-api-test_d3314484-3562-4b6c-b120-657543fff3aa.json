@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "d2ca3d9e-658a-4704-838d-f5aa5a119d36",
-		"name": "Private Services API  - OpenAPI 3.0",
+		"_postman_id": "0c350174-6f3e-4f49-8478-55ef7fc08b5d",
+		"name": "tenant-api-test",
 		"description": "This is the set of api endpoints to support access to Subscripify Super Services. Super Services are those that are available to Subscripify super tenants. They provide higher capabilities to super tenants to manage across multiple main tenants within the context of the Super-Tenant.<br><br> These APIs act as the front end to Private Services engineered and hosted by super tenants that need to access the subscripify platform.<br><br>Examples of super services available only to Super Tenants through this API are- <br>Tenant Management<br>Subscription and Plan Management <br>Billing and Payments<br><br> Subscripify also maintains a set of api endpoints to support access to Subscripify Public Services. Subscripify public services are services required by all tenants and users on the subscripify platform. All tenants, regardless of type have access to these services.<br><br>Examples of private services available to Super Tenants and to Main Tenants are- <br>Identity Services<br>Usage Analytics Services<br>For more information about Subscripify tenant architecture click here.\n\nContact Support:\n Email: william.ohara@subscripify.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -14,7 +14,7 @@
 					"item": [
 						{
 							"name": "returns a tenant",
-							"id": "8f978b8a-4826-4697-b583-ae8ce59f79ef",
+							"id": "9c0adcb3-7bb3-44f3-b11f-1388a7bcde06",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -37,8 +37,9 @@
 									],
 									"variable": [
 										{
+											"id": "24de115c-99fe-492c-a304-9f038dc43ad1",
 											"key": "targetTenantUUID",
-											"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+											"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 											"description": "(Required) "
 										}
 									]
@@ -47,7 +48,7 @@
 							},
 							"response": [
 								{
-									"id": "e6c24265-15cf-4f96-b8b2-ee86bcf6a2dc",
+									"id": "a943d8a2-ea58-408c-a728-35334518750a",
 									"name": "return tenant",
 									"originalRequest": {
 										"method": "GET",
@@ -64,7 +65,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -76,16 +77,15 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n \"publicServicesConfig\": \"aF6923f3-CDcC-eDf4-c2E5-fE1E5F9dF1Ad\",\n \"subdomain\": \"my-tenant\",\n \"superServicesConfig\": \"f6CdBcA7-A30E-28Fa-7AF4-EBD5e42bA2DA\",\n \"tenantAlias\": \"my tenant alias\"\n}"
+									"body": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"my-tenant\",\n  \"superServicesConfig\": \"AfeCC4d9-1cdF-5cED-4Da7-c1D94e5Af4Bf\",\n  \"publicServicesConfig\": \"8482Bb0e-AF29-0cDB-4Fd1-1c47d71Aa878\"\n}"
 								},
 								{
-									"id": "34c3e8e7-e1c5-4bdf-a32f-4a9114867a53",
+									"id": "81e7b0fd-f6e5-4541-85aa-e8803576cf0f",
 									"name": "Authorization Required",
 									"originalRequest": {
 										"method": "GET",
@@ -102,7 +102,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -114,16 +114,15 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "43a6a7d3-2322-4ecb-9303-9a2c1b7a5a94",
+									"id": "ddd5d49c-851a-4325-bbd5-623ea99e65a9",
 									"name": "Forbidden",
 									"originalRequest": {
 										"method": "GET",
@@ -140,7 +139,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -152,16 +151,15 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "a8c2844f-922b-4d02-831e-451e837542ba",
+									"id": "8f1360bd-c289-417b-a5d3-3b0fc9d23f61",
 									"name": "Not Found",
 									"originalRequest": {
 										"method": "GET",
@@ -178,7 +176,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -190,16 +188,15 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "d2bb4f49-1cfa-4031-91cd-8d9853a4eebb",
+									"id": "a486cdd6-cdf1-4538-bec2-c05bb8ddf7dd",
 									"name": "Invalid input",
 									"originalRequest": {
 										"method": "GET",
@@ -216,7 +213,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -228,16 +225,15 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "0683a3de-ac59-46ab-a200-ac74e4832fe8",
+									"id": "81b9888f-8411-4093-80fa-c500c7f32d72",
 									"name": "Improper Protocol",
 									"originalRequest": {
 										"method": "GET",
@@ -254,7 +250,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -266,16 +262,15 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "c5b275e0-0b14-4b92-93f4-e830ccb5901b",
+									"id": "e94f7401-92f1-433c-a3e9-1c13e1f0cb1b",
 									"name": "Resource Already Exists",
 									"originalRequest": {
 										"method": "GET",
@@ -292,7 +287,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -304,16 +299,15 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "e99d40da-72c4-4f9e-b6d6-0404a2f0fcda",
+									"id": "72e73359-f06e-4093-9f2b-969c7fa9b895",
 									"name": "Improper media type",
 									"originalRequest": {
 										"method": "GET",
@@ -330,7 +324,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -342,16 +336,15 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "05f9c0d6-913a-4826-bb0b-9e5c8fc3e8d5",
+									"id": "a52583a7-cb27-483d-ac0f-a5e5bead840f",
 									"name": "too many requests",
 									"originalRequest": {
 										"method": "GET",
@@ -368,7 +361,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -380,16 +373,15 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "c843c6c9-d27d-489b-9fab-349904811cdb",
+									"id": "b2dfba80-4eba-49f1-bf25-8d27b0e0dc31",
 									"name": "Unexpected error",
 									"originalRequest": {
 										"method": "GET",
@@ -406,7 +398,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -418,30 +410,43 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								}
 							]
 						},
 						{
 							"name": "updates a tenant",
-							"id": "2f59d789-5f28-4278-9353-7daa5b8b9f8a",
+							"id": "8328a71e-87a9-49c8-bf54-b39a6140474e",
 							"protocolProfileBehavior": {
-								"disableBodyPruning": true
+								"disableBodyPruning": true,
+								"followOriginalHttpMethod": true
 							},
 							"request": {
 								"method": "PATCH",
 								"header": [
 									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
 										"key": "Accept",
 										"value": "application/json"
 									}
 								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"lordServicesConfig\": \"046a5C26-d5cf-E882-f3AA-BD6Fc9beD049\",\n  \"superServicesConfig\": \"62Cb85da-D10c-0fe0-b8E6-dFaDEaf0FbEb\",\n  \"publicServicesConfig\": \"e19c17Db-2Dc3-91c1-0244-1F73dAa5B18B\",\n  \"privateAccessConfig\": \"2a994bd3-d05c-e56B-e95b-bCA74ee6EFFA\",\n  \"customAccessConfig\": \"22BbaDeb-3bA9-Cacd-59fB-F425FB257cAF\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
 									"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
 									"host": [
@@ -454,7 +459,7 @@
 									"variable": [
 										{
 											"key": "targetTenantUUID",
-											"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+											"value": "49259c86-3db3-11ed-bd88-3e0f90a488be",
 											"description": "(Required) "
 										}
 									]
@@ -463,11 +468,20 @@
 							},
 							"response": [
 								{
-									"id": "df25d75d-c556-4d89-8f0b-92b826874a5f",
+									"id": "f1caf4c5-ff4d-4de7-830f-42eefe01fca3",
 									"name": "return tenant",
 									"originalRequest": {
 										"method": "PATCH",
 										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"lordServicesConfig\": \"046a5C26-d5cf-E882-f3AA-BD6Fc9beD049\",\n  \"superServicesConfig\": \"62Cb85da-D10c-0fe0-b8E6-dFaDEaf0FbEb\",\n  \"publicServicesConfig\": \"e19c17Db-2Dc3-91c1-0244-1F73dAa5B18B\",\n  \"privateAccessConfig\": \"2a994bd3-d05c-e56B-e95b-bCA74ee6EFFA\",\n  \"customAccessConfig\": \"22BbaDeb-3bA9-Cacd-59fB-F425FB257cAF\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
 											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
 											"host": [
@@ -480,7 +494,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -492,20 +506,28 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n \"publicServicesConfig\": \"aF6923f3-CDcC-eDf4-c2E5-fE1E5F9dF1Ad\",\n \"subdomain\": \"my-tenant\",\n \"superServicesConfig\": \"f6CdBcA7-A30E-28Fa-7AF4-EBD5e42bA2DA\",\n \"tenantAlias\": \"my tenant alias\"\n}"
+									"body": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"my-tenant\",\n  \"superServicesConfig\": \"AfeCC4d9-1cdF-5cED-4Da7-c1D94e5Af4Bf\",\n  \"publicServicesConfig\": \"8482Bb0e-AF29-0cDB-4Fd1-1c47d71Aa878\"\n}"
 								},
 								{
-									"id": "a85439c4-b787-42c6-ab4b-f333d3b55e95",
+									"id": "60287da4-2570-4f5e-8e44-d4255b0bfef4",
 									"name": "Authorization Required",
 									"originalRequest": {
 										"method": "PATCH",
 										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"lordServicesConfig\": \"046a5C26-d5cf-E882-f3AA-BD6Fc9beD049\",\n  \"superServicesConfig\": \"62Cb85da-D10c-0fe0-b8E6-dFaDEaf0FbEb\",\n  \"publicServicesConfig\": \"e19c17Db-2Dc3-91c1-0244-1F73dAa5B18B\",\n  \"privateAccessConfig\": \"2a994bd3-d05c-e56B-e95b-bCA74ee6EFFA\",\n  \"customAccessConfig\": \"22BbaDeb-3bA9-Cacd-59fB-F425FB257cAF\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
 											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
 											"host": [
@@ -518,7 +540,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -530,20 +552,28 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "e4f52d40-c0aa-4f15-878c-089974bbe232",
+									"id": "49f14133-4c15-4a85-9281-50c34aec5280",
 									"name": "Forbidden",
 									"originalRequest": {
 										"method": "PATCH",
 										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"lordServicesConfig\": \"046a5C26-d5cf-E882-f3AA-BD6Fc9beD049\",\n  \"superServicesConfig\": \"62Cb85da-D10c-0fe0-b8E6-dFaDEaf0FbEb\",\n  \"publicServicesConfig\": \"e19c17Db-2Dc3-91c1-0244-1F73dAa5B18B\",\n  \"privateAccessConfig\": \"2a994bd3-d05c-e56B-e95b-bCA74ee6EFFA\",\n  \"customAccessConfig\": \"22BbaDeb-3bA9-Cacd-59fB-F425FB257cAF\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
 											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
 											"host": [
@@ -556,7 +586,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -568,20 +598,28 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "378553ab-d998-4d88-a207-b922133e04a8",
+									"id": "1f3fd425-dfa0-460f-88da-5ccfc803acc9",
 									"name": "Not Found",
 									"originalRequest": {
 										"method": "PATCH",
 										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"lordServicesConfig\": \"046a5C26-d5cf-E882-f3AA-BD6Fc9beD049\",\n  \"superServicesConfig\": \"62Cb85da-D10c-0fe0-b8E6-dFaDEaf0FbEb\",\n  \"publicServicesConfig\": \"e19c17Db-2Dc3-91c1-0244-1F73dAa5B18B\",\n  \"privateAccessConfig\": \"2a994bd3-d05c-e56B-e95b-bCA74ee6EFFA\",\n  \"customAccessConfig\": \"22BbaDeb-3bA9-Cacd-59fB-F425FB257cAF\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
 											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
 											"host": [
@@ -594,7 +632,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -606,20 +644,28 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "f43f2493-ea07-4198-b6e5-a5c808e5f468",
+									"id": "7dac4982-f199-4973-835f-953217523710",
 									"name": "Invalid input",
 									"originalRequest": {
 										"method": "PATCH",
 										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"lordServicesConfig\": \"046a5C26-d5cf-E882-f3AA-BD6Fc9beD049\",\n  \"superServicesConfig\": \"62Cb85da-D10c-0fe0-b8E6-dFaDEaf0FbEb\",\n  \"publicServicesConfig\": \"e19c17Db-2Dc3-91c1-0244-1F73dAa5B18B\",\n  \"privateAccessConfig\": \"2a994bd3-d05c-e56B-e95b-bCA74ee6EFFA\",\n  \"customAccessConfig\": \"22BbaDeb-3bA9-Cacd-59fB-F425FB257cAF\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
 											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
 											"host": [
@@ -632,7 +678,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -644,20 +690,28 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "7eeb0eb3-7b42-4dd1-a627-aa2e3b42574b",
+									"id": "8cd053aa-a7bc-4b7e-b649-c9369d7ecb68",
 									"name": "Improper Protocol",
 									"originalRequest": {
 										"method": "PATCH",
 										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"lordServicesConfig\": \"046a5C26-d5cf-E882-f3AA-BD6Fc9beD049\",\n  \"superServicesConfig\": \"62Cb85da-D10c-0fe0-b8E6-dFaDEaf0FbEb\",\n  \"publicServicesConfig\": \"e19c17Db-2Dc3-91c1-0244-1F73dAa5B18B\",\n  \"privateAccessConfig\": \"2a994bd3-d05c-e56B-e95b-bCA74ee6EFFA\",\n  \"customAccessConfig\": \"22BbaDeb-3bA9-Cacd-59fB-F425FB257cAF\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
 											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
 											"host": [
@@ -670,7 +724,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -682,20 +736,28 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "9ad7cbed-20f9-46eb-90cc-a949ebe1c2f9",
+									"id": "964891be-05b2-4a4a-8add-8ab3182a7e44",
 									"name": "Resource Already Exists",
 									"originalRequest": {
 										"method": "PATCH",
 										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"lordServicesConfig\": \"046a5C26-d5cf-E882-f3AA-BD6Fc9beD049\",\n  \"superServicesConfig\": \"62Cb85da-D10c-0fe0-b8E6-dFaDEaf0FbEb\",\n  \"publicServicesConfig\": \"e19c17Db-2Dc3-91c1-0244-1F73dAa5B18B\",\n  \"privateAccessConfig\": \"2a994bd3-d05c-e56B-e95b-bCA74ee6EFFA\",\n  \"customAccessConfig\": \"22BbaDeb-3bA9-Cacd-59fB-F425FB257cAF\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
 											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
 											"host": [
@@ -708,7 +770,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -720,20 +782,28 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "521b18ee-bb60-4b2c-8dc6-60d2c4e9dd9b",
+									"id": "6ac2b313-fb81-4b6d-bc4d-06380448887b",
 									"name": "Improper media type",
 									"originalRequest": {
 										"method": "PATCH",
 										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"lordServicesConfig\": \"046a5C26-d5cf-E882-f3AA-BD6Fc9beD049\",\n  \"superServicesConfig\": \"62Cb85da-D10c-0fe0-b8E6-dFaDEaf0FbEb\",\n  \"publicServicesConfig\": \"e19c17Db-2Dc3-91c1-0244-1F73dAa5B18B\",\n  \"privateAccessConfig\": \"2a994bd3-d05c-e56B-e95b-bCA74ee6EFFA\",\n  \"customAccessConfig\": \"22BbaDeb-3bA9-Cacd-59fB-F425FB257cAF\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
 											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
 											"host": [
@@ -746,7 +816,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -758,20 +828,28 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "4789f302-e300-491b-860a-8d91d921615f",
+									"id": "eaa60436-420f-4dbb-8747-831a32cff33f",
 									"name": "too many requests",
 									"originalRequest": {
 										"method": "PATCH",
 										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"lordServicesConfig\": \"046a5C26-d5cf-E882-f3AA-BD6Fc9beD049\",\n  \"superServicesConfig\": \"62Cb85da-D10c-0fe0-b8E6-dFaDEaf0FbEb\",\n  \"publicServicesConfig\": \"e19c17Db-2Dc3-91c1-0244-1F73dAa5B18B\",\n  \"privateAccessConfig\": \"2a994bd3-d05c-e56B-e95b-bCA74ee6EFFA\",\n  \"customAccessConfig\": \"22BbaDeb-3bA9-Cacd-59fB-F425FB257cAF\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
 											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
 											"host": [
@@ -784,7 +862,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -796,20 +874,28 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "32157283-bf47-4491-8e94-b597751f9e1c",
+									"id": "2a190a9b-be3a-41b2-8142-4df16dd2eab4",
 									"name": "Unexpected error",
 									"originalRequest": {
 										"method": "PATCH",
 										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"lordServicesConfig\": \"046a5C26-d5cf-E882-f3AA-BD6Fc9beD049\",\n  \"superServicesConfig\": \"62Cb85da-D10c-0fe0-b8E6-dFaDEaf0FbEb\",\n  \"publicServicesConfig\": \"e19c17Db-2Dc3-91c1-0244-1F73dAa5B18B\",\n  \"privateAccessConfig\": \"2a994bd3-d05c-e56B-e95b-bCA74ee6EFFA\",\n  \"customAccessConfig\": \"22BbaDeb-3bA9-Cacd-59fB-F425FB257cAF\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
 											"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
 											"host": [
@@ -822,7 +908,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -834,21 +920,33 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								}
 							]
 						},
 						{
 							"name": "removes a tenant",
-							"id": "8981fdaf-1796-45db-a3bb-fccf92d89bf1",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "9ed6cca6-ef08-4fdc-b4fa-a374884be17d",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "8f74506e-5948-4b21-9f74-59da18d4393a",
 							"protocolProfileBehavior": {
-								"disableBodyPruning": true
+								"disableBodyPruning": true,
+								"followOriginalHttpMethod": true
 							},
 							"request": {
 								"method": "DELETE",
@@ -859,27 +957,20 @@
 									}
 								],
 								"url": {
-									"raw": "{{baseUrl}}/tenants/:targetTenantUUID",
+									"raw": "{{baseUrl}}/tenants/{{targetTenantUUID}}",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"tenants",
-										":targetTenantUUID"
-									],
-									"variable": [
-										{
-											"key": "targetTenantUUID",
-											"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
-											"description": "(Required) "
-										}
+										"{{targetTenantUUID}}"
 									]
 								},
 								"description": "removes a tenant"
 							},
 							"response": [
 								{
-									"id": "b7a6dccf-0a9a-440b-b872-5df32806ad39",
+									"id": "2eedbce8-831a-4dc3-9a3e-e1fa68ed3f66",
 									"name": "return tenant",
 									"originalRequest": {
 										"method": "DELETE",
@@ -896,7 +987,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -908,16 +999,15 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n \"publicServicesConfig\": \"aF6923f3-CDcC-eDf4-c2E5-fE1E5F9dF1Ad\",\n \"subdomain\": \"my-tenant\",\n \"superServicesConfig\": \"f6CdBcA7-A30E-28Fa-7AF4-EBD5e42bA2DA\",\n \"tenantAlias\": \"my tenant alias\"\n}"
+									"body": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"my-tenant\",\n  \"superServicesConfig\": \"AfeCC4d9-1cdF-5cED-4Da7-c1D94e5Af4Bf\",\n  \"publicServicesConfig\": \"8482Bb0e-AF29-0cDB-4Fd1-1c47d71Aa878\"\n}"
 								},
 								{
-									"id": "9cf842c3-557b-4d4b-a893-cedc0869279b",
+									"id": "bd37e810-4fa4-4956-b097-b65e8bc0d2a0",
 									"name": "Authorization Required",
 									"originalRequest": {
 										"method": "DELETE",
@@ -934,7 +1024,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -946,16 +1036,15 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "5a7da2e3-259f-4d51-8faf-8edaa1e4db68",
+									"id": "d2c10bfd-01b7-425b-ac4c-01e4f7d4c5a1",
 									"name": "Forbidden",
 									"originalRequest": {
 										"method": "DELETE",
@@ -972,7 +1061,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -984,16 +1073,15 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "20c49708-550d-4c73-93f4-c68275d3b75a",
+									"id": "e51ff26b-fdcd-41a8-8fcc-c9999db389f4",
 									"name": "Not Found",
 									"originalRequest": {
 										"method": "DELETE",
@@ -1010,7 +1098,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -1022,16 +1110,15 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "b99dec44-053c-4dfd-9218-a3f7ec69e6f5",
+									"id": "3090fe80-14a6-4db4-a300-6444334e3510",
 									"name": "Invalid input",
 									"originalRequest": {
 										"method": "DELETE",
@@ -1048,7 +1135,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -1060,16 +1147,15 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "8472ba14-b28a-41e0-8614-ae9ec436394b",
+									"id": "32548986-91fc-480c-98cb-beaf8a09db2e",
 									"name": "Improper Protocol",
 									"originalRequest": {
 										"method": "DELETE",
@@ -1086,7 +1172,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -1098,16 +1184,15 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "ee428e8b-1c92-45eb-84dd-a2ac721a96f7",
+									"id": "2a37344f-1356-4acc-84d4-82c7b5d9fa80",
 									"name": "Resource Already Exists",
 									"originalRequest": {
 										"method": "DELETE",
@@ -1124,7 +1209,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -1136,16 +1221,15 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "c7d76cb2-f0c7-4a9f-9abf-051984553f0e",
+									"id": "602d81fc-e4f6-4e10-80b8-cb34091c33ec",
 									"name": "Improper media type",
 									"originalRequest": {
 										"method": "DELETE",
@@ -1162,7 +1246,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -1174,16 +1258,15 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "cc6ac4fe-b05c-4770-b8cf-7aff486d928b",
+									"id": "cde0b06d-0561-445a-b832-ed168913ad9a",
 									"name": "too many requests",
 									"originalRequest": {
 										"method": "DELETE",
@@ -1200,7 +1283,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -1212,16 +1295,15 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								},
 								{
-									"id": "3a988981-1c73-457c-8c54-8f0b667b8a0e",
+									"id": "5cbb2d35-aed2-43ab-99c5-95354c217d5e",
 									"name": "Unexpected error",
 									"originalRequest": {
 										"method": "DELETE",
@@ -1238,7 +1320,7 @@
 											"variable": [
 												{
 													"key": "targetTenantUUID",
-													"value": "5A75abC6-C718-41F0-ffe6-6Dd51B2c",
+													"value": "618Bc96e-6eEd-0bDf-1b06-4F06Ee5D2593",
 													"description": "(Required) "
 												}
 											]
@@ -1250,24 +1332,24 @@
 									"header": [
 										{
 											"key": "Content-Type",
-											"value": "application/json",
-											"enabled": true
+											"value": "application/json"
 										}
 									],
 									"cookie": [],
 									"responseTime": null,
-									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+									"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 								}
 							]
 						}
 					],
-					"id": "0df9f13f-3bc6-4345-912d-e1da1abe98eb"
+					"id": "a2db932c-66d5-47a9-92fe-0edba517db74"
 				},
 				{
 					"name": "Add a new main or super tenant",
-					"id": "20afa886-567c-48b2-af88-74b24859b651",
+					"id": "30eaf2de-f471-4f53-8872-c0c733ca24ca",
 					"protocolProfileBehavior": {
-						"disableBodyPruning": true
+						"disableBodyPruning": true,
+						"followOriginalHttpMethod": true
 					},
 					"request": {
 						"method": "POST",
@@ -1275,7 +1357,7 @@
 							{
 								"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 								"key": "liegeUUID",
-								"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+								"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 							},
 							{
 								"key": "Content-Type",
@@ -1288,7 +1370,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n \"tenantType\": \"main\",\n \"tenantAlias\": \"my tenant alias\",\n \"subdomain\": \"subscripify\",\n \"publicServicesConfig\": \"44ED6Aa2-E2Cf-A5DF-6B0E-DDAED41fC5Da\",\n \"superServicesConfig\": \"9a79e3b0-F899-f6ed-6Fd6-Fc4BE5A1E9fe\",\n \"privateAccessConfig\": \"Ae3cEafe-D53b-2AEc-f1C4-fd33F9f2E0df\",\n \"publicAccessConfig\": \"0f9e7A1a-d7be-A460-8bEA-FAF1AFEfA9D0\"\n}",
+							"raw": "{\n  \"tenantType\": \"lord\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"superServicesConfig\": \"aBF972Ea-Cc4D-0df2-2Db4-c8ca2c5C299b\",\n  \"publicServicesConfig\": \"f6E2bb9C-723D-3376-02d0-9c92E746EfdD\",\n  \"privateAccessConfig\": \"A9f68014-B4aA-D799-70F3-E57cCDA9F4aB\",\n  \"customAccessConfig\": \"6208FC0d-7e23-3685-681c-cEBcA2D38a6B\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1308,7 +1390,7 @@
 					},
 					"response": [
 						{
-							"id": "1fd9e066-8fe8-4ba5-985f-b38e1f009713",
+							"id": "b977976d-9baa-4562-a225-5512546992c1",
 							"name": "Successful operation returns the new object UUID",
 							"originalRequest": {
 								"method": "POST",
@@ -1316,12 +1398,12 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"superServicesConfig\": \"aBF972Ea-Cc4D-0df2-2Db4-c8ca2c5C299b\",\n  \"publicServicesConfig\": \"f6E2bb9C-723D-3376-02d0-9c92E746EfdD\",\n  \"privateAccessConfig\": \"A9f68014-B4aA-D799-70F3-E57cCDA9F4aB\",\n  \"customAccessConfig\": \"6208FC0d-7e23-3685-681c-cEBcA2D38a6B\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1344,16 +1426,15 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n \"tenantUUID\": \"0E4FaBB8-2a13-Ba49-07BF-afd0cf6fDa4F\"\n}"
+							"body": "{\n  \"tenantUUID\": \"A6052F20-cF59-BDE3-d82f-78Bc5C85B00A\"\n}"
 						},
 						{
-							"id": "e79cab5d-3e1f-4f00-becc-32d6d51d0d07",
+							"id": "44b85f6c-af65-414b-b436-5a0b1c37e1b1",
 							"name": "Authorization Required",
 							"originalRequest": {
 								"method": "POST",
@@ -1361,12 +1442,12 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"superServicesConfig\": \"aBF972Ea-Cc4D-0df2-2Db4-c8ca2c5C299b\",\n  \"publicServicesConfig\": \"f6E2bb9C-723D-3376-02d0-9c92E746EfdD\",\n  \"privateAccessConfig\": \"A9f68014-B4aA-D799-70F3-E57cCDA9F4aB\",\n  \"customAccessConfig\": \"6208FC0d-7e23-3685-681c-cEBcA2D38a6B\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1389,16 +1470,15 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 						},
 						{
-							"id": "a137bcb5-8771-4dc8-91c4-ffa73675dcfb",
+							"id": "516d44ac-9ea0-4c31-a5c1-1f1600817f0e",
 							"name": "Forbidden",
 							"originalRequest": {
 								"method": "POST",
@@ -1406,12 +1486,12 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"superServicesConfig\": \"aBF972Ea-Cc4D-0df2-2Db4-c8ca2c5C299b\",\n  \"publicServicesConfig\": \"f6E2bb9C-723D-3376-02d0-9c92E746EfdD\",\n  \"privateAccessConfig\": \"A9f68014-B4aA-D799-70F3-E57cCDA9F4aB\",\n  \"customAccessConfig\": \"6208FC0d-7e23-3685-681c-cEBcA2D38a6B\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1434,16 +1514,15 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 						},
 						{
-							"id": "5866adee-e02a-454a-b69a-16dcd9ff7ab2",
+							"id": "085a9dbe-acec-4589-b55c-178b31fb9f40",
 							"name": "Not Found",
 							"originalRequest": {
 								"method": "POST",
@@ -1451,12 +1530,12 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"superServicesConfig\": \"aBF972Ea-Cc4D-0df2-2Db4-c8ca2c5C299b\",\n  \"publicServicesConfig\": \"f6E2bb9C-723D-3376-02d0-9c92E746EfdD\",\n  \"privateAccessConfig\": \"A9f68014-B4aA-D799-70F3-E57cCDA9F4aB\",\n  \"customAccessConfig\": \"6208FC0d-7e23-3685-681c-cEBcA2D38a6B\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1479,16 +1558,15 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 						},
 						{
-							"id": "9cc00c72-c1be-40c5-9f88-406e83620563",
+							"id": "9950e59c-24a2-43bf-bff2-b87f648edc5c",
 							"name": "Invalid input",
 							"originalRequest": {
 								"method": "POST",
@@ -1496,12 +1574,12 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"superServicesConfig\": \"aBF972Ea-Cc4D-0df2-2Db4-c8ca2c5C299b\",\n  \"publicServicesConfig\": \"f6E2bb9C-723D-3376-02d0-9c92E746EfdD\",\n  \"privateAccessConfig\": \"A9f68014-B4aA-D799-70F3-E57cCDA9F4aB\",\n  \"customAccessConfig\": \"6208FC0d-7e23-3685-681c-cEBcA2D38a6B\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1524,16 +1602,15 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 						},
 						{
-							"id": "e84935b4-1955-4c43-8ea4-267f274704b4",
+							"id": "54d2d573-7725-40f9-9c0d-e1f2d210a39e",
 							"name": "Improper Protocol",
 							"originalRequest": {
 								"method": "POST",
@@ -1541,12 +1618,12 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"superServicesConfig\": \"aBF972Ea-Cc4D-0df2-2Db4-c8ca2c5C299b\",\n  \"publicServicesConfig\": \"f6E2bb9C-723D-3376-02d0-9c92E746EfdD\",\n  \"privateAccessConfig\": \"A9f68014-B4aA-D799-70F3-E57cCDA9F4aB\",\n  \"customAccessConfig\": \"6208FC0d-7e23-3685-681c-cEBcA2D38a6B\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1569,16 +1646,15 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 						},
 						{
-							"id": "2de50d0a-ad5f-4838-80da-485d9c2660d8",
+							"id": "3840fef2-5805-4496-a6f9-ed1a0f312808",
 							"name": "Resource Already Exists",
 							"originalRequest": {
 								"method": "POST",
@@ -1586,12 +1662,12 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"superServicesConfig\": \"aBF972Ea-Cc4D-0df2-2Db4-c8ca2c5C299b\",\n  \"publicServicesConfig\": \"f6E2bb9C-723D-3376-02d0-9c92E746EfdD\",\n  \"privateAccessConfig\": \"A9f68014-B4aA-D799-70F3-E57cCDA9F4aB\",\n  \"customAccessConfig\": \"6208FC0d-7e23-3685-681c-cEBcA2D38a6B\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1614,16 +1690,15 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 						},
 						{
-							"id": "04f55469-6c92-41d7-a640-89d57e411dc3",
+							"id": "0c0ebe18-889a-46d6-b39c-31f73bf6b48d",
 							"name": "Improper media type",
 							"originalRequest": {
 								"method": "POST",
@@ -1631,12 +1706,12 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"superServicesConfig\": \"aBF972Ea-Cc4D-0df2-2Db4-c8ca2c5C299b\",\n  \"publicServicesConfig\": \"f6E2bb9C-723D-3376-02d0-9c92E746EfdD\",\n  \"privateAccessConfig\": \"A9f68014-B4aA-D799-70F3-E57cCDA9F4aB\",\n  \"customAccessConfig\": \"6208FC0d-7e23-3685-681c-cEBcA2D38a6B\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1659,16 +1734,15 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 						},
 						{
-							"id": "eaf7122b-ac50-4b3d-8c07-09a33c8326a1",
+							"id": "3b699f12-4775-4068-bd10-b437266e0819",
 							"name": "too many requests",
 							"originalRequest": {
 								"method": "POST",
@@ -1676,12 +1750,12 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"superServicesConfig\": \"aBF972Ea-Cc4D-0df2-2Db4-c8ca2c5C299b\",\n  \"publicServicesConfig\": \"f6E2bb9C-723D-3376-02d0-9c92E746EfdD\",\n  \"privateAccessConfig\": \"A9f68014-B4aA-D799-70F3-E57cCDA9F4aB\",\n  \"customAccessConfig\": \"6208FC0d-7e23-3685-681c-cEBcA2D38a6B\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1704,16 +1778,15 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 						},
 						{
-							"id": "763f40d4-e6cf-404c-8ef2-c9367fb50999",
+							"id": "4a89ee43-71db-44fc-86f8-c22b2f4e005e",
 							"name": "Unexpected error",
 							"originalRequest": {
 								"method": "POST",
@@ -1721,12 +1794,12 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"publicServicesConfig\": \"D14AdFe1-FEEd-4a8F-20eC-99CcD6F9\",\n  \"superServicesConfig\": \"c8364bb3-B5Ea-dEfc-98ab-0EA17Dcd\",\n  \"privateAccessConfig\": \"B8e0f2ae-eadC-3Ac2-1EDd-9fdaD18b\",\n  \"publicAccessConfig\": \"03CAfd80-ECcC-E1DD-bDCB-C1bAD4a1\"\n}",
+									"raw": "{\n  \"tenantType\": \"main\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"subdomain\": \"subscripify\",\n  \"superServicesConfig\": \"aBF972Ea-Cc4D-0df2-2Db4-c8ca2c5C299b\",\n  \"publicServicesConfig\": \"f6E2bb9C-723D-3376-02d0-9c92E746EfdD\",\n  \"privateAccessConfig\": \"A9f68014-B4aA-D799-70F3-E57cCDA9F4aB\",\n  \"customAccessConfig\": \"6208FC0d-7e23-3685-681c-cEBcA2D38a6B\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1749,19 +1822,18 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 						}
 					]
 				},
 				{
 					"name": "Tenant Search",
-					"id": "0915cab0-9776-439c-9959-c4a9d8a09e57",
+					"id": "2975f468-491e-49fd-8146-a57059e34d3a",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -1771,7 +1843,7 @@
 							{
 								"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 								"key": "liegeUUID",
-								"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+								"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 							},
 							{
 								"key": "Accept",
@@ -1792,7 +1864,7 @@
 					},
 					"response": [
 						{
-							"id": "e477160c-58c7-4b4a-8ccc-08df431c4ff1",
+							"id": "f2c411be-618f-422a-8fea-2ea5adc2e1f9",
 							"name": "Successful operation returns full tenant data including generated felids",
 							"originalRequest": {
 								"method": "GET",
@@ -1800,7 +1872,7 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"url": {
@@ -1820,16 +1892,15 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "[\n {\n  \"tenantUUID\": \"4d49cfaA-cf73-eACA-ceA3-58eeF043d7E2\",\n  \"tenantAlias\": \"consequat sed\",\n  \"tenantType\": \"super\"\n },\n {\n  \"tenantUUID\": \"D28daAAA-03A3-9147-fB68-52a524b2a6ce\",\n  \"tenantAlias\": \"tempor occaecat \",\n  \"tenantType\": \"super\"\n }\n]"
+							"body": "[\n  {\n    \"tenantUUID\": \"aC2e0B4c-f8Cf-5A3C-78DB-6331aBFBa65a\",\n    \"tenantAlias\": \"dolore in ea\",\n    \"tenantType\": \"super\"\n  },\n  {\n    \"tenantUUID\": \"cE8c7Ec1-Cfe0-6747-7FAA-ff36edB02e4d\",\n    \"tenantAlias\": \"anim nulla ipsum\",\n    \"tenantType\": \"super\"\n  }\n]"
 						},
 						{
-							"id": "0769d1a1-c5fd-4fc5-92c1-9d861ea57a8b",
+							"id": "7f3453c3-935b-464d-b1ea-0d57397f8e3b",
 							"name": "Authorization Required",
 							"originalRequest": {
 								"method": "GET",
@@ -1837,7 +1908,7 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"url": {
@@ -1857,16 +1928,15 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 						},
 						{
-							"id": "77ac8fab-f2b1-4ba2-9aca-c7176b329d34",
+							"id": "2af6e3cf-9e93-4752-9452-2cddfec93dda",
 							"name": "Forbidden",
 							"originalRequest": {
 								"method": "GET",
@@ -1874,7 +1944,7 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"url": {
@@ -1894,16 +1964,15 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 						},
 						{
-							"id": "ca67ad78-6b1d-4203-8d60-742272ddc686",
+							"id": "bbdb52ef-16fb-4da5-b0b0-9d2922eaae97",
 							"name": "Not Found",
 							"originalRequest": {
 								"method": "GET",
@@ -1911,7 +1980,7 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"url": {
@@ -1931,16 +2000,15 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 						},
 						{
-							"id": "ba1e4290-9169-45f7-84dc-700c3804cf95",
+							"id": "2de567c3-548a-4ac8-9010-ade65658003f",
 							"name": "Invalid input",
 							"originalRequest": {
 								"method": "GET",
@@ -1948,7 +2016,7 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"url": {
@@ -1968,16 +2036,15 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 						},
 						{
-							"id": "f5b40053-176f-4c33-921e-2efb95906c3d",
+							"id": "0caba578-4811-498f-bba9-90de7b54dec4",
 							"name": "Improper Protocol",
 							"originalRequest": {
 								"method": "GET",
@@ -1985,7 +2052,7 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"url": {
@@ -2005,16 +2072,15 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 						},
 						{
-							"id": "bddc05e7-ef3b-439a-afce-be98d203fe2b",
+							"id": "774842ce-e9be-4f33-b99a-18f43eb6280d",
 							"name": "Resource Already Exists",
 							"originalRequest": {
 								"method": "GET",
@@ -2022,7 +2088,7 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"url": {
@@ -2042,16 +2108,15 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 						},
 						{
-							"id": "741823f9-5287-4e21-83d0-9e1b2825baad",
+							"id": "acc48d42-014d-4528-920b-c3a859172b31",
 							"name": "Improper media type",
 							"originalRequest": {
 								"method": "GET",
@@ -2059,7 +2124,7 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"url": {
@@ -2079,16 +2144,15 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 						},
 						{
-							"id": "31a818ad-9711-4d78-9677-55e475a92896",
+							"id": "eac026cc-a63a-4e67-adf4-1f022efa058f",
 							"name": "too many requests",
 							"originalRequest": {
 								"method": "GET",
@@ -2096,7 +2160,7 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"url": {
@@ -2116,16 +2180,15 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 						},
 						{
-							"id": "d09c0c28-f111-46a6-97f8-4b1ea84716b4",
+							"id": "3943e2bb-2011-44f6-8e65-2ef6a779c3c1",
 							"name": "Unexpected error",
 							"originalRequest": {
 								"method": "GET",
@@ -2133,7 +2196,7 @@
 									{
 										"description": "(Required) Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required  and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or  deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail. <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the appropriate permissions.",
 										"key": "liegeUUID",
-										"value": "6ED8F52B-93d8-56f7-1615-FfD6Dcf0a940"
+										"value": "b1Fa9431-673d-b6e0-fB0a-426D7Df8EdCa"
 									}
 								],
 								"url": {
@@ -2153,22 +2216,21 @@
 							"header": [
 								{
 									"key": "Content-Type",
-									"value": "application/json",
-									"enabled": true
+									"value": "application/json"
 								}
 							],
 							"cookie": [],
 							"responseTime": null,
-							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+							"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 						}
 					]
 				}
 			],
-			"id": "0ab7bf01-45c1-4fc5-9ae0-86784da4c683"
+			"id": "3ce05820-db9a-4e56-8125-292c17c8812b"
 		},
 		{
 			"name": "Add a new lord tenant",
-			"id": "94be448f-041c-420d-9e4f-d2436385cb75",
+			"id": "69f922c6-402a-48f1-a433-e867eaf3b165",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true,
 				"followOriginalHttpMethod": true
@@ -2187,7 +2249,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n \"lordServicesConfig\": \"60135d7c-3857-11ed-907f-f5001f9bae96\",\n \"publicServicesConfig\": \"6a24689f-385a-11ed-907f-f5001f9bae96\",\n \"superServicesConfig\": \"432ead01-385a-11ed-907f-f5001f9bae96\",\n \"subdomain\": \"my-tenant\",\n \"subscripifyDeploymentCloudLocation\": \"azure\",\n \"tenantAlias\": \"my tenant alias\",\n \"topLevelDomain\": \"com\",\n \"secondaryDomain\": \"subscripify\"\n}",
+					"raw": "{\n  \"tenantAlias\": \"{{testAlias}}\",\n  \"topLevelDomain\": \"{{topLevelDomain}}\",\n  \"secondaryDomain\": \"{{secondaryDomain}}\",\n  \"subdomain\": \"{{subdomain}}\",\n  \"lordServicesConfig\": \"{{lordServicesConfig}}\",\n  \"superServicesConfig\": \"{{superServicesConfig}}\",\n  \"publicServicesConfig\": \"{{publicServicesConfig}}\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2207,14 +2269,14 @@
 			},
 			"response": [
 				{
-					"id": "4acba1b7-e5d4-4237-b47d-b857a80b8dc0",
+					"id": "0943a7fd-ff2b-4b48-afc5-4c53bd7c07d6",
 					"name": "Successful operation returns the new object UUID",
 					"originalRequest": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\",\n  \"subdomain\": \"my-tenant\",\n  \"lordServicesConfig\": \"A5209867-E313-07f8-D687-8C273D9F9341\",\n  \"superServicesConfig\": \"4b76fa6e-aeA5-c377-373F-F7044Cac7af9\",\n  \"publicServicesConfig\": \"Df34C7f4-5Ce7-DD27-f86c-20c7FBF671C4\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2237,23 +2299,22 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json",
-							"enabled": true
+							"value": "application/json"
 						}
 					],
 					"cookie": [],
 					"responseTime": null,
-					"body": "{\n \"tenantUUID\": \"0E4FaBB8-2a13-Ba49-07BF-afd0cf6fDa4F\"\n}"
+					"body": "{\n  \"tenantUUID\": \"A6052F20-cF59-BDE3-d82f-78Bc5C85B00A\"\n}"
 				},
 				{
-					"id": "27875a52-5106-4130-9b79-f66321a57230",
+					"id": "5feb375d-21e5-40cc-8ceb-c82e4bfe21c2",
 					"name": "Authorization Required",
 					"originalRequest": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\",\n  \"subdomain\": \"my-tenant\",\n  \"lordServicesConfig\": \"A5209867-E313-07f8-D687-8C273D9F9341\",\n  \"superServicesConfig\": \"4b76fa6e-aeA5-c377-373F-F7044Cac7af9\",\n  \"publicServicesConfig\": \"Df34C7f4-5Ce7-DD27-f86c-20c7FBF671C4\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2276,23 +2337,22 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json",
-							"enabled": true
+							"value": "application/json"
 						}
 					],
 					"cookie": [],
 					"responseTime": null,
-					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 				},
 				{
-					"id": "f8ae3be1-7129-4bda-95b3-b5126e5dcbcd",
+					"id": "0e43b975-355d-4a21-a291-07e443a1de88",
 					"name": "Forbidden",
 					"originalRequest": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\",\n  \"subdomain\": \"my-tenant\",\n  \"lordServicesConfig\": \"A5209867-E313-07f8-D687-8C273D9F9341\",\n  \"superServicesConfig\": \"4b76fa6e-aeA5-c377-373F-F7044Cac7af9\",\n  \"publicServicesConfig\": \"Df34C7f4-5Ce7-DD27-f86c-20c7FBF671C4\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2315,23 +2375,22 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json",
-							"enabled": true
+							"value": "application/json"
 						}
 					],
 					"cookie": [],
 					"responseTime": null,
-					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 				},
 				{
-					"id": "b2012c87-baea-407d-b344-4d419e4b7346",
+					"id": "185635e6-7500-44d8-9a72-9796cb55eeb5",
 					"name": "Not Found",
 					"originalRequest": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\",\n  \"subdomain\": \"my-tenant\",\n  \"lordServicesConfig\": \"A5209867-E313-07f8-D687-8C273D9F9341\",\n  \"superServicesConfig\": \"4b76fa6e-aeA5-c377-373F-F7044Cac7af9\",\n  \"publicServicesConfig\": \"Df34C7f4-5Ce7-DD27-f86c-20c7FBF671C4\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2354,23 +2413,22 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json",
-							"enabled": true
+							"value": "application/json"
 						}
 					],
 					"cookie": [],
 					"responseTime": null,
-					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 				},
 				{
-					"id": "0cd33e3a-679a-49cc-bb2e-d6b39bf5bde8",
+					"id": "2449c14d-d984-4651-b1b0-ac7b06e4db9e",
 					"name": "Invalid input",
 					"originalRequest": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\",\n  \"subdomain\": \"my-tenant\",\n  \"lordServicesConfig\": \"A5209867-E313-07f8-D687-8C273D9F9341\",\n  \"superServicesConfig\": \"4b76fa6e-aeA5-c377-373F-F7044Cac7af9\",\n  \"publicServicesConfig\": \"Df34C7f4-5Ce7-DD27-f86c-20c7FBF671C4\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2393,23 +2451,22 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json",
-							"enabled": true
+							"value": "application/json"
 						}
 					],
 					"cookie": [],
 					"responseTime": null,
-					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 				},
 				{
-					"id": "3d8ded19-20ca-43ee-b46d-7158092944b6",
+					"id": "9440bedc-dea0-4ec5-924f-7a93a0d2cd25",
 					"name": "Improper Protocol",
 					"originalRequest": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\",\n  \"subdomain\": \"my-tenant\",\n  \"lordServicesConfig\": \"A5209867-E313-07f8-D687-8C273D9F9341\",\n  \"superServicesConfig\": \"4b76fa6e-aeA5-c377-373F-F7044Cac7af9\",\n  \"publicServicesConfig\": \"Df34C7f4-5Ce7-DD27-f86c-20c7FBF671C4\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2432,23 +2489,22 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json",
-							"enabled": true
+							"value": "application/json"
 						}
 					],
 					"cookie": [],
 					"responseTime": null,
-					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 				},
 				{
-					"id": "22fc1ca9-a020-49d0-b836-bffb51baf439",
+					"id": "b02cc52a-35a7-4381-93ad-db68e5dde450",
 					"name": "Resource Already Exists",
 					"originalRequest": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\",\n  \"subdomain\": \"my-tenant\",\n  \"lordServicesConfig\": \"A5209867-E313-07f8-D687-8C273D9F9341\",\n  \"superServicesConfig\": \"4b76fa6e-aeA5-c377-373F-F7044Cac7af9\",\n  \"publicServicesConfig\": \"Df34C7f4-5Ce7-DD27-f86c-20c7FBF671C4\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2471,23 +2527,22 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json",
-							"enabled": true
+							"value": "application/json"
 						}
 					],
 					"cookie": [],
 					"responseTime": null,
-					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 				},
 				{
-					"id": "c41ed7ef-ee88-48ff-b0b4-fc8a080b334d",
+					"id": "1f67b54e-4183-4600-a455-93a967bd0f1b",
 					"name": "Improper media type",
 					"originalRequest": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\",\n  \"subdomain\": \"my-tenant\",\n  \"lordServicesConfig\": \"A5209867-E313-07f8-D687-8C273D9F9341\",\n  \"superServicesConfig\": \"4b76fa6e-aeA5-c377-373F-F7044Cac7af9\",\n  \"publicServicesConfig\": \"Df34C7f4-5Ce7-DD27-f86c-20c7FBF671C4\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2510,23 +2565,22 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json",
-							"enabled": true
+							"value": "application/json"
 						}
 					],
 					"cookie": [],
 					"responseTime": null,
-					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 				},
 				{
-					"id": "0e426aef-8852-4059-aee3-d7b733cc724a",
+					"id": "53e2dcb7-5280-4bdc-8a10-0f4172a0c225",
 					"name": "too many requests",
 					"originalRequest": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\",\n  \"subdomain\": \"my-tenant\",\n  \"lordServicesConfig\": \"A5209867-E313-07f8-D687-8C273D9F9341\",\n  \"superServicesConfig\": \"4b76fa6e-aeA5-c377-373F-F7044Cac7af9\",\n  \"publicServicesConfig\": \"Df34C7f4-5Ce7-DD27-f86c-20c7FBF671C4\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2549,23 +2603,22 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json",
-							"enabled": true
+							"value": "application/json"
 						}
 					],
 					"cookie": [],
 					"responseTime": null,
-					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 				},
 				{
-					"id": "25735702-5c0a-4470-b00f-71d9344feb5f",
+					"id": "2c2dc845-ec7e-4e42-8914-603aa38d4594",
 					"name": "Unexpected error",
 					"originalRequest": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"internalServicesConfig\": \"7a4DdB97-31F7-ABff-8dfD-0fc5cE0A\",\n  \"publicServicesConfig\": \"ff0aDB0D-535c-0ABf-7BB6-c787408F\",\n  \"superServicesConfig\": \"5C08AddC-Afa5-Bc4c-e0b7-aDbeC48f\",\n  \"subdomain\": \"my-tenant\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\",\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\"\n}",
+							"raw": "{\n  \"tenantAlias\": \"my tenant alias\",\n  \"topLevelDomain\": \"com\",\n  \"secondaryDomain\": \"subscripify\",\n  \"subdomain\": \"my-tenant\",\n  \"lordServicesConfig\": \"A5209867-E313-07f8-D687-8C273D9F9341\",\n  \"superServicesConfig\": \"4b76fa6e-aeA5-c377-373F-F7044Cac7af9\",\n  \"publicServicesConfig\": \"Df34C7f4-5Ce7-DD27-f86c-20c7FBF671C4\",\n  \"subscripifyDeploymentCloudLocation\": \"azure\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2588,22 +2641,22 @@
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json",
-							"enabled": true
+							"value": "application/json"
 						}
 					],
 					"cookie": [],
 					"responseTime": null,
-					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"&j1\"\n}"
+					"body": "{\n  \"responseCode\": 401,\n  \"message\": \"Uq3\"\n}"
 				}
 			]
 		}
 	],
 	"variable": [
 		{
-			"id": "e2f840c4-5fc2-4a1f-882c-3daa7cdd0632",
+			"id": "05638ffe-95f7-46d8-b3a3-68bb873a3811",
 			"key": "baseUrl",
-			"value": "https://lord-tenant.subscripify.com"
+			"value": "https://lord-tenant.subscripify.com",
+			"type": "string"
 		}
 	]
 }

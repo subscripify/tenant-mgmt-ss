@@ -21,16 +21,55 @@ func createSuperTenant(
 	privateAccessConfig string,
 	customAccessConfig string,
 	liegeUUID string,
-	lordUUID string,
-	createdBy string) iTenant {
-	return &superTenant{
-		tenant: tenant{
-			alias:               tenantAlias,
-			subdomain:           subdomain,
-			createdBy:           createdBy,
-			kubeNamespacePrefix: "newKube",
-		},
+	createdBy string) (iTenant, int, error) {
+
+	var s superTenant
+
+	//all of these checks would fail due to first level validation and should be 400s
+	if err := s.setTenantType(SuperTenant); err != nil {
+
+		return nil, 400, err
 	}
+	if err := s.setAlias(tenantAlias); err != nil {
+
+		return nil, 400, err
+	}
+	if err := s.setSubdomainName(subdomain); err != nil {
+
+		return nil, 400, err
+	}
+
+	if err := s.setSuperServicesConfig(superServicesConfig); err != nil {
+
+		return nil, 400, err
+	}
+
+	if err := s.setPublicServicesConfig(publicServicesConfig); err != nil {
+
+		return nil, 400, err
+	}
+	//there is no Private Access config for main tenants only custom configs
+	if err := s.setPrivateAccessConfig(privateAccessConfig); err != nil {
+
+		return nil, 400, err
+	}
+	if err := s.setCustomAccessConfig(customAccessConfig); err != nil {
+
+		return nil, 400, err
+	}
+	if err := s.setCreatedBy(createdBy); err != nil {
+
+		return nil, 400, err
+	}
+	if err := s.setLiegeUUID(liegeUUID); err != nil {
+
+		return nil, 400, err
+	}
+
+	// if all pass - set the new tenant id
+	s.setNewTenantUUID()
+	return &s, 200, nil
+
 }
 
 //createSuperTenant

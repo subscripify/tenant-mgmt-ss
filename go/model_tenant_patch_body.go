@@ -9,17 +9,17 @@
  */
 package tenantapi
 
-type ExtendedTenantObject struct {
-
-	TenantUUID string `json:"tenantUUID,omitempty"`
-	// The name prefix for the Kubernetes namespaces and cloud resources that make up this tenant.
-	KubeNamespacePrefix string `json:"kubeNamespacePrefix,omitempty"`
-	// The UUID of this tenant's owner tenant. This value is equal to lordUUID for super tenants
-	LiegeUUID string `json:"liegeUUID,omitempty"`
-	// The UUID of this tenant's lord tenant
-	LordUUID string `json:"lordUUID,omitempty"`
-
-	CreateTimestamp string `json:"createTimestamp,omitempty"`
-
-	CreatedBy string `json:"createdBy,omitempty"`
+type TenantPatchBody struct {
+	// The alias name does not need to be unique and is used for quick reference when searching in UI. No starting spaces and no special characters.
+	TenantAlias string `json:"tenantAlias,omitempty"`
+	// The services config UUID to use for the lord tenant. Must be a valid services config UUID
+	LordServicesConfig string `json:"lordServicesConfig,omitempty"`
+	// The services config UUID to use for the super-tenant. Must be a valid services config UUID
+	SuperServicesConfig string `json:"superServicesConfig,omitempty"`
+	// The services config UUID to use for the main-tenant's public services. The services config UUID  used must be a publicServices UUID and belong to the liege tenant
+	PublicServicesConfig string `json:"publicServicesConfig,omitempty"`
+	// The private access config UUID to use for the tenant's public services. Must be a valid private access UUID. This value must be empty when creating a main tenant.
+	PrivateAccessConfig string `json:"privateAccessConfig,omitempty"`
+	// The public access config UUID to use for the tenant's public services. Must be a valid public access UUID.
+	CustomAccessConfig string `json:"customAccessConfig,omitempty"`
 }

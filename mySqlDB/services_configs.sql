@@ -6,11 +6,11 @@ CREATE TABLE tenant_service_configs (
   config_location                         TEXT NOT NULL,
   config_owner_tenant                     BINARY(16),
   created_by                              CHAR(60) NOT NULL,
-  deployment_level                        ENUM('lord','super','main') NOT NULL
+  deployment_level                        ENUM('lord','super','public') NOT NULL,
+  create_timestamp   					DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE tenant_service_configs
-ADD COLUMN create_timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
 
 INSERT INTO tenant_service_configs (
   tenant_config_uuid,
