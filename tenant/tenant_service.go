@@ -380,6 +380,7 @@ func ListTenants(
 	// isFirst := true
 
 	t := reflect.TypeOf(&so).Elem()
+	v := reflect.ValueOf(&so)
 
 	for i := 0; i < t.NumMethod(); i++ {
 
@@ -387,8 +388,12 @@ func ListTenants(
 		if strings.HasPrefix(method.Name, "get") {
 			log.Println("I am here+++++++++++++++++++++++++++++++++++++++++3")
 			log.Println(method.Name)
-			whereVal := reflect.ValueOf(&so).MethodByName(method.Name).Call(nil)
-			log.Println(whereVal)
+
+			whereVal := method.Func.Call([]reflect.Value{v})
+			log.Println("I am here+++++++++++++++++++++++++++++++++++++++++4")
+
+			// whereVal := v.MethodByName(method.Name).Call(nil)
+			log.Println(whereVal[0])
 			// whereVal := reflect.ValueOf(&so).MethodByName(method.Name).Call([]reflect.Value{})
 
 			// whereString := whereVal[0].String()

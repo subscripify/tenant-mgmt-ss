@@ -38,16 +38,15 @@ type iTenantSearch interface {
 }
 
 type tenantSearch struct {
-	tenantUUID        []uuid.UUID
-	tenantAlias       []string
-	subdomain         []string
-	lordConfigAlias   []string
-	lordConfigUUID    []uuid.UUID
-	superConfigAlias  []string
-	superConfigUUID   []uuid.UUID
-	publicConfigAlias []string
-	publicConfigUUID  []uuid.UUID
-
+	tenantUUID         []uuid.UUID
+	tenantAlias        []string
+	subdomain          []string
+	lordConfigAlias    []string
+	lordConfigUUID     []uuid.UUID
+	superConfigAlias   []string
+	superConfigUUID    []uuid.UUID
+	publicConfigAlias  []string
+	publicConfigUUID   []uuid.UUID
 	privateAccessAlias []string
 	privateAccessUUID  []uuid.UUID
 	customAccessAlias  []string
