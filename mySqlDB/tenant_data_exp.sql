@@ -1,9 +1,9 @@
 select bin_to_uuid(tenant_uuid) as tenant_uuid, tenant_alias,secondary_domain, subdomain, kube_namespace_prefix,
-lord_services_config, super_services_config, public_services_config, private_access_config, custom_access_config, 
+lord_services_config, super_services_config, public_services_config, private_access_config, BIN_to_UUID(custom_access_config) as custom_access_config , 
 bin_to_uuid(liege_uuid), bin_to_uuid(lord_uuid), is_lord_tenant, is_super_tenant from tenant ORDER BY create_timestamp DESC;
-
+-- 
 UPDATE tenant SET tenant_alias = 'my tenant alias' , super_services_config = uuid_to_bin('432ead01-385a-11ed-907f-f5001f9bae96') WHERE tenant_uuid = UUID_TO_BIN('49259c86-3db3-11ed-bd88-3e0f90a488be');
-UPDATE tenant SET tenant_alias = 'my tenant alias', lord_services_config = UUID_TO_BIN('046a5c26-d5cf-e882-f3aa-bd6fc9bed049'), super_services_config = UUID_TO_BIN('62cb85da-d10c-0fe0-b8e6-dfadeaf0fbeb'), public_services_config = UUID_TO_BIN('e19c17db-2dc3-91c1-0244-1f73daa5b18b'), private_access_config = UUID_TO_BIN('2a994bd3-d05c-e56b-e95b-bca74ee6effa'), custom_access_config = UUID_TO_BIN('22bbadeb-3ba9-cacd-59fb-f425fb257caf') WHERE tenant_uuid = UUID_TO_BIN('49259c86-3db3-11ed-bd88-3e0f90a488be');
+UPDATE tenant SET tenant_alias = 'my tenant update', super_services_config = UUID_TO_BIN('432ead01-385a-11ed-907f-f5001f9bae96'), public_services_config = UUID_TO_BIN('6a24689f-385a-11ed-907f-f5001f9bae96'), private_access_config = UUID_TO_BIN('c9057cff-3863-11ed-907f-f5001f9bae96'), custom_access_config = UUID_TO_BIN('845c5fe4-3864-11ed-907f-f5001f9bae96') WHERE tenant_uuid = UUID_TO_BIN('49259c86-3db3-11ed-bd88-3e0f90a488be');
 
 -- DELETE FROM tenant WHERE tenant_uuid = UUID_TO_BIN('2f40a6e4-ede4-41f5-aeba-b8d34ca1d06a');
 DELETE FROM tenant WHERE alias = "testing-123" AND is_lord_tenant IS NULL AND is_super_tenant = false;

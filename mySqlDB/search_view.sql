@@ -1,4 +1,4 @@
-
+-- DROP VIEW tenant_search;
 CREATE VIEW tenant_search AS
 SELECT 
   tenant.tenant_uuid as tenant_uuid, 
@@ -19,7 +19,7 @@ SELECT
   private.config_alias as private_access_config_alias,
   tenant.private_access_config as private_access_config_UUID,
   custom.config_alias as custom_access_config_alias,
-  tenant.custom_access_config as custom_asscess_config_UUID
+  tenant.custom_access_config as custom_access_config_UUID
   FROM tenant
 LEFT JOIN (
 SELECT tenant_service_configs.tenant_config_uuid AS config_uuid, tenant_service_configs.config_alias AS config_alias FROM tenant_service_configs WHERE tenant_service_configs.deployment_level = 'lord'

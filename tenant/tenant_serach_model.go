@@ -10,31 +10,31 @@ import (
 
 type iTenantSearch interface {
 	mapTenantUUID(pipedString string) error
-	getTenantUUIDQueryInString() string
+	GetTenantUUIDQueryInString() string
 	mapTenantAlias(pipedString string) error
-	getTenantAliasQueryLikeString() string
+	GetTenantAliasQueryLikeString() string
 	mapSubdomain(pipedString string) error
-	getSubdomainQueryLikeString() string
+	GetSubdomainQueryLikeString() string
 	mapLordConfigAlias(pipedString string) error
-	getLordConfigAliasQueryLikeString() string
+	GetLordConfigAliasQueryLikeString() string
 	mapLordConfigUUID(pipedString string) error
-	getLordConfigUUIDQueryInString() string
+	GetLordConfigUUIDQueryInString() string
 	mapSuperConfigAlias(pipedString string) error
-	getSuperConfigAliasQueryLikeString() string
+	GetSuperConfigAliasQueryLikeString() string
 	mapSuperConfigUUID(pipedString string) error
-	getSuperConfigUUIDQueryInString() string
+	GetSuperConfigUUIDQueryInString() string
 	mapPublicConfigAlias(pipedString string) error
-	getPublicConfigAliasQueryLikeString() string
+	GetPublicConfigAliasQueryLikeString() string
 	mapPublicConfigUUID(pipedString string) error
-	getPublicConfigUUIDQueryInString() string
+	GetPublicConfigUUIDQueryInString() string
 	mapPrivateAccessAlias(pipedString string) error
-	getPrivateAccessAliasQueryLikeString() string
+	GetPrivateAccessAliasQueryLikeString() string
 	mapPrivateAccessUUID(pipedString string) error
-	getPrivateAccessUUIDQueryInString() string
+	GetPrivateAccessUUIDQueryInString() string
 	mapCustomAccessAlias(pipedString string) error
-	getCustomAccessAliasQueryLikeString() string
+	GetCustomAccessAliasQueryLikeString() string
 	mapCustomAccessUUID(pipedString string) error
-	getCustomAccessUUIDQueryInString() string
+	GetCustomAccessUUIDQueryInString() string
 }
 
 type tenantSearch struct {
@@ -68,7 +68,7 @@ func (ts *tenantSearch) mapTenantUUID(pipedString string) error {
 	return nil
 }
 
-func (ts *tenantSearch) getTenantUUIDQueryInString() string {
+func (ts *tenantSearch) GetTenantUUIDQueryInString() string {
 	inString := ""
 	if ts.tenantUUID != nil {
 		inString = inString + `(tenant_uuid IN (`
@@ -92,7 +92,7 @@ func (ts *tenantSearch) mapTenantAlias(pipedString string) error {
 
 	for i := 0; i < len(splitString); i++ {
 
-		if r.MatchString(splitString[i]) {
+		if !r.MatchString(splitString[i]) {
 			ts.tenantAlias = []string{}
 			return fmt.Errorf(`this is not a valid tenant alias must match pattern (?m)^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$`)
 		}
@@ -102,7 +102,7 @@ func (ts *tenantSearch) mapTenantAlias(pipedString string) error {
 	return nil
 }
 
-func (ts *tenantSearch) getTenantAliasQueryLikeString() string {
+func (ts *tenantSearch) GetTenantAliasQueryLikeString() string {
 	inString := ""
 	if ts.tenantAlias != nil {
 		inString = inString + `(tenant_alias LIKE `
@@ -113,7 +113,7 @@ func (ts *tenantSearch) getTenantAliasQueryLikeString() string {
 				inString = inString + `OR tenant_alias LIKE '` + s + `' `
 			}
 		}
-		inString = inString + `))`
+		inString = inString + `)`
 	}
 	return inString
 }
@@ -126,7 +126,7 @@ func (ts *tenantSearch) mapSubdomain(pipedString string) error {
 
 	for i := 0; i < len(splitString); i++ {
 
-		if r.MatchString(splitString[i]) {
+		if !r.MatchString(splitString[i]) {
 			ts.subdomain = []string{}
 			return fmt.Errorf("not a valid subdomain name - must match pattern '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$'")
 		}
@@ -136,10 +136,10 @@ func (ts *tenantSearch) mapSubdomain(pipedString string) error {
 	return nil
 }
 
-func (ts *tenantSearch) getSubdomainQueryLikeString() string {
+func (ts *tenantSearch) GetSubdomainQueryLikeString() string {
 	inString := ""
 	if ts.subdomain != nil {
-		inString = inString + `subdomain LIKE `
+		inString = inString + `(subdomain LIKE `
 		for i, s := range ts.subdomain {
 			if i == 0 {
 				inString = inString + `'` + s + `' `
@@ -160,7 +160,7 @@ func (ts *tenantSearch) mapLordConfigAlias(pipedString string) error {
 
 	for i := 0; i < len(splitString); i++ {
 
-		if r.MatchString(splitString[i]) {
+		if !r.MatchString(splitString[i]) {
 			ts.lordConfigAlias = []string{}
 			return fmt.Errorf(`this is not a valid config alias must match pattern (?m)^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$`)
 		}
@@ -170,15 +170,15 @@ func (ts *tenantSearch) mapLordConfigAlias(pipedString string) error {
 	return nil
 }
 
-func (ts *tenantSearch) getLordConfigAliasQueryLikeString() string {
+func (ts *tenantSearch) GetLordConfigAliasQueryLikeString() string {
 	inString := ""
 	if ts.lordConfigAlias != nil {
-		inString = inString + `lord_config_alias LIKE `
+		inString = inString + `(lord_config_alias LIKE `
 		for i, s := range ts.lordConfigAlias {
 			if i == 0 {
 				inString = inString + `'` + s + `' `
 			} else {
-				inString = inString + `OR lord_config_alias LIKE ` + s + `' `
+				inString = inString + `OR lord_config_alias LIKE '` + s + `' `
 			}
 		}
 		inString = inString + `)`
@@ -201,7 +201,7 @@ func (ts *tenantSearch) mapLordConfigUUID(pipedString string) error {
 	return nil
 }
 
-func (ts *tenantSearch) getLordConfigUUIDQueryInString() string {
+func (ts *tenantSearch) GetLordConfigUUIDQueryInString() string {
 	inString := ""
 	if ts.lordConfigUUID != nil {
 		inString = inString + `(lord_config_uuid IN (`
@@ -225,7 +225,7 @@ func (ts *tenantSearch) mapSuperConfigAlias(pipedString string) error {
 
 	for i := 0; i < len(splitString); i++ {
 
-		if r.MatchString(splitString[i]) {
+		if !r.MatchString(splitString[i]) {
 			ts.superConfigAlias = []string{}
 			return fmt.Errorf(`this is not a valid config alias must match pattern (?m)^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$`)
 		}
@@ -235,15 +235,15 @@ func (ts *tenantSearch) mapSuperConfigAlias(pipedString string) error {
 	return nil
 }
 
-func (ts *tenantSearch) getSuperConfigAliasQueryLikeString() string {
+func (ts *tenantSearch) GetSuperConfigAliasQueryLikeString() string {
 	inString := ""
 	if ts.superConfigAlias != nil {
-		inString = inString + `super_config_alias LIKE `
+		inString = inString + `(super_config_alias LIKE `
 		for i, s := range ts.superConfigAlias {
 			if i == 0 {
 				inString = inString + `'` + s + `' `
 			} else {
-				inString = inString + `OR super_config_alias LIKE ` + s + `' `
+				inString = inString + `OR super_config_alias LIKE '` + s + `' `
 			}
 		}
 		inString = inString + `)`
@@ -266,7 +266,7 @@ func (ts *tenantSearch) mapSuperConfigUUID(pipedString string) error {
 	return nil
 }
 
-func (ts *tenantSearch) getSuperConfigUUIDQueryInString() string {
+func (ts *tenantSearch) GetSuperConfigUUIDQueryInString() string {
 	inString := ""
 	if ts.superConfigUUID != nil {
 		inString = inString + `(super_config_uuid IN (`
@@ -290,7 +290,7 @@ func (ts *tenantSearch) mapPublicConfigAlias(pipedString string) error {
 
 	for i := 0; i < len(splitString); i++ {
 
-		if r.MatchString(splitString[i]) {
+		if !r.MatchString(splitString[i]) {
 			ts.publicConfigAlias = []string{}
 			return fmt.Errorf(`this is not a valid config alias must match pattern (?m)^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$`)
 		}
@@ -300,15 +300,15 @@ func (ts *tenantSearch) mapPublicConfigAlias(pipedString string) error {
 	return nil
 }
 
-func (ts *tenantSearch) getPublicConfigAliasQueryLikeString() string {
+func (ts *tenantSearch) GetPublicConfigAliasQueryLikeString() string {
 	inString := ""
 	if ts.publicConfigAlias != nil {
-		inString = inString + `public_config_alias LIKE `
+		inString = inString + `(public_config_alias LIKE `
 		for i, s := range ts.publicConfigAlias {
 			if i == 0 {
 				inString = inString + `'` + s + `' `
 			} else {
-				inString = inString + `OR public_config_alias LIKE ` + s + `' `
+				inString = inString + `OR public_config_alias LIKE '` + s + `' `
 			}
 		}
 		inString = inString + `)`
@@ -331,7 +331,7 @@ func (ts *tenantSearch) mapPublicConfigUUID(pipedString string) error {
 	return nil
 }
 
-func (ts *tenantSearch) getPublicConfigUUIDQueryInString() string {
+func (ts *tenantSearch) GetPublicConfigUUIDQueryInString() string {
 	inString := ""
 	if ts.publicConfigUUID != nil {
 		inString = inString + `(public_config_uuid IN (`
@@ -355,7 +355,7 @@ func (ts *tenantSearch) mapPrivateAccessAlias(pipedString string) error {
 
 	for i := 0; i < len(splitString); i++ {
 
-		if r.MatchString(splitString[i]) {
+		if !r.MatchString(splitString[i]) {
 			ts.privateAccessAlias = []string{}
 			return fmt.Errorf(`this is not a valid access alias must match pattern (?m)^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$`)
 		}
@@ -365,15 +365,15 @@ func (ts *tenantSearch) mapPrivateAccessAlias(pipedString string) error {
 	return nil
 }
 
-func (ts *tenantSearch) getPrivateAccessAliasQueryLikeString() string {
+func (ts *tenantSearch) GetPrivateAccessAliasQueryLikeString() string {
 	inString := ""
 	if ts.privateAccessAlias != nil {
-		inString = inString + `private_access_alias LIKE `
+		inString = inString + `(private_access_config_alias LIKE `
 		for i, s := range ts.privateAccessAlias {
 			if i == 0 {
 				inString = inString + `'` + s + `' `
 			} else {
-				inString = inString + `OR private_access_alias LIKE ` + s + `' `
+				inString = inString + `OR private_access_config_alias LIKE '` + s + `' `
 			}
 		}
 		inString = inString + `)`
@@ -396,7 +396,7 @@ func (ts *tenantSearch) mapPrivateAccessUUID(pipedString string) error {
 	return nil
 }
 
-func (ts *tenantSearch) getPrivateAccessUUIDQueryInString() string {
+func (ts *tenantSearch) GetPrivateAccessUUIDQueryInString() string {
 	inString := ""
 	if ts.privateAccessUUID != nil {
 		inString = inString + `(private_access_config_uuid IN (`
@@ -420,7 +420,7 @@ func (ts *tenantSearch) mapCustomAccessAlias(pipedString string) error {
 
 	for i := 0; i < len(splitString); i++ {
 
-		if r.MatchString(splitString[i]) {
+		if !r.MatchString(splitString[i]) {
 			ts.customAccessAlias = []string{}
 			return fmt.Errorf(`this is not a valid access alias must match pattern (?m)^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$`)
 		}
@@ -430,15 +430,15 @@ func (ts *tenantSearch) mapCustomAccessAlias(pipedString string) error {
 	return nil
 }
 
-func (ts *tenantSearch) getCustomAccessAliasQueryLikeString() string {
+func (ts *tenantSearch) GetCustomAccessAliasQueryLikeString() string {
 	inString := ""
 	if ts.customAccessAlias != nil {
-		inString = inString + `custom_access_alias LIKE `
+		inString = inString + `(custom_access_config_alias LIKE `
 		for i, s := range ts.customAccessAlias {
 			if i == 0 {
 				inString = inString + `'` + s + `' `
 			} else {
-				inString = inString + `OR custom_access_alias LIKE ` + s + `' `
+				inString = inString + `OR custom_access_config_alias LIKE '` + s + `' `
 			}
 		}
 		inString = inString + `)`
@@ -461,7 +461,7 @@ func (ts *tenantSearch) mapCustomAccessUUID(pipedString string) error {
 	return nil
 }
 
-func (ts *tenantSearch) getCustomAccessUUIDQueryInString() string {
+func (ts *tenantSearch) GetCustomAccessUUIDQueryInString() string {
 	inString := ""
 	if ts.customAccessUUID != nil {
 		inString = inString + `(custom_access_config_uuid IN (`
@@ -495,55 +495,81 @@ func createTenantSearchObject(
 
 	if tenantUUIDs != "" {
 		err := tso.mapTenantUUID(tenantUUIDs)
-		return nil, 400, err
+		if err != nil {
+			return nil, 400, err
+		}
 	}
 	if tenantAliases != "" {
 		err := tso.mapTenantAlias(tenantAliases)
-		return nil, 400, err
+		if err != nil {
+			return nil, 400, err
+		}
 	}
 	if subdomains != "" {
 		err := tso.mapSubdomain(subdomains)
-		return nil, 400, err
+		if err != nil {
+			return nil, 400, err
+		}
 	}
 	if lordConfigUUIDs != "" {
 		err := tso.mapLordConfigUUID(lordConfigUUIDs)
-		return nil, 400, err
+		if err != nil {
+			return nil, 400, err
+		}
 	}
 	if lordConfigAliases != "" {
 		err := tso.mapLordConfigAlias(lordConfigAliases)
-		return nil, 400, err
+		if err != nil {
+			return nil, 400, err
+		}
 	}
 	if superConfigUUIDs != "" {
 		err := tso.mapSuperConfigUUID(superConfigUUIDs)
-		return nil, 400, err
+		if err != nil {
+			return nil, 400, err
+		}
 	}
 	if superConfigAliases != "" {
 		err := tso.mapSuperConfigAlias(superConfigAliases)
-		return nil, 400, err
+		if err != nil {
+			return nil, 400, err
+		}
 	}
 	if publicConfigUUIDs != "" {
 		err := tso.mapPublicConfigUUID(publicConfigUUIDs)
-		return nil, 400, err
+		if err != nil {
+			return nil, 400, err
+		}
 	}
 	if publicConfigAliases != "" {
 		err := tso.mapPublicConfigAlias(publicConfigAliases)
-		return nil, 400, err
+		if err != nil {
+			return nil, 400, err
+		}
 	}
 	if privateAccessUUIDs != "" {
 		err := tso.mapPrivateAccessUUID(privateAccessUUIDs)
-		return nil, 400, err
+		if err != nil {
+			return nil, 400, err
+		}
 	}
 	if privateAccessAliases != "" {
 		err := tso.mapPrivateAccessAlias(privateAccessAliases)
-		return nil, 400, err
+		if err != nil {
+			return nil, 400, err
+		}
 	}
 	if customAccessUUIDs != "" {
 		err := tso.mapCustomAccessUUID(customAccessUUIDs)
-		return nil, 400, err
+		if err != nil {
+			return nil, 400, err
+		}
 	}
 	if customAccessAliases != "" {
 		err := tso.mapCustomAccessAlias(customAccessAliases)
-		return nil, 400, err
+		if err != nil {
+			return nil, 400, err
+		}
 	}
 	return &tso, 200, nil
 }

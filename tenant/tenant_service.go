@@ -377,33 +377,28 @@ func ListTenants(
 	}
 	selectString := `SELECT tenant_UUID, tenant_alias, is_lord_tenant, is_super_tenant FROM tenant_search WHERE `
 
-	// isFirst := true
+	isFirst := true
 
 	t := reflect.TypeOf(&so).Elem()
-	v := reflect.ValueOf(&so)
+	v := reflect.ValueOf(&so).Elem()
 
 	for i := 0; i < t.NumMethod(); i++ {
 
 		method := t.Method(i)
-		if strings.HasPrefix(method.Name, "get") {
-			log.Println("I am here+++++++++++++++++++++++++++++++++++++++++3")
+		if strings.HasPrefix(method.Name, "Get") {
 			log.Println(method.Name)
+			whereVal := v.MethodByName(method.Name).Call(nil)
 
-			whereVal := method.Func.Call([]reflect.Value{v})
-			log.Println("I am here+++++++++++++++++++++++++++++++++++++++++4")
-
-			// whereVal := v.MethodByName(method.Name).Call(nil)
-			log.Println(whereVal[0])
 			// whereVal := reflect.ValueOf(&so).MethodByName(method.Name).Call([]reflect.Value{})
 
-			// whereString := whereVal[0].String()
-			// if whereString != "" {
-			// 	if !isFirst {
-			// 		selectString = selectString + `AND `
-			// 	}
-			// 	selectString = selectString + string(whereString)
-			// 	isFirst = false
-			// }
+			whereString := whereVal[0].String()
+			if whereString != "" {
+				if !isFirst {
+					selectString = selectString + ` AND `
+				}
+				selectString = selectString + string(whereString)
+				isFirst = false
+			}
 		}
 
 	}
