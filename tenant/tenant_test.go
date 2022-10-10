@@ -27,9 +27,9 @@ type tenantTestData struct {
 // creates a new test data struct with everything that one needs to do a tenant test
 func NewTenantTestData() *tenantTestData {
 	t := tenantTestData{}
-	t.alias = "testing-cIXzsBP4bw"
-	t.tenantTld = "com"
-	t.tenantSecD = "test-domains"
+	t.alias = "testing-cIXzsBP4bw-z"
+	t.tenantTld = "bz"
+	t.tenantSecD = "test-domat"
 	t.lordTenantSub = "lord-tenant"
 	t.superTenantSub = "super-tenant"
 	t.mainTenantSub = "main-tenant"

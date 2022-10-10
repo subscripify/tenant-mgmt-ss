@@ -1,17 +1,4 @@
-USE tenants;
--- DROP TABLE IF EXISTS tenant_service_configs;
-CREATE TABLE tenant_service_configs (
-  tenant_config_uuid                      BINARY(16) NOT NULL UNIQUE PRIMARY KEY,
-  config_alias                            CHAR(36) NOT NULL UNIQUE,
-  config_location                         TEXT NOT NULL,
-  config_owner_tenant                     BINARY(16),
-  created_by                              CHAR(60) NOT NULL,
-  deployment_level                        ENUM('lord','super','public') NOT NULL,
-  create_timestamp   					DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-
-
+-- this file contains inserts for seed test data in the tenant_service_configs table
 INSERT INTO tenant_service_configs (
   tenant_config_uuid,
   config_alias,
@@ -38,24 +25,7 @@ INSERT INTO tenant_service_configs (
   deployment_level
 )
 VALUES (
-  UUID_TO_BIN(UUID()),
-  'FirstSuper',
-  'somewhere',
-  UUID_TO_BIN('60135d7c-3857-11ed-907f-f5001f9bae96'),
-  'william.ohara@subscripify.com',
-  'super'
-);
-
-INSERT INTO tenant_service_configs (
-  tenant_config_uuid,
-  config_alias,
-  config_location,
-  config_owner_tenant,
-  created_by,
-  deployment_level
-)
-VALUES (
-  UUID_TO_BIN(UUID()),
+  UUID_TO_BIN('432ead01-385a-11ed-907f-f5001f9bae96'),
   'FirstSuper',
   'somewhere',
   null,
@@ -63,6 +33,8 @@ VALUES (
   'super'
 );
 
+
+
 INSERT INTO tenant_service_configs (
   tenant_config_uuid,
   config_alias,
@@ -72,12 +44,12 @@ INSERT INTO tenant_service_configs (
   deployment_level
 )
 VALUES (
-  UUID_TO_BIN(UUID()),
+  UUID_TO_BIN('6a24689f-385a-11ed-907f-f5001f9bae96'),
   'FirstMain',
   'somewhere',
   null,
   'william.ohara@subscripify.com',
-  'main'
+  'public'
 );
 -- DELETE FROM tenant_service_configs WHERE tenant_config_uuid=UUID_TO_BIN('c234d752-3859-11ed-907f-f5001f9bae96');
 SELECT *, BIN_TO_UUID(tenant_config_uuid) FROM tenant_service_configs;

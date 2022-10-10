@@ -1,13 +1,4 @@
-CREATE TABLE access_configs (
-  access_config_uuid                      BINARY(16) NOT NULL UNIQUE PRIMARY KEY, 
-  config_alias                            CHAR(36) NOT NULL UNIQUE,
-  config_location                         TEXT NOT NULL,
-  config_owner_tenant                     BINARY(16),
-  created_by                              CHAR(60) NOT NULL,
-  access_type                             ENUM("private", "public"),
-  create_timestamp                        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP              
-);
-
+-- this file contians insert commands for seed data into the access_configs table
 INSERT INTO access_configs (
   access_config_uuid,
   config_alias,
@@ -17,7 +8,7 @@ INSERT INTO access_configs (
   access_type
 )
 VALUES (
-  UUID_TO_BIN(UUID()),
+  UUID_TO_BIN('c9057cff-3863-11ed-907f-f5001f9bae96'),
   'FirstPrivate',
   'somewhere',
   null,
@@ -34,11 +25,11 @@ INSERT INTO access_configs (
   access_type
 )
 VALUES (
-  UUID_TO_BIN(UUID()),
+  UUID_TO_BIN('845c5fe4-3864-11ed-907f-f5001f9bae96'),
   'FirstPublic',
   'somewhere',
   null,
   'william.ohara@subscripify.com',
-  'public'
+  'custom'
 );
 SELECT *, BIN_TO_UUID(access_config_uuid) FROM access_configs;

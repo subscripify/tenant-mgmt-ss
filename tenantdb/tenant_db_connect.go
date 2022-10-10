@@ -35,23 +35,39 @@ func getNewMySQLTenantDbHandle() *sql.DB {
 	if ok := rootCertPool.AppendCertsFromPEM(pem); !ok {
 		subscripifylogger.FatalLog.Fatal("Failed to append PEM.")
 	}
+	env := os.Getenv("SUBSCRIPIFY_DB_ENV")
+	var cfgdb mysql.Config
+	if !(env == "localdb") {
 
-	mysql.RegisterTLSConfig("custom", &tls.Config{RootCAs: rootCertPool})
+		mysql.RegisterTLSConfig("custom", &tls.Config{RootCAs: rootCertPool})
 
-	cfgdb := mysql.Config{
-		User:                 os.Getenv("DBUSER"),
-		Passwd:               os.Getenv("DBPASS"),
-		Net:                  "tcp",
-		Addr:                 os.Getenv("DBHOST"),
-		DBName:               "tenants",
-		AllowNativePasswords: true,
-		TLSConfig:            "custom",
-		ParseTime:            true,
+		cfgdb = mysql.Config{
+			User:                 os.Getenv("DBUSER"),
+			Passwd:               os.Getenv("DBPASS"),
+			Net:                  "tcp",
+			Addr:                 os.Getenv("DBHOST"),
+			DBName:               "tenants",
+			AllowNativePasswords: true,
+			TLSConfig:            "custom",
+			ParseTime:            true,
+		}
+	} else {
+
+		cfgdb = mysql.Config{
+			User:   "root",
+			Passwd: "insecure",
+			Net:    "tcp",
+			Addr:   "localhost",
+
+			DBName:               "tenants",
+			AllowNativePasswords: true,
+			ParseTime:            true,
+		}
 	}
-
 	// Get a database handle.
 	var err error
 	tenantsDbHandle, err = sql.Open("mysql", cfgdb.FormatDSN())
+
 	if err != nil {
 		subscripifylogger.FatalLog.Fatal(err)
 	}
@@ -60,7 +76,12 @@ func getNewMySQLTenantDbHandle() *sql.DB {
 	if pingErr != nil {
 		subscripifylogger.FatalLog.Fatal(pingErr)
 	}
-	subscripifylogger.InfoLog.Printf("connected to tenants db on server:%s", os.Getenv("DBHOST"))
+	if !(env == "localdb") {
+		subscripifylogger.InfoLog.Printf("connected to tenants db on server:%s", "localhost")
+	} else {
+		subscripifylogger.InfoLog.Printf("connected to tenants db on server:%s", os.Getenv("DBHOST"))
+	}
+
 	return tenantsDbHandle
 }
 
