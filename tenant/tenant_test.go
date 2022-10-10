@@ -5,47 +5,10 @@ import (
 	"testing"
 
 	tenantdbserv "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/tenantdb"
-	"github.com/google/uuid"
 )
 
-type tenantTestData struct {
-	alias          string
-	tenantTld      string
-	tenantSecD     string
-	lordTenantSub  string
-	superTenantSub string
-	mainTenantSub  string
-	tenantCloud    CloudLocation
-	createdBy      string
-	privateAccess  uuid.UUID
-	customAccess   uuid.UUID
-	lordConfig     uuid.UUID
-	superConfig    uuid.UUID
-	publicConfig   uuid.UUID
-}
+// this function fills the database for testing search
 
-// creates a new test data struct with everything that one needs to do a tenant test
-func NewTenantTestData() *tenantTestData {
-	t := tenantTestData{}
-	t.alias = "testing-cIXzsBP4bw-z"
-	t.tenantTld = "bz"
-	t.tenantSecD = "test-domat"
-	t.lordTenantSub = "lord-tenant"
-	t.superTenantSub = "super-tenant"
-	t.mainTenantSub = "main-tenant"
-	t.tenantCloud = Azure
-	t.createdBy = "william.ohara@subscripify.com"
-
-	// these data pints are in the DB, need to develop the rest of the endpoints for config management
-	t.privateAccess = uuid.MustParse("c9057cff-3863-11ed-907f-f5001f9bae96")
-	t.customAccess = uuid.MustParse("845c5fe4-3864-11ed-907f-f5001f9bae96")
-	t.lordConfig = uuid.MustParse("60135d7c-3857-11ed-907f-f5001f9bae96")
-	t.superConfig = uuid.MustParse("432ead01-385a-11ed-907f-f5001f9bae96")
-	t.publicConfig = uuid.MustParse("6a24689f-385a-11ed-907f-f5001f9bae96")
-
-	return &t
-
-}
 func TestCreateTenantTree(t *testing.T) {
 	// need to utilize stored procedures to protect database
 	t.Cleanup(func() {

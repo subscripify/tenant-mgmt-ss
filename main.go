@@ -12,15 +12,28 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	tenantapi "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/go"
 	subscripifylogger "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/subscripify-logger"
+	tenant "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/tenant"
 )
 
 func main() {
-	subscripifylogger.InfoLog.Printf("tenant management service started")
+	//need to make this a bit mire idiomatic for go
+	env := os.Getenv("SUBSCRIPIFY_DB_ENV")
+	if os.Args[1] == "test-data-gen" {
+		if env == "localdb" {
+			tenant.TestDataCreate()
+		} else {
+			log.Fatal("test data can only be created on localdb - set the SUBSCRIPIFY_DB_ENV to use")
+		}
 
-	router := tenantapi.NewRouter()
+	} else {
+		subscripifylogger.InfoLog.Printf("tenant management service started")
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+		router := tenantapi.NewRouter()
+
+		log.Fatal(http.ListenAndServe(":8080", router))
+	}
 }
