@@ -40,7 +40,7 @@ tags:
     description: Find out more about our store
     url: http://wiki.subscripify.com/tenant-architecture
 paths:
-  /tenants/lord-tenants:
+  /lord-tenants:
     post:
       tags:
       - tenants
@@ -236,7 +236,7 @@ paths:
           $ref: '#/components/responses/429'
         default:
           $ref: '#/components/responses/default'
-  /tenants/search:
+  /search/tenants:
     get:
       tags: 
       - tenants
@@ -294,19 +294,32 @@ components:
         pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
         type: string
         description: 'This is the UUID of the target tenant. The target tenant must belong to the liege tenant in the liegeUUID header.'
-    searchSubdomainQuery:
-      name: subdmn
+    searchTypeQuery:
+      name: type 
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          maxLength: 5
+          pattern: ^(lord|super|main)$`
+          description: 'A full name for either a main, lord, or super tenant for a private or custom access config. Can have multiple.'
+        minItems: 1
+      style: pipeDelimited
+    searchTenantUUIDQuery:
+      name: tid
       in: query
       required: false
       schema:
         type: array
         items: 
-          type: string
-          maxLength: 61
-          pattern: ^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$
-          description: 'A partial or whole subdomain name. Use of this field for search adheres to naming rules outlined in <a href="https://www.rfc-editor.org/rfc/rfc3986#section-3.2.2">RFC3986</a> for subdomains.'    
+          type: string 
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          description: the UUID for a tenant
         minItems: 1
-      style: pipeDelimited  
+      style: pipeDelimited
     searchTenantAliasQuery:
       name: tal
       in: query
@@ -316,9 +329,33 @@ components:
         items:
           maxLength: 36
           type: string
-          description: 'A partial or whole organization name/ alias given when the tenant was created.'
+          description: 'A partial or whole tenant alias.'
         minItems: 1
       style: pipeDelimited
+    searchSubdomainQuery:
+      name: subdmn
+      in: query
+      required: false
+      schema:
+        type: array
+        items: 
+          type: string
+          maxLength: 61
+          description: 'A partial or whole subdomain name.'    
+        minItems: 1
+      style: pipeDelimited  
+    searchDomainQuery:
+      name: dmn
+      in: query
+      required: false
+      schema:
+        type: array
+        items: 
+          type: string
+          maxLength: 61
+          description: 'A partial or whole domain name - can contain top level domain.'    
+        minItems: 1
+      style: pipeDelimited  
     searchConfigAliasQuery:
       name: cal
       in: query
@@ -346,7 +383,18 @@ components:
             Can have up to three cids in the same url'
         minItems: 1
       style: pipeDelimited
-        
+    searchAccessAliasQuery:
+      name: aal 
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          maxLength: 36
+          description: 'A partial or whole alias for a private or custom access config. Can have multiple.'
+        minItems: 1
+      style: pipeDelimited   
     searchAccessQuery:
       name: aid
       in: query
@@ -360,30 +408,8 @@ components:
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
           description: A whole UUID for a private or custom access config id. No partials, must be a full UUID or search will fail. Can have up to two in a URL. Any more will be ignored.
       style: pipeDelimited
-    searchPrivateAccessAliasQuery:
-      name: aal 
-      in: query
-      required: false
-      schema:
-        type: array
-        items:
-          type: string
-          maxLength: 36
-          description: 'A partial or whole alias for a private or custom access config. Can have multiple.'
-        minItems: 1
-      style: pipeDelimited
-    searchTypeQuery:
-      name: type 
-      in: query
-      required: false
-      schema:
-        type: array
-        items:
-          type: string
-          maxLength: 36
-          description: 'A full name for either a main, lord, or super tenant for a private or custom access config. Can have multiple.'
-        minItems: 1
-      style: pipeDelimited
+    
+    
   schemas:
     tenantPatchBody:
       type: object
@@ -539,19 +565,55 @@ components:
         properties:
           tenantUUID:
             type: string
-            maxLength: 36
             pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
-            readOnly: true
           tenantAlias:
             type: string
-            maxLength: 32
             description: The name of the organization at time of tenant creation and the alias used for searching by org name.
+          tenantSubdomain:
+            type: string
+            description: the subdomain of the tenant
+          tenantSecDomain:
+            type: string
+            description: the secondary domain of the tenant - does not include the top level domain
+          tenantTld:
+            type: string
+            description: the top level domain of the tenant
           tenantType:
             maxLength: 5
             pattern: ^super|lord|main$
             type: string
             description: Indicate which type of tenant. Lord tenants will see both "super" and "main" tenant types. 
-              Super tenants will only see "main" tenant types.
+              Super tenants will only see "main" tenant types. 
+          lordConfigAlias:
+            type: string 
+            description: the lord config alias of the tenant - non lord tenants will be blank
+          lordConfigUUID:
+            type: string
+            description: the lord config UUID of the tenant - non lord tenants will be blank
+          superConfigAlias:
+            type: string 
+            description: the super config alias of the tenant - non super tenants will be blank
+          superConfigUUID:
+            type: string
+            description: the super config UUID of the tenant - non super tenants will be blank
+          publicConfigAlias:
+            type: string 
+            description: the public config alias of the tenant
+          publicConfigUUID:
+            type: string
+            description: the public config UUID of the tenant
+          privateAccessAlias:
+            type: string 
+            description: the private access config (if applicable) alias of the tenant
+          privateAccessUUID:
+            type: string
+            description: the private access config (if applicable) UUID of the tenant
+          customAccessAlias:
+            type: string 
+            description: the custom access config (if applicable) alias of the tenant
+          customAccessUUID:
+            type: string
+            description: the custom access config (if applicable) UUID of the tenant 
       maxItems: 100
     extendedTenantObject:
       type: object
@@ -593,77 +655,71 @@ components:
     #   allOf:
     #     - $ref: '#/components/schemas/lordTenantCreateBody'
     #     - $ref: '#/components/schemas/extendedTenantObject'
-    httpResponseError:
+    httpResponseMessage:
       type: object
       properties:
         responseCode:
           type: integer
-          example: 401
         message:
           maxLength: 200
-          pattern: ".[a-z][0-9]"
           type: string
-          example: not authorized to view this resource
       additionalProperties: false
-      description: Authentication information is missing or invalid
-      example:
-        message: not authorized to view this resource
-        responseCode: 401
+      
   responses:
     '401':
           description: Authorization Required
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/httpResponseError'
+                $ref: '#/components/schemas/httpResponseMessage'
     '403':
       description: Forbidden
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/httpResponseError'
+            $ref: '#/components/schemas/httpResponseMessage'
     '404':
       description: Not Found
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/httpResponseError'
+            $ref: '#/components/schemas/httpResponseMessage'
     '405':
       description: Invalid method
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/httpResponseError'
+            $ref: '#/components/schemas/httpResponseMessage'
     '406':
       description: Improper Protocol
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/httpResponseError'
+            $ref: '#/components/schemas/httpResponseMessage'
     '409':
       description: Resource Already Exists
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/httpResponseError'
+            $ref: '#/components/schemas/httpResponseMessage'
     '415':
       description: Improper media type
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/httpResponseError'
+            $ref: '#/components/schemas/httpResponseMessage'
     '429':
       description: too many requests
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/httpResponseError'
+            $ref: '#/components/schemas/httpResponseMessage'
     default:
       description: Unexpected error
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/httpResponseError'
+            $ref: '#/components/schemas/httpResponseMessage'
   # securitySchemes:
   #   tenant_auth:
   #     type: oauth2

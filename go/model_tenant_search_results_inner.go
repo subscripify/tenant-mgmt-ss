@@ -14,6 +14,32 @@ type TenantSearchResultsInner struct {
 	TenantUUID string `json:"tenantUUID,omitempty"`
 	// The name of the organization at time of tenant creation and the alias used for searching by org name.
 	TenantAlias string `json:"tenantAlias,omitempty"`
+	// the subdomain of the tenant
+	TenantSubdomain string `json:"tenantSubdomain,omitempty"`
+	// the secondary domain of the tenant - does not include the top level domain
+	TenantSecDomain string `json:"tenantSecDomain,omitempty"`
+	// the top level domain of the tenant
+	TenantTld string `json:"tenantTld,omitempty"`
+	// the lord config alias of the tenant - non lord tenants will be blank
+	LordConfigAlias string `json:"lordConfigAlias,omitempty"`
+	// the lord config UUID of the tenant - non lord tenants will be blank
+	LordConfigUUID string `json:"lordConfigUUID,omitempty"`
+	// the super config alias of the tenant - non super tenants will be blank
+	SuperConfigAlias string `json:"superConfigAlias,omitempty"`
+	// the super config UUID of the tenant - non super tenants will be blank
+	SuperConfigUUID string `json:"superConfigUUID,omitempty"`
+	// the public config alias of the tenant
+	PublicConfigAlias string `json:"publicConfigAlias,omitempty"`
+	// the public config UUID of the tenant
+	PublicConfigUUID string `json:"publicConfigUUID,omitempty"`
+	// the private access config (if applicable) alias of the tenant
+	PrivateAccessAlias string `json:"privateAccessAlias,omitempty"`
+	// the private access config (if applicable) UUID of the tenant
+	PrivateAccessUUID string `json:"privateAccessUUID,omitempty"`
+	// the custom access config (if applicable) alias of the tenant
+	CustomAccessAlias string `json:"customAccessAlias,omitempty"`
+	// the custom access config (if applicable) UUID of the tenant
+	CustomAccessUUID string `json:"customAccessUUID,omitempty"`
 	// Indicate which type of tenant. Lord tenants will see both \"super\" and \"main\" tenant types. Super tenants will only see \"main\" tenant types.
 	TenantType string `json:"tenantType,omitempty"`
 }

@@ -21,6 +21,8 @@ type iTenantSearch interface {
 	GetTenantAliasQueryLikeString() string
 	mapSubdomain(pipedString string) error
 	GetSubdomainQueryLikeString() string
+	mapDomain(pipedString string) error
+	GetDomainQueryLikeString() string
 	mapLordConfigAlias(pipedString string) error
 	GetLordConfigAliasQueryLikeString() string
 	mapLordConfigUUID(pipedString string) error
@@ -48,6 +50,7 @@ type tenantSearch struct {
 	tenantUUID         []uuid.UUID
 	tenantAlias        []string
 	subdomain          []string
+	domain             []string
 	lordConfigAlias    []string
 	lordConfigUUID     []uuid.UUID
 	superConfigAlias   []string
@@ -279,6 +282,52 @@ func (ts *tenantSearch) GetSubdomainQueryLikeString() string {
 			} else {
 				inString = inString + `OR subdomain LIKE '%` + s + `%' `
 			}
+		}
+		inString = inString + `)`
+	}
+	return inString
+}
+
+func (ts *tenantSearch) mapDomain(pipedString string) error {
+	splitString := strings.Split(pipedString, "|")
+
+	for i := 0; i < len(splitString); i++ {
+		ts.domain = append(ts.domain, splitString[i])
+	}
+
+	return nil
+}
+
+func (ts *tenantSearch) GetDomainQueryLikeString() string {
+	inString := ""
+	topDmn := ""
+	secDmn := ""
+	log.Println(ts.domain)
+	if ts.domain != nil {
+		for i, s := range ts.domain {
+			secTopSplit := strings.Split(s, ".")
+			log.Println(secTopSplit)
+			if len(secTopSplit) < 2 {
+				topDmn = ""
+				secDmn = secTopSplit[0]
+			} else {
+				topDmn = secTopSplit[len(secTopSplit)-1]
+				secDmn = strings.Join(secTopSplit[0:(len(secTopSplit)-1)], ".")
+			}
+			if topDmn == "" {
+				if i == 0 {
+					inString = inString + `(secondary_domain LIKE '%` + secDmn + `%' `
+				} else {
+					inString = inString + `OR secondary_domain LIKE '%` + secDmn + `%' `
+				}
+			} else {
+				if i == 0 {
+					inString = inString + `((secondary_domain LIKE '%` + secDmn + `%' AND top_level_domain LIKE '%` + topDmn + `%') `
+				} else {
+					inString = inString + `OR (secondary_domain LIKE '%` + secDmn + `%' AND top_level_domain LIKE '%` + topDmn + `%') `
+				}
+			}
+
 		}
 		inString = inString + `)`
 	}
@@ -575,6 +624,7 @@ func createTenantSearchObject(
 	tenantUUIDs string,
 	tenantAliases string,
 	subdomains string,
+	domains string,
 	lordConfigUUIDs string,
 	lordConfigAliases string,
 	superConfigUUIDs string,
@@ -608,6 +658,12 @@ func createTenantSearchObject(
 	}
 	if subdomains != "" {
 		err := tso.mapSubdomain(subdomains)
+		if err != nil {
+			return nil, 400, err
+		}
+	}
+	if domains != "" {
+		err := tso.mapDomain(domains)
 		if err != nil {
 			return nil, 400, err
 		}

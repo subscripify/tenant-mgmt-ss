@@ -256,23 +256,7 @@ func SearchTenant(w http.ResponseWriter, r *http.Request) {
 	var hr HttpResponseError
 	var jsonResp []byte
 
-	resp := tenant.ListTenants(
-		1,
-		99999999999,
-		"",
-		"",
-		"cloud",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"").GetHttpResponse()
+	resp := tenant.ListTenants(1, 99999999999, "", "", "", "", "butterfly.lively.com", "", "", "", "", "", "", "", "", "", "").GetHttpResponse()
 	hr.ResponseCode = int32(resp.HttpResponseCode)
 	if hr.ResponseCode == 200 {
 		jsonResp, _ = json.Marshal(&resp.SearchResults)

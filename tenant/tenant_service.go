@@ -354,6 +354,7 @@ func ListTenants(
 	pipedTenantUUIDs string,
 	pipedTenantAliases string,
 	pipedSubdomains string,
+	pipedDomains string,
 	pipedLordConfigUUIDs string,
 	pipedLordConfigAliases string,
 	pipedSuperConfigUUIDs string,
@@ -367,7 +368,7 @@ func ListTenants(
 	var resp httpResponseData
 
 	so, responseCode, err := createTenantSearchObject(pipedTenantType, pipedTenantUUIDs, pipedTenantAliases,
-		pipedSubdomains, pipedLordConfigUUIDs, pipedLordConfigAliases, pipedSuperConfigUUIDs, pipedSuperConfigAliases,
+		pipedSubdomains, pipedDomains, pipedLordConfigUUIDs, pipedLordConfigAliases, pipedSuperConfigUUIDs, pipedSuperConfigAliases,
 		pipedPublicConfigUUIDs, pipedPublicConfigAliases, pipedPrivateAccessUUIDs, pipedPrivateAccessAliases,
 		pipedCustomAccessUUIDs, pipedCustomAccessAliases)
 
