@@ -3,8 +3,6 @@ package tenant
 import (
 	"context"
 	"fmt"
-	"log"
-	"reflect"
 	"strings"
 	"time"
 
@@ -195,7 +193,6 @@ func NewTenant(
 			nst.getTenantCreator(),
 			nst.getLiegeUUID()))
 
-		//if the response is not a 200 then an insert error ocurred
 		if err != nil {
 			resp.generateHttpResponseCodeAndMessage(rc, err.Error())
 			return &resp
@@ -351,6 +348,9 @@ func UpdateTenant(
 }
 
 func ListTenants(
+	startRow int,
+	rowCount int,
+	pipedTenantType string,
 	pipedTenantUUIDs string,
 	pipedTenantAliases string,
 	pipedSubdomains string,
@@ -366,7 +366,7 @@ func ListTenants(
 	pipedCustomAccessAliases string) iHttpResponse {
 	var resp httpResponseData
 
-	so, responseCode, err := createTenantSearchObject(pipedTenantUUIDs, pipedTenantAliases,
+	so, responseCode, err := createTenantSearchObject(pipedTenantType, pipedTenantUUIDs, pipedTenantAliases,
 		pipedSubdomains, pipedLordConfigUUIDs, pipedLordConfigAliases, pipedSuperConfigUUIDs, pipedSuperConfigAliases,
 		pipedPublicConfigUUIDs, pipedPublicConfigAliases, pipedPrivateAccessUUIDs, pipedPrivateAccessAliases,
 		pipedCustomAccessUUIDs, pipedCustomAccessAliases)
@@ -375,35 +375,15 @@ func ListTenants(
 		resp.generateHttpResponseCodeAndMessage(responseCode, err.Error())
 		return &resp
 	}
-	selectString := `SELECT tenant_UUID, tenant_alias, is_lord_tenant, is_super_tenant FROM tenant_search WHERE `
 
-	isFirst := true
-
-	t := reflect.TypeOf(&so).Elem()
-	v := reflect.ValueOf(&so).Elem()
-
-	for i := 0; i < t.NumMethod(); i++ {
-
-		method := t.Method(i)
-		if strings.HasPrefix(method.Name, "Get") {
-			log.Println(method.Name)
-			whereVal := v.MethodByName(method.Name).Call(nil)
-
-			// whereVal := reflect.ValueOf(&so).MethodByName(method.Name).Call([]reflect.Value{})
-
-			whereString := whereVal[0].String()
-			if whereString != "" {
-				if !isFirst {
-					selectString = selectString + ` AND `
-				}
-				selectString = selectString + string(whereString)
-				isFirst = false
-			}
-		}
-
+	sr, responseCode, err := so.buildTenantSearchResults(startRow, rowCount)
+	if err != nil {
+		resp.generateHttpResponseCodeAndMessage(responseCode, err.Error())
+		return &resp
 	}
-	log.Println(selectString)
-	resp.generateHttpResponseCodeAndMessage(200, "i think this works")
+
+	resp.generateHttpResponseCodeAndMessage(200, "successful")
+	resp.generateTenantSearchList(sr, GET)
 
 	return &resp
 }

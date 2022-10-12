@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 
+	tenantdbserv "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/tenantdb"
 	"github.com/google/uuid"
 	"github.com/goombaio/namegenerator"
 )
@@ -81,4 +82,54 @@ func TestDataCreate() {
 			}
 		}
 	}
+}
+
+func TestDataDelete() {
+
+	tdb := tenantdbserv.Tdb.Handle
+	delstr := `DELETE FROM tenant WHERE is_lord_tenant IS NULL AND is_super_tenant IS FALSE AND tenant_alias LIKE '%-ta'`
+	_, err := tdb.Exec(delstr)
+	if err != nil {
+		log.Printf("test cleanup failed main tenant delete on main tenant delete %s", err)
+		return
+	}
+	delstr = `DELETE FROM tenant WHERE is_lord_tenant IS NULL AND is_super_tenant IS TRUE AND tenant_alias LIKE '%-ta'`
+	_, err = tdb.Exec(delstr)
+	if err != nil {
+		log.Printf("test cleanup failed super tenant delete on main tenant delete %s", err)
+		return
+	}
+	delstr = `DELETE FROM tenant WHERE is_lord_tenant IS TRUE AND is_super_tenant IS FALSE AND tenant_alias LIKE '%-ta'`
+	_, err = tdb.Exec(delstr)
+	if err != nil {
+		log.Printf("test cleanup failed lord tenant delete on main tenant delete %s", err)
+		return
+	}
+	log.Printf("test data deleted - run tenantmgr test-data-purge to remove completely")
+
+}
+
+func TestDataPurge() {
+
+	tdb := tenantdbserv.Tdb.Handle
+	delstr := `DELETE FROM tenant_deleted WHERE is_lord_tenant IS NULL AND is_super_tenant IS FALSE AND tenant_alias LIKE '%-ta'`
+	_, err := tdb.Exec(delstr)
+	if err != nil {
+		log.Printf("test cleanup failed main tenant purge on main tenant delete %s", err)
+		return
+	}
+	delstr = `DELETE FROM tenant_deleted WHERE is_lord_tenant IS NULL AND is_super_tenant IS TRUE AND tenant_alias LIKE '%-ta'`
+	_, err = tdb.Exec(delstr)
+	if err != nil {
+		log.Printf("test cleanup failed super tenant purge on main tenant delete %s", err)
+		return
+	}
+	delstr = `DELETE FROM tenant_deleted WHERE is_lord_tenant IS TRUE AND is_super_tenant IS FALSE AND tenant_alias LIKE '%-ta'`
+	_, err = tdb.Exec(delstr)
+	if err != nil {
+		log.Printf("test cleanup failed lord tenant purge on main tenant delete %s", err)
+		return
+	}
+	log.Printf("test data purged")
+
 }

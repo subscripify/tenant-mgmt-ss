@@ -5,6 +5,7 @@ import (
 	"crypto/x509"
 	"database/sql"
 	"io/ioutil"
+	"log"
 	"os"
 
 	subscripifylogger "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/subscripify-logger"
@@ -37,7 +38,7 @@ func getNewMySQLTenantDbHandle() *sql.DB {
 	}
 	env := os.Getenv("SUBSCRIPIFY_DB_ENV")
 	var cfgdb mysql.Config
-	if !(env == "localdb") {
+	if env == "proddb" {
 
 		mysql.RegisterTLSConfig("custom", &tls.Config{RootCAs: rootCertPool})
 
@@ -51,7 +52,7 @@ func getNewMySQLTenantDbHandle() *sql.DB {
 			TLSConfig:            "custom",
 			ParseTime:            true,
 		}
-	} else {
+	} else if env == "localdb" {
 
 		cfgdb = mysql.Config{
 			User:   "root",
@@ -63,6 +64,8 @@ func getNewMySQLTenantDbHandle() *sql.DB {
 			AllowNativePasswords: true,
 			ParseTime:            true,
 		}
+	} else {
+		log.Fatal("SUBSCRIPIFY_DB_ENV is not set or invalid")
 	}
 	// Get a database handle.
 	var err error
@@ -76,10 +79,10 @@ func getNewMySQLTenantDbHandle() *sql.DB {
 	if pingErr != nil {
 		subscripifylogger.FatalLog.Fatal(pingErr)
 	}
-	if !(env == "localdb") {
-		subscripifylogger.InfoLog.Printf("connected to tenants db on server:%s", "localhost")
-	} else {
+	if env == "proddb" {
 		subscripifylogger.InfoLog.Printf("connected to tenants db on server:%s", os.Getenv("DBHOST"))
+	} else {
+		subscripifylogger.InfoLog.Printf("connected to tenants db on server:%s", "localhost")
 	}
 
 	return tenantsDbHandle

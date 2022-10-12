@@ -44,6 +44,7 @@ type httpResponseData struct {
 	Message          string
 	NewTenant        newTenantResponse
 	FullTenant       fullTenantResponse
+	SearchResults    *tenantListResponseOuter
 }
 
 type RestAction string
@@ -87,7 +88,7 @@ func (hr *httpResponseData) generateHttpResponseCodeAndMessage(responseCode int,
 
 }
 
-// this function generates a new tenant response and assigns it to a
+// this function is used to  a new tenant response - just the tenant uuid is returned
 func (tr *httpResponseData) generateNewTenantResponse(nID uuid.UUID) {
 
 	tr.NewTenant.TenantUUID = nID.String()
@@ -98,6 +99,7 @@ func (tr *httpResponseData) generateNewTenantResponse(nID uuid.UUID) {
 
 }
 
+// list function is used to generate a response for full tenant data
 func (tr *httpResponseData) generateLoadedTenantResponse(l *loadedTenant, expectedAction RestAction) {
 	if l.isLordTenant() {
 		tr.FullTenant.TenantType = string(LordTenant)
@@ -128,5 +130,15 @@ func (tr *httpResponseData) generateLoadedTenantResponse(l *loadedTenant, expect
 		"tenant service sent a full tenant object for a  %s action :%s ",
 		expectedAction,
 		l.getTenantUUID().String())
+
+}
+
+func (tr *httpResponseData) generateTenantSearchList(l *tenantListResponseOuter, expectedAction RestAction) {
+
+	tr.SearchResults = l
+
+	subscripifylogger.DebugLog.Printf(
+		"tenant service sent a list of tenant search results on a : %s action",
+		expectedAction)
 
 }

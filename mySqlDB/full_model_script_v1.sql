@@ -159,13 +159,15 @@ DROP TABLE IF EXISTS `tenants`.`tenant_search`;
 USE `tenants`;
 CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`SfEuj2w4nrHeHoD6`@`%` SQL SECURITY DEFINER VIEW `tenants`.`tenant_search` AS 
 SELECT 
-  tenant.tenant_uuid as tenant_uuid, 
-  tenant.tenant_alias,
-  tenant.subdomain,
-  CASE
-  WHEN tenant.is_lord_tenant IS TRUE AND tenant.is_super_tenant IS FALSE THEN 'lord'
-  WHEN tenant.is_lord_tenant IS NULL AND tenant.is_super_tenant IS TRUE THEN 'super'
-  WHEN tenant.is_lord_tenant IS NULL AND tenant.is_super_tenant IS FALSE THEN 'main'
+  tenant.tenant_uuid AS tenant_uuid, 
+  tenant.tenant_alias AS tenant_alias,
+  tenant.subdomain AS subdomain,
+  tenant.secondary_domain AS secondary_domain,
+  tenant.top_level_domain AS top_level_domain,
+  CASE 
+  WHEN tenant.is_lord_tenant IS TRUE AND tenant.is_super_tenant IS FALSE THEN cast('lord' as char) 
+  WHEN tenant.is_lord_tenant IS NULL AND tenant.is_super_tenant IS TRUE THEN cast('super' as char) 
+  WHEN tenant.is_lord_tenant IS NULL AND tenant.is_super_tenant IS FALSE THEN cast('main' as char) 
   ELSE 'error'
   END AS tenant_type,
   lord.config_alias AS lord_config_alias, 
