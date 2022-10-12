@@ -303,6 +303,20 @@ components:
         pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
         type: string
         description: 'This is the UUID of the target tenant. The target tenant must belong to the liege tenant in the liegeUUID header.'
+    recordStart:
+      name: ls 
+      in: query
+      required: false
+      schema:
+        type: integer
+        description: the starting record from a requested list of tenants - if you want your resposne to start with the 100th row, set this paramter to 100 - if left out api assumes first record as start
+    recordCount:
+      name: lc 
+      in: query
+      required: false
+      schema:
+        type: integer
+        description: the number of rows to return from and including the starting record from the record start paramter
     searchTypeQuery:
       name: type 
       in: query
