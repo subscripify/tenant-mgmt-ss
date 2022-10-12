@@ -245,6 +245,8 @@ paths:
       operationId: searchTenant
       parameters:
         - $ref: '#/components/parameters/liegeUUIDHeader'
+        - $ref: '#/components/parameters/recordStart'
+        - $ref: '#/components/parameters/recordCount'
         - $ref: '#/components/parameters/searchTypeQuery'
         - $ref: '#/components/parameters/searchTenantUUIDQuery'
         - $ref: '#/components/parameters/searchTenantAliasQuery'
@@ -309,14 +311,14 @@ components:
       required: false
       schema:
         type: integer
-        description: the starting record from a requested list of tenants - if you want your resposne to start with the 100th row, set this paramter to 100 - if left out api assumes first record as start
+      description: the starting record from a requested list of tenants - if you want your resposne to start with the 100th row, set this paramter to 100 - if left out api assumes first record as start
     recordCount:
       name: lc 
       in: query
       required: false
       schema:
         type: integer
-        description: the number of rows to return from and including the starting record from the record start paramter
+      description: the number of rows to return from and including the starting record from the record start paramter
     searchTypeQuery:
       name: type 
       in: query
