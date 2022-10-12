@@ -58,7 +58,7 @@ var routes = Routes{
 	Route{
 		"AddLordTenant",
 		strings.ToUpper("Post"),
-		"/tenants/lord-tenants",
+		"/lord-tenants",
 		AddLordTenant,
 	},
 

@@ -245,6 +245,15 @@ paths:
       operationId: searchTenant
       parameters:
         - $ref: '#/components/parameters/liegeUUIDHeader'
+        - $ref: '#/components/parameters/searchTypeQuery'
+        - $ref: '#/components/parameters/searchTenantUUIDQuery'
+        - $ref: '#/components/parameters/searchTenantAliasQuery'
+        - $ref: '#/components/parameters/searchSubdomainQuery'
+        - $ref: '#/components/parameters/searchDomainQuery'
+        - $ref: '#/components/parameters/searchConfigAliasQuery'
+        - $ref: '#/components/parameters/searchConfigQuery'
+        - $ref: '#/components/parameters/searchAccessAliasQuery'
+        - $ref: '#/components/parameters/searchAccessQuery'
       responses: 
         '200':
           description: Successful operation returns full tenant data including generated
@@ -332,6 +341,7 @@ components:
           description: 'A partial or whole tenant alias.'
         minItems: 1
       style: pipeDelimited
+
     searchSubdomainQuery:
       name: subdmn
       in: query

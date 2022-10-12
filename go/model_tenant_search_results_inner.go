@@ -20,6 +20,8 @@ type TenantSearchResultsInner struct {
 	TenantSecDomain string `json:"tenantSecDomain,omitempty"`
 	// the top level domain of the tenant
 	TenantTld string `json:"tenantTld,omitempty"`
+	// Indicate which type of tenant. Lord tenants will see both \"super\" and \"main\" tenant types. Super tenants will only see \"main\" tenant types.
+	TenantType string `json:"tenantType,omitempty"`
 	// the lord config alias of the tenant - non lord tenants will be blank
 	LordConfigAlias string `json:"lordConfigAlias,omitempty"`
 	// the lord config UUID of the tenant - non lord tenants will be blank
@@ -40,6 +42,4 @@ type TenantSearchResultsInner struct {
 	CustomAccessAlias string `json:"customAccessAlias,omitempty"`
 	// the custom access config (if applicable) UUID of the tenant
 	CustomAccessUUID string `json:"customAccessUUID,omitempty"`
-	// Indicate which type of tenant. Lord tenants will see both \"super\" and \"main\" tenant types. Super tenants will only see \"main\" tenant types.
-	TenantType string `json:"tenantType,omitempty"`
 }
