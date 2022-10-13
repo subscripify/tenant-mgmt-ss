@@ -9,7 +9,7 @@
  */
 package tenantapi
 
-type TenantSearchResultsInner struct {
+type TenantSearchResultsData struct {
 
 	TenantUUID string `json:"tenantUUID,omitempty"`
 	// The name of the organization at time of tenant creation and the alias used for searching by org name.

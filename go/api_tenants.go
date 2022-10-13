@@ -12,6 +12,7 @@ package tenantapi
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	tenant "dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss/tenant"
 	"github.com/google/uuid"
@@ -255,8 +256,28 @@ func SearchTenant(w http.ResponseWriter, r *http.Request) {
 
 	var hr HttpResponseError
 	var jsonResp []byte
+	pageNum, err := strconv.Atoi(r.URL.Query().Get("pg"))
+	if err != nil {
+		pageNum = 1
+	}
 
-	resp := tenant.ListTenants(1, 99999999999, "", "", "", "", "butterfly.lively.com", "", "", "", "", "", "", "", "", "", "").GetHttpResponse()
+	perPage, err := strconv.Atoi(r.URL.Query().Get("lc"))
+	if err != nil {
+		perPage = 10
+	}
+	resp := tenant.ListTenants(
+		pageNum,                     // the page number
+		perPage,                     // the line count per page
+		r.URL.Query().Get("type"),   // tenant type filter
+		r.URL.Query().Get("tid"),    // tenant uuid filter
+		r.URL.Query().Get("tal"),    // tenant alias filter
+		r.URL.Query().Get("subdmn"), //subdomain filter
+		r.URL.Query().Get("dmn"),    // domain filter
+		r.URL.Query().Get("cid"),    // config Uuid filter
+		r.URL.Query().Get("cal"),    // config alias filter
+		r.URL.Query().Get("aid"),    // access uuid filter
+		r.URL.Query().Get("aal"),    // access alias filter
+	).GetHttpResponse()
 	hr.ResponseCode = int32(resp.HttpResponseCode)
 	if hr.ResponseCode == 200 {
 		jsonResp, _ = json.Marshal(&resp.SearchResults)

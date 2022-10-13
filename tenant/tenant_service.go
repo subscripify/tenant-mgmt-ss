@@ -348,36 +348,28 @@ func UpdateTenant(
 }
 
 func ListTenants(
-	startRow int,
-	rowCount int,
+	page int,
+	perPage int,
 	pipedTenantType string,
 	pipedTenantUUIDs string,
 	pipedTenantAliases string,
 	pipedSubdomains string,
 	pipedDomains string,
-	pipedLordConfigUUIDs string,
-	pipedLordConfigAliases string,
-	pipedSuperConfigUUIDs string,
-	pipedSuperConfigAliases string,
-	pipedPublicConfigUUIDs string,
-	pipedPublicConfigAliases string,
-	pipedPrivateAccessUUIDs string,
-	pipedPrivateAccessAliases string,
-	pipedCustomAccessUUIDs string,
-	pipedCustomAccessAliases string) iHttpResponse {
+	pipedConfigUUIDs string,
+	pipedConfigAliases string,
+	pipedAccessUUIDs string,
+	pipedAccessAliases string) iHttpResponse {
 	var resp httpResponseData
 
 	so, responseCode, err := createTenantSearchObject(pipedTenantType, pipedTenantUUIDs, pipedTenantAliases,
-		pipedSubdomains, pipedDomains, pipedLordConfigUUIDs, pipedLordConfigAliases, pipedSuperConfigUUIDs, pipedSuperConfigAliases,
-		pipedPublicConfigUUIDs, pipedPublicConfigAliases, pipedPrivateAccessUUIDs, pipedPrivateAccessAliases,
-		pipedCustomAccessUUIDs, pipedCustomAccessAliases)
+		pipedSubdomains, pipedDomains, pipedConfigUUIDs, pipedConfigAliases, pipedAccessUUIDs, pipedAccessAliases)
 
 	if err != nil {
 		resp.generateHttpResponseCodeAndMessage(responseCode, err.Error())
 		return &resp
 	}
 
-	sr, responseCode, err := so.buildTenantSearchResults(startRow, rowCount)
+	sr, responseCode, err := so.buildTenantSearchResults(page, perPage)
 	if err != nil {
 		resp.generateHttpResponseCodeAndMessage(responseCode, err.Error())
 		return &resp

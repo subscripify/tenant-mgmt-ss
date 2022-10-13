@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"math"
 	"reflect"
 	"regexp"
 	"strings"
@@ -15,33 +16,33 @@ import (
 
 type iTenantSearch interface {
 	buildTenantSearchResults(rowStart int, returnCount int) (*tenantListResponseOuter, int, error)
-	mapTenantUUID(pipedString string) error
+	mapTenantUUID() error
 	GetTenantUUIDQueryInString() string
-	mapTenantAlias(pipedString string) error
+	mapTenantAlias() error
 	GetTenantAliasQueryLikeString() string
-	mapSubdomain(pipedString string) error
+	mapSubdomain() error
 	GetSubdomainQueryLikeString() string
-	mapDomain(pipedString string) error
+	mapDomain() error
 	GetDomainQueryLikeString() string
-	mapLordConfigAlias(pipedString string) error
+	mapLordConfigAlias() error
 	GetLordConfigAliasQueryLikeString() string
-	mapLordConfigUUID(pipedString string) error
+	mapLordConfigUUID() error
 	GetLordConfigUUIDQueryInString() string
-	mapSuperConfigAlias(pipedString string) error
+	mapSuperConfigAlias() error
 	GetSuperConfigAliasQueryLikeString() string
-	mapSuperConfigUUID(pipedString string) error
+	mapSuperConfigUUID() error
 	GetSuperConfigUUIDQueryInString() string
-	mapPublicConfigAlias(pipedString string) error
+	mapPublicConfigAlias() error
 	GetPublicConfigAliasQueryLikeString() string
-	mapPublicConfigUUID(pipedString string) error
+	mapPublicConfigUUID() error
 	GetPublicConfigUUIDQueryInString() string
-	mapPrivateAccessAlias(pipedString string) error
+	mapPrivateAccessAlias() error
 	GetPrivateAccessAliasQueryLikeString() string
-	mapPrivateAccessUUID(pipedString string) error
+	mapPrivateAccessUUID() error
 	GetPrivateAccessUUIDQueryInString() string
-	mapCustomAccessAlias(pipedString string) error
+	mapCustomAccessAlias() error
 	GetCustomAccessAliasQueryLikeString() string
-	mapCustomAccessUUID(pipedString string) error
+	mapCustomAccessUUID() error
 	GetCustomAccessUUIDQueryInString() string
 }
 
@@ -61,34 +62,59 @@ type tenantSearch struct {
 	privateAccessUUID  []uuid.UUID
 	customAccessAlias  []string
 	customAccessUUID   []uuid.UUID
+	qsType             string
+	qsTid              string
+	qsTal              string
+	qsSubdmn           string
+	qsDmn              string
+	qsCal              string
+	qsCid              string
+	qsAal              string
+	qsAid              string
 }
 
 type tenantListResponseOuter struct {
-	Results []tenantListResponseInner
+	Data   []tenantListResponseInner
+	Paging *tenantSearchResultsPaging
+}
+
+type tenantSearchResultsPaging struct {
+	PageCount int
+	Previous  string
+	Next      string
 }
 
 type tenantListResponseInner struct {
-	TenantUUID               string
-	TenantAlias              string
-	TopLevelDomain           string
-	SecondaryDomain          string
-	Subdomain                string
-	TenantType               string
-	LordConfigAlias          string
-	LordServicesConfigUUID   string
-	SuperConfigAlias         string
-	SuperServicesConfigUUID  string
-	PublicConfigAlias        string
-	PublicServicesConfigUUID string
-	PrivateAccessConfigAlias string
-	PrivateAccessConfigUUID  string
-	CustomAccessConfigAlias  string
-	CustomAccessConfigUUID   string
+	TenantUUID         string
+	TenantAlias        string
+	TenantSubdomain    string
+	TenantSecDomain    string
+	TenantTld          string
+	TenantType         string
+	LordConfigAlias    string
+	LordConfigUUID     string
+	SuperConfigAlias   string
+	SuperConfigUUID    string
+	PublicConfigAlias  string
+	PublicConfigUUID   string
+	PrivateAccessAlias string
+	PrivateAccessUUID  string
+	CustomAccessAlias  string
+	CustomAccessUUID   string
 }
 
-func (ts *tenantSearch) buildTenantSearchResults(rowStart int, returnCount int) (*tenantListResponseOuter, int, error) {
+func (ts *tenantSearch) buildTenantSearchResults(page int, perPage int) (*tenantListResponseOuter, int, error) {
 
-	selectString := `SELECT BIN_TO_UUID(tenant_UUID) AS tenant_UUID, 
+	if page < 1 {
+		return nil, 400, fmt.Errorf("page must be an integer greater than 1")
+	}
+	if perPage < 0 {
+		return nil, 400, fmt.Errorf("per page must be an integer greater than 0")
+	}
+
+	selectString := `SELECT 
+	COUNT(tenant_uuid) OVER() as total_count,
+	BIN_TO_UUID(tenant_UUID) AS tenant_UUID, 
 	tenant_alias, 
 	subdomain,
 	secondary_domain,
@@ -130,7 +156,7 @@ func (ts *tenantSearch) buildTenantSearchResults(rowStart int, returnCount int) 
 		}
 
 	}
-	selectString = selectString + ` ORDER BY tenant_alias LIMIT ` + fmt.Sprint(rowStart) + `,` + fmt.Sprint(returnCount)
+	selectString = selectString + ` ORDER BY tenant_alias LIMIT ` + fmt.Sprint(page*perPage) + `,` + fmt.Sprint(perPage)
 	log.Println(selectString)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -140,37 +166,112 @@ func (ts *tenantSearch) buildTenantSearchResults(rowStart int, returnCount int) 
 	if err != nil {
 		return nil, 500, fmt.Errorf("invalid query: %s", err)
 	}
-
+	var itemCount int32
 	var sr tenantListResponseOuter
 	for rows.Next() {
 		var r tenantListResponseInner
 		err = rows.Scan(
+			itemCount,
 			&r.TenantUUID,
 			&r.TenantAlias,
-			&r.Subdomain,
-			&r.SecondaryDomain,
-			&r.TopLevelDomain,
+			&r.TenantSubdomain,
+			&r.TenantSecDomain,
+			&r.TenantTld,
 			&r.TenantType,
 			&r.LordConfigAlias,
-			&r.LordServicesConfigUUID,
+			&r.LordConfigUUID,
 			&r.SuperConfigAlias,
-			&r.SuperServicesConfigUUID,
+			&r.SuperConfigUUID,
 			&r.PublicConfigAlias,
-			&r.PublicServicesConfigUUID,
-			&r.PrivateAccessConfigAlias,
-			&r.PrivateAccessConfigUUID,
-			&r.CustomAccessConfigAlias,
-			&r.CustomAccessConfigUUID)
+			&r.PublicConfigUUID,
+			&r.PrivateAccessAlias,
+			&r.PrivateAccessUUID,
+			&r.CustomAccessAlias,
+			&r.CustomAccessUUID)
 		if err != nil {
 			return nil, 500, fmt.Errorf("invalid scan: %s", err)
 		}
-		sr.Results = append(sr.Results, r)
+		sr.Data = append(sr.Data, r)
 	}
+	sr.Paging = ts.buildPagination(int(itemCount), page, perPage)
 	return &sr, 200, nil
 }
 
-func (ts *tenantSearch) mapTenantType(pipedString string) error {
-	splitString := strings.Split(pipedString, "|")
+func (ts *tenantSearch) buildPagination(rowCount int, page int, perPage int) *tenantSearchResultsPaging {
+	var paginationObject tenantSearchResultsPaging
+
+	if perPage > 0 {
+		paginationObject.PageCount = int(math.Ceil(float64(rowCount / perPage)))
+	} else {
+		paginationObject.PageCount = 1
+	}
+	var nextPage int
+	var lastPage bool
+	if page >= paginationObject.PageCount {
+		nextPage = paginationObject.PageCount
+		lastPage = true
+	} else {
+		nextPage = page + 1
+	}
+	var prevPage int
+	var firstPage bool
+	if page <= 1 {
+		prevPage = 1
+		firstPage = true
+	} else {
+		prevPage = page - 1
+	}
+
+	var queryString string
+	if ts.qsType != "" {
+		queryString = `&type=` + ts.qsType
+	}
+	if ts.qsTid != "" {
+		queryString = `&tid=` + ts.qsTid
+	}
+	if ts.qsTal != "" {
+		queryString = `&tal=` + ts.qsTal
+	}
+	if ts.qsSubdmn != "" {
+		queryString = `&subdmn=` + ts.qsSubdmn
+	}
+	if ts.qsDmn != "" {
+		queryString = `&dmn=` + ts.qsDmn
+	}
+	if ts.qsCal != "" {
+		queryString = `&cal=` + ts.qsCal
+	}
+	if ts.qsCid != "" {
+		queryString = `&cid=` + ts.qsCid
+	}
+	if ts.qsAal != "" {
+		queryString = `&aal=` + ts.qsAal
+	}
+	if ts.qsAid != "" {
+		queryString = `&aid=` + ts.qsAid
+	}
+
+	nextPageQueryString := ""
+	prevPageQueryString := ""
+	if !lastPage {
+		nextPageQueryString = `?pg=` + fmt.Sprint(nextPage)
+		nextPageQueryString = nextPageQueryString + `&lc=` + fmt.Sprint(perPage)
+		nextPageQueryString = nextPageQueryString + queryString
+	}
+	if !firstPage {
+		prevPageQueryString = `?pg=` + fmt.Sprint(prevPage)
+		prevPageQueryString = prevPageQueryString + `&lc=` + fmt.Sprint(perPage)
+		prevPageQueryString = nextPageQueryString + queryString
+	}
+
+	paginationObject.Next = nextPageQueryString
+	paginationObject.Previous = prevPageQueryString
+
+	return &paginationObject
+}
+
+func (ts *tenantSearch) mapTenantType() error {
+	splitString := strings.Split(ts.qsType, "|")
 	log.Println(splitString[0])
 
 	pattern := `^(lord|super|main)$`
@@ -205,8 +306,8 @@ func (ts *tenantSearch) GetTenantTypeQueryLikeString() string {
 	return inString
 }
 
-func (ts *tenantSearch) mapTenantUUID(pipedString string) error {
-	splitString := strings.Split(pipedString, "|")
+func (ts *tenantSearch) mapTenantUUID() error {
+	splitString := strings.Split(ts.qsTid, "|")
 
 	for i := 0; i < len(splitString); i++ {
 		parsedUUID, err := uuid.Parse(splitString[i])
@@ -236,8 +337,8 @@ func (ts *tenantSearch) GetTenantUUIDQueryInString() string {
 	return inString
 }
 
-func (ts *tenantSearch) mapTenantAlias(pipedString string) error {
-	splitString := strings.Split(pipedString, "|")
+func (ts *tenantSearch) mapTenantAlias() error {
+	splitString := strings.Split(ts.qsTal, "|")
 
 	for i := 0; i < len(splitString); i++ {
 		ts.tenantAlias = append(ts.tenantAlias, splitString[i])
@@ -262,8 +363,8 @@ func (ts *tenantSearch) GetTenantAliasQueryLikeString() string {
 	return inString
 }
 
-func (ts *tenantSearch) mapSubdomain(pipedString string) error {
-	splitString := strings.Split(pipedString, "|")
+func (ts *tenantSearch) mapSubdomain() error {
+	splitString := strings.Split(ts.qsSubdmn, "|")
 
 	for i := 0; i < len(splitString); i++ {
 		ts.subdomain = append(ts.subdomain, splitString[i])
@@ -288,8 +389,8 @@ func (ts *tenantSearch) GetSubdomainQueryLikeString() string {
 	return inString
 }
 
-func (ts *tenantSearch) mapDomain(pipedString string) error {
-	splitString := strings.Split(pipedString, "|")
+func (ts *tenantSearch) mapDomain() error {
+	splitString := strings.Split(ts.qsDmn, "|")
 
 	for i := 0; i < len(splitString); i++ {
 		ts.domain = append(ts.domain, splitString[i])
@@ -334,8 +435,8 @@ func (ts *tenantSearch) GetDomainQueryLikeString() string {
 	return inString
 }
 
-func (ts *tenantSearch) mapLordConfigAlias(pipedString string) error {
-	splitString := strings.Split(pipedString, "|")
+func (ts *tenantSearch) mapLordConfigAlias() error {
+	splitString := strings.Split(ts.qsCal, "|")
 
 	for i := 0; i < len(splitString); i++ {
 		ts.lordConfigAlias = append(ts.lordConfigAlias, splitString[i])
@@ -360,8 +461,8 @@ func (ts *tenantSearch) GetLordConfigAliasQueryLikeString() string {
 	return inString
 }
 
-func (ts *tenantSearch) mapLordConfigUUID(pipedString string) error {
-	splitString := strings.Split(pipedString, "|")
+func (ts *tenantSearch) mapLordConfigUUID() error {
+	splitString := strings.Split(ts.qsCid, "|")
 
 	for i := 0; i < len(splitString); i++ {
 		parsedUUID, err := uuid.Parse(splitString[i])
@@ -391,8 +492,8 @@ func (ts *tenantSearch) GetLordConfigUUIDQueryInString() string {
 	return inString
 }
 
-func (ts *tenantSearch) mapSuperConfigAlias(pipedString string) error {
-	splitString := strings.Split(pipedString, "|")
+func (ts *tenantSearch) mapSuperConfigAlias() error {
+	splitString := strings.Split(ts.qsCal, "|")
 
 	for i := 0; i < len(splitString); i++ {
 		ts.superConfigAlias = append(ts.superConfigAlias, splitString[i])
@@ -417,8 +518,8 @@ func (ts *tenantSearch) GetSuperConfigAliasQueryLikeString() string {
 	return inString
 }
 
-func (ts *tenantSearch) mapSuperConfigUUID(pipedString string) error {
-	splitString := strings.Split(pipedString, "|")
+func (ts *tenantSearch) mapSuperConfigUUID() error {
+	splitString := strings.Split(ts.qsCid, "|")
 
 	for i := 0; i < len(splitString); i++ {
 		parsedUUID, err := uuid.Parse(splitString[i])
@@ -448,8 +549,8 @@ func (ts *tenantSearch) GetSuperConfigUUIDQueryInString() string {
 	return inString
 }
 
-func (ts *tenantSearch) mapPublicConfigAlias(pipedString string) error {
-	splitString := strings.Split(pipedString, "|")
+func (ts *tenantSearch) mapPublicConfigAlias() error {
+	splitString := strings.Split(ts.qsCal, "|")
 
 	for i := 0; i < len(splitString); i++ {
 		ts.publicConfigAlias = append(ts.publicConfigAlias, splitString[i])
@@ -474,8 +575,8 @@ func (ts *tenantSearch) GetPublicConfigAliasQueryLikeString() string {
 	return inString
 }
 
-func (ts *tenantSearch) mapPublicConfigUUID(pipedString string) error {
-	splitString := strings.Split(pipedString, "|")
+func (ts *tenantSearch) mapPublicConfigUUID() error {
+	splitString := strings.Split(ts.qsCid, "|")
 
 	for i := 0; i < len(splitString); i++ {
 		parsedUUID, err := uuid.Parse(splitString[i])
@@ -505,8 +606,8 @@ func (ts *tenantSearch) GetPublicConfigUUIDQueryInString() string {
 	return inString
 }
 
-func (ts *tenantSearch) mapPrivateAccessAlias(pipedString string) error {
-	splitString := strings.Split(pipedString, "|")
+func (ts *tenantSearch) mapPrivateAccessAlias() error {
+	splitString := strings.Split(ts.qsAal, "|")
 
 	for i := 0; i < len(splitString); i++ {
 		ts.privateAccessAlias = append(ts.privateAccessAlias, splitString[i])
@@ -531,8 +632,8 @@ func (ts *tenantSearch) GetPrivateAccessAliasQueryLikeString() string {
 	return inString
 }
 
-func (ts *tenantSearch) mapPrivateAccessUUID(pipedString string) error {
-	splitString := strings.Split(pipedString, "|")
+func (ts *tenantSearch) mapPrivateAccessUUID() error {
+	splitString := strings.Split(ts.qsAid, "|")
 
 	for i := 0; i < len(splitString); i++ {
 		parsedUUID, err := uuid.Parse(splitString[i])
@@ -562,8 +663,8 @@ func (ts *tenantSearch) GetPrivateAccessUUIDQueryInString() string {
 	return inString
 }
 
-func (ts *tenantSearch) mapCustomAccessAlias(pipedString string) error {
-	splitString := strings.Split(pipedString, "|")
+func (ts *tenantSearch) mapCustomAccessAlias() error {
+	splitString := strings.Split(ts.qsAal, "|")
 
 	for i := 0; i < len(splitString); i++ {
 		ts.customAccessAlias = append(ts.customAccessAlias, splitString[i])
@@ -588,8 +689,8 @@ func (ts *tenantSearch) GetCustomAccessAliasQueryLikeString() string {
 	return inString
 }
 
-func (ts *tenantSearch) mapCustomAccessUUID(pipedString string) error {
-	splitString := strings.Split(pipedString, "|")
+func (ts *tenantSearch) mapCustomAccessUUID() error {
+	splitString := strings.Split(ts.qsAid, "|")
 
 	for i := 0; i < len(splitString); i++ {
 		parsedUUID, err := uuid.Parse(splitString[i])
@@ -625,105 +726,109 @@ func createTenantSearchObject(
 	tenantAliases string,
 	subdomains string,
 	domains string,
-	lordConfigUUIDs string,
-	lordConfigAliases string,
-	superConfigUUIDs string,
-	superConfigAliases string,
-	publicConfigUUIDs string,
-	publicConfigAliases string,
-	privateAccessUUIDs string,
-	privateAccessAliases string,
-	customAccessUUIDs string,
-	customAccessAliases string) (iTenantSearch, int, error) {
+	configUUIDs string,
+	configAliases string,
+	accessUUIDs string,
+	accessAliases string) (iTenantSearch, int, error) {
 	var tso tenantSearch
 
+	tso.qsType = tenantTypes
+	tso.qsTid = tenantUUIDs
+	tso.qsTal = tenantAliases
+	tso.qsSubdmn = subdomains
+	tso.qsDmn = domains
+	tso.qsCal = configAliases
+	tso.qsCid = configUUIDs
+	tso.qsAal = accessAliases
+	tso.qsAid = accessUUIDs
+
 	if tenantTypes != "" {
-		err := tso.mapTenantType(tenantTypes)
+		err := tso.mapTenantType()
 		if err != nil {
 			return nil, 400, err
 		}
 	}
 
 	if tenantUUIDs != "" {
-		err := tso.mapTenantUUID(tenantUUIDs)
+		err := tso.mapTenantUUID()
 		if err != nil {
 			return nil, 400, err
 		}
 	}
 	if tenantAliases != "" {
-		err := tso.mapTenantAlias(tenantAliases)
+		err := tso.mapTenantAlias()
 		if err != nil {
 			return nil, 400, err
 		}
 	}
 	if subdomains != "" {
-		err := tso.mapSubdomain(subdomains)
+		err := tso.mapSubdomain()
 		if err != nil {
 			return nil, 400, err
 		}
 	}
 	if domains != "" {
-		err := tso.mapDomain(domains)
+		err := tso.mapDomain()
 		if err != nil {
 			return nil, 400, err
 		}
 	}
-	if lordConfigUUIDs != "" {
-		err := tso.mapLordConfigUUID(lordConfigUUIDs)
+	if configUUIDs != "" {
+		err := tso.mapLordConfigUUID()
 		if err != nil {
 			return nil, 400, err
 		}
 	}
-	if lordConfigAliases != "" {
-		err := tso.mapLordConfigAlias(lordConfigAliases)
+	if configAliases != "" {
+		err := tso.mapLordConfigAlias()
 		if err != nil {
 			return nil, 400, err
 		}
 	}
-	if superConfigUUIDs != "" {
-		err := tso.mapSuperConfigUUID(superConfigUUIDs)
+	if configUUIDs != "" {
+		err := tso.mapSuperConfigUUID()
 		if err != nil {
 			return nil, 400, err
 		}
 	}
-	if superConfigAliases != "" {
-		err := tso.mapSuperConfigAlias(superConfigAliases)
+	if configAliases != "" {
+		err := tso.mapSuperConfigAlias()
 		if err != nil {
 			return nil, 400, err
 		}
 	}
-	if publicConfigUUIDs != "" {
-		err := tso.mapPublicConfigUUID(publicConfigUUIDs)
+	if configUUIDs != "" {
+		err := tso.mapPublicConfigUUID()
 		if err != nil {
 			return nil, 400, err
 		}
 	}
-	if publicConfigAliases != "" {
-		err := tso.mapPublicConfigAlias(publicConfigAliases)
+	if configAliases != "" {
+		err := tso.mapPublicConfigAlias()
 		if err != nil {
 			return nil, 400, err
 		}
 	}
-	if privateAccessUUIDs != "" {
-		err := tso.mapPrivateAccessUUID(privateAccessUUIDs)
+	if accessUUIDs != "" {
+		err := tso.mapPrivateAccessUUID()
 		if err != nil {
 			return nil, 400, err
 		}
 	}
-	if privateAccessAliases != "" {
-		err := tso.mapPrivateAccessAlias(privateAccessAliases)
+	if accessAliases != "" {
+		err := tso.mapPrivateAccessAlias()
 		if err != nil {
 			return nil, 400, err
 		}
 	}
-	if customAccessUUIDs != "" {
-		err := tso.mapCustomAccessUUID(customAccessUUIDs)
+	if accessUUIDs != "" {
+		err := tso.mapCustomAccessUUID()
 		if err != nil {
 			return nil, 400, err
 		}
 	}
-	if customAccessAliases != "" {
-		err := tso.mapCustomAccessAlias(customAccessAliases)
+	if accessAliases != "" {
+		err := tso.mapCustomAccessAlias()
 		if err != nil {
 			return nil, 400, err
 		}
