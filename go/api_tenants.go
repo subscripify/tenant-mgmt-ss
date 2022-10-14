@@ -24,14 +24,14 @@ import (
 // this function sends then sends the data
 func AddLordTenant(w http.ResponseWriter, r *http.Request) {
 	var wo TenantUuidCreatedObject
-	var hr HttpResponseError
+	var hr HttpResponseMessage
 	var jsonResp []byte
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 
 	defer r.Body.Close()
 	dec := json.NewDecoder(r.Body)
-	var lordTenantCreateBody LordTenantCreateBody
+	var lordTenantCreateBody LordTenantsBody
 	if err := dec.Decode(&lordTenantCreateBody); err != nil {
 
 		hr.Message = "bad json"
@@ -70,14 +70,14 @@ func AddLordTenant(w http.ResponseWriter, r *http.Request) {
 
 func AddTenant(w http.ResponseWriter, r *http.Request) {
 	var wo TenantUuidCreatedObject
-	var hr HttpResponseError
+	var hr HttpResponseMessage
 	var jsonResp []byte
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 
 	defer r.Body.Close()
 	dec := json.NewDecoder(r.Body)
-	var tenantCreateBody TenantCreateBody
+	var tenantCreateBody TenantsBody
 	if err := dec.Decode(&tenantCreateBody); err != nil {
 		hr.Message = "bad json"
 		hr.ResponseCode = http.StatusBadRequest
@@ -113,7 +113,7 @@ func AddTenant(w http.ResponseWriter, r *http.Request) {
 
 func DeleteTenant(w http.ResponseWriter, r *http.Request) {
 	var wo FullTenantObject
-	var hr HttpResponseError
+	var hr HttpResponseMessage
 	var jsonResp []byte
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -183,7 +183,7 @@ func DeleteTenant(w http.ResponseWriter, r *http.Request) {
 
 func GetTenant(w http.ResponseWriter, r *http.Request) {
 	var wo FullTenantObject
-	var hr HttpResponseError
+	var hr HttpResponseMessage
 	var jsonResp []byte
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -254,7 +254,7 @@ func GetTenant(w http.ResponseWriter, r *http.Request) {
 func SearchTenant(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 
-	var hr HttpResponseError
+	var hr HttpResponseMessage
 	var jsonResp []byte
 	pageNum, err := strconv.Atoi(r.URL.Query().Get("pg"))
 	if err != nil {
@@ -294,7 +294,7 @@ func SearchTenant(w http.ResponseWriter, r *http.Request) {
 func UpdateTenant(w http.ResponseWriter, r *http.Request) {
 	var tenantPatchBody TenantPatchBody
 	var wo FullTenantObject
-	var hr HttpResponseError
+	var hr HttpResponseMessage
 	var jsonResp []byte
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")

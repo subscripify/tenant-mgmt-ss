@@ -9,31 +9,21 @@
  */
 package tenantapi
 
-type LordTenantObject struct {
-
-	TenantUUID string `json:"tenantUUID,omitempty"`
-	// The name of the organization at time of tenant creation and the alias used for searching by org name.
-	OrgName string `json:"orgName,omitempty"`
-	// The name prefix for the Kubernetes namespaces and cloud resources that make up this tenant.
-	KubeNamespace string `json:"kubeNamespace,omitempty"`
-	// The UUID of this tenant's owner tenant
-	LiegeUUID string `json:"liegeUUID,omitempty"`
-
-	CreateTimestamp string `json:"createTimestamp,omitempty"`
+type LordTenantsBody struct {
 	// The alias name does not need to be unique and is used for quick reference when searching in UI. No starting spaces and no special characters.
-	Alias string `json:"alias,omitempty"`
+	TenantAlias string `json:"tenantAlias,omitempty"`
+	// The subdomain name string which used for the services namespace of the tenant and providing unique url for each tenant
+	Subdomain string `json:"subdomain,omitempty"`
+	// The services config UUID to use for a super tenant. Must be a valid services config UUID. This value must be empty when creating a main tenant.
+	SuperServicesConfig string `json:"superServicesConfig,omitempty"`
+	// The services config UUID to use for the tenant's public services. Must be a valid public services UUID.
+	PublicServicesConfig string `json:"publicServicesConfig,omitempty"`
 	// Sets the top level domain for the tenant - validates against ICANN/IANA list https://data.iana.org/TLD/tlds-alpha-by-domain.txt e.g. \"com\" from my-tenant.subscripify.com
 	TopLevelDomain string `json:"topLevelDomain,omitempty"`
 	// Sets the secondary domain name for the tenant. e.g. \"subscripify\" from my-tenant.subscripify.com
 	SecondaryDomain string `json:"secondaryDomain,omitempty"`
-	// Sets the secondary domain name for the tenant. e.g. \"my-tenant\" from my-tenant.subscripify.com. Also used for the kubernetes namespace prefix for this tenant
-	Subdomain string `json:"subdomain"`
 	// The services config UUID to use for the lord tenant. Must be a valid services config UUID
-	InternalServicesConfig string `json:"internalServicesConfig"`
-	// The services config UUID to use for the super-tenant. Must be a valid services config UUID
-	SuperServicesConfig string `json:"superServicesConfig"`
-	// The services config UUID to use for the main-tenant's public services. The services config UUID  used must be a publicServices UUID and belong to the liege tenant
-	PublicServicesConfig string `json:"publicServicesConfig"`
+	LordServicesConfig string `json:"lordServicesConfig,omitempty"`
 	// The cloud provider to deploy to. e.g. The only cloud provider supported (currently) is azure.
-	SubscripifyDeploymentCloudLocation string `json:"subscripifyDeploymentCloudLocation"`
+	SubscripifyDeploymentCloudLocation string `json:"subscripifyDeploymentCloudLocation,omitempty"`
 }

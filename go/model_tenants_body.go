@@ -9,91 +9,19 @@
  */
 package tenantapi
 
-import (
-	"fmt"
-	"net/http"
-	"strings"
-
-	"github.com/gorilla/mux"
-)
-
-type Route struct {
-	Name        string
-	Method      string
-	Pattern     string
-	HandlerFunc http.HandlerFunc
-}
-
-type Routes []Route
-
-func NewRouter() *mux.Router {
-	router := mux.NewRouter().StrictSlash(true)
-	for _, route := range routes {
-		var handler http.Handler
-		handler = route.HandlerFunc
-		handler = Logger(handler, route.Name)
-
-		router.
-			Methods(route.Method).
-			Path(route.Pattern).
-			Name(route.Name).
-			Handler(handler)
-	}
-
-	return router
-}
-
-func Index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello World!")
-}
-
-var routes = Routes{
-	Route{
-		"Index",
-		"GET",
-		"/",
-		Index,
-	},
-
-	Route{
-		"AddLordTenant",
-		strings.ToUpper("Post"),
-		"/lord-tenants",
-		AddLordTenant,
-	},
-
-	Route{
-		"AddTenant",
-		strings.ToUpper("Post"),
-		"/tenants",
-		AddTenant,
-	},
-
-	Route{
-		"DeleteTenant",
-		strings.ToUpper("Delete"),
-		"/tenants/{targetTenantUUID}",
-		DeleteTenant,
-	},
-
-	Route{
-		"GetTenant",
-		strings.ToUpper("Get"),
-		"/tenants/{targetTenantUUID}",
-		GetTenant,
-	},
-
-	Route{
-		"SearchTenant",
-		strings.ToUpper("Get"),
-		"/search/tenants",
-		SearchTenant,
-	},
-
-	Route{
-		"UpdateTenant",
-		strings.ToUpper("Patch"),
-		"/tenants/{targetTenantUUID}",
-		UpdateTenant,
-	},
+type TenantsBody struct {
+	// The alias name does not need to be unique and is used for quick reference when searching in UI. No starting spaces and no special characters.
+	TenantAlias string `json:"tenantAlias,omitempty"`
+	// The subdomain name string which used for the services namespace of the tenant and providing unique url for each tenant
+	Subdomain string `json:"subdomain,omitempty"`
+	// The services config UUID to use for a super tenant. Must be a valid services config UUID. This value must be empty when creating a main tenant.
+	SuperServicesConfig string `json:"superServicesConfig,omitempty"`
+	// The services config UUID to use for the tenant's public services. Must be a valid public services UUID.
+	PublicServicesConfig string `json:"publicServicesConfig,omitempty"`
+	// Indicate which type of tenant to establish, main or super.
+	TenantType string `json:"tenantType,omitempty"`
+	// The private access config UUID to use for the tenant's public services. Must be a valid private access UUID. This value must be empty when creating a main tenant.
+	PrivateAccessConfig string `json:"privateAccessConfig,omitempty"`
+	// The public access config UUID to use for the tenant's public services. Must be a valid public access UUID.
+	CustomAccessConfig string `json:"customAccessConfig,omitempty"`
 }
