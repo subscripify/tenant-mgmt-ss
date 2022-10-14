@@ -259,6 +259,8 @@ paths:
       operationId: searchTenant
       parameters:
         - $ref: '#/components/parameters/liegeUUIDHeader'
+        - $ref: '#/components/parameters/pageStart'
+        - $ref: '#/components/parameters/recordOnPageCount'
         - $ref: '#/components/parameters/searchTypeQuery'
         - $ref: '#/components/parameters/searchTenantUUIDQuery'
         - $ref: '#/components/parameters/searchTenantAliasQuery'
@@ -320,7 +322,7 @@ components:
         pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
         type: string
         description: 'This is the UUID of the target tenant. The target tenant must belong to the liege tenant in the liegeUUID header.'
-    recordStart:
+    pageStart:
       name: pg 
       in: query
       required: false
@@ -330,7 +332,7 @@ components:
         maximum: 99999999999
         description: 'the page number you wish to show, defaults to 1 if absent. a page is defined as the number of rows in the result set divided by the line count per page.'
         format: int64
-    recordCount:
+    recordOnPageCount:
       name: lc 
       in: query
       required: false

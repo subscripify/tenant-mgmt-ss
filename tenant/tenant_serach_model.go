@@ -171,7 +171,7 @@ func (ts *tenantSearch) buildTenantSearchResults(page int, perPage int) (*tenant
 	for rows.Next() {
 		var r tenantListResponseInner
 		err = rows.Scan(
-			itemCount,
+			&itemCount,
 			&r.TenantUUID,
 			&r.TenantAlias,
 			&r.TenantSubdomain,
