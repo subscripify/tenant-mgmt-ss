@@ -201,7 +201,8 @@ func (ts *tenantSearch) buildPagination(rowCount int, page int, perPage int) *te
 	var paginationObject tenantSearchResultsPaging
 
 	if perPage > 0 {
-		paginationObject.PageCount = int(math.Ceil(float64(rowCount / perPage)))
+		divide := (float64(rowCount) / float64(perPage))
+		paginationObject.PageCount = int(math.Ceil(divide))
 	} else {
 		paginationObject.PageCount = 1
 	}
@@ -261,7 +262,7 @@ func (ts *tenantSearch) buildPagination(rowCount int, page int, perPage int) *te
 	if !firstPage {
 		prevPageQueryString = `?pg=` + fmt.Sprint(prevPage)
 		prevPageQueryString = prevPageQueryString + `&lc=` + fmt.Sprint(perPage)
-		prevPageQueryString = nextPageQueryString + queryString
+		prevPageQueryString = prevPageQueryString + queryString
 	}
 
 	paginationObject.Next = nextPageQueryString
