@@ -112,7 +112,7 @@ func (t *tenant) setAlias(alias string) error {
 	// no spaces, special characters, or swear words
 	profanityDetector := goaway.NewProfanityDetector().WithSanitizeLeetSpeak(false).WithSanitizeSpecialCharacters(true).WithSanitizeAccents(false)
 	if profanityDetector.IsProfane(alias) {
-		err := fmt.Errorf("this is not a valid alias name")
+		err := fmt.Errorf("this is not a valid alias name, only a-z A-Z 1-9 - and spaces allowed")
 		return err
 	}
 	pattern := `^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$`
@@ -121,7 +121,7 @@ func (t *tenant) setAlias(alias string) error {
 		t.alias = alias
 		return nil
 	}
-	err := fmt.Errorf(`this is not a valid alias name must match pattern (?m)^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$`)
+	err := fmt.Errorf(`this is not a valid alias name `)
 	return err
 
 }
@@ -145,7 +145,7 @@ func (t *tenant) setSubdomainName(subdomain string) error {
 		t.kubeNamespacePrefix = subdomain
 		return nil
 	}
-	err := fmt.Errorf("not a valid subdomain name - must match pattern '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$'")
+	err := fmt.Errorf("not a valid subdomain name - only a-z A-Z 1-9 and - allowed")
 	return err
 }
 
@@ -173,7 +173,7 @@ func (t *tenant) setSecondaryDomainName(secondaryDomain string) error {
 			t.secondaryDomain = secondaryDomain
 			return nil
 		} else {
-			err := fmt.Errorf("not a valid domain name - must match pattern '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$'")
+			err := fmt.Errorf("not a valid domain name - only a-z A-Z 1-9 and - allowed")
 			return err
 		}
 	}

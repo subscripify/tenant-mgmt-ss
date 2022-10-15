@@ -12,6 +12,8 @@ package tenantapi
 type TenantSearchResultsPaging struct {
 	// the number of pages based upon the number of items per page requested
 	PageCount int32 `json:"pageCount,omitempty"`
+	// the number rows returned in the result set
+	RowCount int32 `json:"rowCount,omitempty"`
 	// the url of the previous page in a series
 	Previous string `json:"previous,omitempty"`
 	// the url of the next page in a series

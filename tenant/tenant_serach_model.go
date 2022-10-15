@@ -74,12 +74,13 @@ type tenantSearch struct {
 }
 
 type tenantListResponseOuter struct {
-	Data   []tenantListResponseInner
 	Paging *tenantSearchResultsPaging
+	Data   []tenantListResponseInner
 }
 
 type tenantSearchResultsPaging struct {
 	PageCount int
+	RowCount  int
 	Previous  string
 	Next      string
 }
@@ -108,7 +109,7 @@ func (ts *tenantSearch) buildTenantSearchResults(page int, perPage int) (*tenant
 	if page < 1 {
 		return nil, 400, fmt.Errorf("page must be an integer greater than 1")
 	}
-	if perPage < 0 {
+	if perPage <= 0 {
 		return nil, 400, fmt.Errorf("per page must be an integer greater than 0")
 	}
 
@@ -141,7 +142,7 @@ func (ts *tenantSearch) buildTenantSearchResults(page int, perPage int) (*tenant
 
 		method := t.Method(i)
 		if strings.HasPrefix(method.Name, "Get") {
-			log.Println(method.Name)
+
 			whereVal := v.MethodByName(method.Name).Call(nil)
 			whereString := whereVal[0].String()
 			if whereString != "" {
@@ -156,18 +157,21 @@ func (ts *tenantSearch) buildTenantSearchResults(page int, perPage int) (*tenant
 		}
 
 	}
-	selectString = selectString + ` ORDER BY tenant_alias LIMIT ` + fmt.Sprint(page*perPage) + `,` + fmt.Sprint(perPage)
+	selectString = selectString + ` ORDER BY tenant_alias LIMIT ` + fmt.Sprint((page-1)*perPage) + `,` + fmt.Sprint(perPage)
 	log.Println(selectString)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	tdb := tenantdbserv.Tdb.Handle
 	rows, err := tdb.QueryContext(ctx, selectString)
+
 	if err != nil {
 		return nil, 500, fmt.Errorf("invalid query: %s", err)
 	}
+
 	var itemCount int32
 	var sr tenantListResponseOuter
+
 	for rows.Next() {
 		var r tenantListResponseInner
 		err = rows.Scan(
@@ -188,10 +192,17 @@ func (ts *tenantSearch) buildTenantSearchResults(page int, perPage int) (*tenant
 			&r.PrivateAccessUUID,
 			&r.CustomAccessAlias,
 			&r.CustomAccessUUID)
-		if err != nil {
-			return nil, 500, fmt.Errorf("invalid scan: %s", err)
-		}
+
 		sr.Data = append(sr.Data, r)
+	}
+	if err != nil {
+		return nil, 500, fmt.Errorf("invalid scan: %s", err)
+	}
+	if len(sr.Data) == 0 {
+
+		if page > 1 {
+			return nil, 404, fmt.Errorf("results are zero and requested page is greater than 1. re-try with pg=1 in query parameters to verify search criteria")
+		}
 	}
 	sr.Paging = ts.buildPagination(int(itemCount), page, perPage)
 	return &sr, 200, nil
@@ -199,7 +210,10 @@ func (ts *tenantSearch) buildTenantSearchResults(page int, perPage int) (*tenant
 
 func (ts *tenantSearch) buildPagination(rowCount int, page int, perPage int) *tenantSearchResultsPaging {
 	var paginationObject tenantSearchResultsPaging
+	if rowCount == 0 {
 
+		return &paginationObject
+	}
 	if perPage > 0 {
 		divide := (float64(rowCount) / float64(perPage))
 		paginationObject.PageCount = int(math.Ceil(divide))
@@ -252,19 +266,19 @@ func (ts *tenantSearch) buildPagination(rowCount int, page int, perPage int) *te
 		queryString = `&aid=` + ts.qsAid
 	}
 
-	nextPageQueryString := ""
-	prevPageQueryString := ""
+	var nextPageQueryString string
+	var prevPageQueryString string
 	if !lastPage {
-		nextPageQueryString = `?pg=` + fmt.Sprint(nextPage)
+		nextPageQueryString = `/search/tenants?pg=` + fmt.Sprint(nextPage)
 		nextPageQueryString = nextPageQueryString + `&lc=` + fmt.Sprint(perPage)
 		nextPageQueryString = nextPageQueryString + queryString
 	}
 	if !firstPage {
-		prevPageQueryString = `?pg=` + fmt.Sprint(prevPage)
+		prevPageQueryString = `/search/tenants?pg=` + fmt.Sprint(prevPage)
 		prevPageQueryString = prevPageQueryString + `&lc=` + fmt.Sprint(perPage)
 		prevPageQueryString = prevPageQueryString + queryString
 	}
-
+	paginationObject.RowCount = rowCount
 	paginationObject.Next = nextPageQueryString
 	paginationObject.Previous = prevPageQueryString
 
@@ -342,6 +356,11 @@ func (ts *tenantSearch) mapTenantAlias() error {
 	splitString := strings.Split(ts.qsTal, "|")
 
 	for i := 0; i < len(splitString); i++ {
+		pattern := `^[a-zA-Z0-9\s-]*$`
+		re := regexp.MustCompile(pattern)
+		if !re.Match([]byte(splitString[i])) {
+			return fmt.Errorf("invalid search string for alias only a-z A-Z 1-9 - and spaces allowed")
+		}
 		ts.tenantAlias = append(ts.tenantAlias, splitString[i])
 	}
 
@@ -368,6 +387,11 @@ func (ts *tenantSearch) mapSubdomain() error {
 	splitString := strings.Split(ts.qsSubdmn, "|")
 
 	for i := 0; i < len(splitString); i++ {
+		pattern := `^[a-zA-Z0-9-]*$`
+		re := regexp.MustCompile(pattern)
+		if !re.Match([]byte(splitString[i])) {
+			return fmt.Errorf("invalid search string for subdomain only a-z A-Z 1-9 and - allowed")
+		}
 		ts.subdomain = append(ts.subdomain, splitString[i])
 	}
 
@@ -394,6 +418,11 @@ func (ts *tenantSearch) mapDomain() error {
 	splitString := strings.Split(ts.qsDmn, "|")
 
 	for i := 0; i < len(splitString); i++ {
+		pattern := `^[a-zA-Z0-9-]*$`
+		re := regexp.MustCompile(pattern)
+		if !re.Match([]byte(splitString[i])) {
+			return fmt.Errorf("invalid search string for domain only a-z A-Z 1-9 and - allowed")
+		}
 		ts.domain = append(ts.domain, splitString[i])
 	}
 
@@ -440,6 +469,11 @@ func (ts *tenantSearch) mapLordConfigAlias() error {
 	splitString := strings.Split(ts.qsCal, "|")
 
 	for i := 0; i < len(splitString); i++ {
+		pattern := `^[a-zA-Z0-9\s-]*$`
+		re := regexp.MustCompile(pattern)
+		if !re.Match([]byte(splitString[i])) {
+			return fmt.Errorf("invalid search string for alias only a-z A-Z 1-9 - and spaces allowed")
+		}
 		ts.lordConfigAlias = append(ts.lordConfigAlias, splitString[i])
 	}
 
@@ -497,6 +531,11 @@ func (ts *tenantSearch) mapSuperConfigAlias() error {
 	splitString := strings.Split(ts.qsCal, "|")
 
 	for i := 0; i < len(splitString); i++ {
+		pattern := `^[a-zA-Z0-9\s-]*$`
+		re := regexp.MustCompile(pattern)
+		if !re.Match([]byte(splitString[i])) {
+			return fmt.Errorf("invalid search string for alias only a-z A-Z 1-9 - and spaces allowed")
+		}
 		ts.superConfigAlias = append(ts.superConfigAlias, splitString[i])
 	}
 
@@ -554,6 +593,11 @@ func (ts *tenantSearch) mapPublicConfigAlias() error {
 	splitString := strings.Split(ts.qsCal, "|")
 
 	for i := 0; i < len(splitString); i++ {
+		pattern := `^[a-zA-Z0-9\s-]*$`
+		re := regexp.MustCompile(pattern)
+		if !re.Match([]byte(splitString[i])) {
+			return fmt.Errorf("invalid search string for alias only a-z A-Z 1-9 - and spaces allowed")
+		}
 		ts.publicConfigAlias = append(ts.publicConfigAlias, splitString[i])
 	}
 
@@ -611,6 +655,11 @@ func (ts *tenantSearch) mapPrivateAccessAlias() error {
 	splitString := strings.Split(ts.qsAal, "|")
 
 	for i := 0; i < len(splitString); i++ {
+		pattern := `^[a-zA-Z0-9\s-]*$`
+		re := regexp.MustCompile(pattern)
+		if !re.Match([]byte(splitString[i])) {
+			return fmt.Errorf("invalid search string for alias only a-z A-Z 1-9 - and spaces allowed")
+		}
 		ts.privateAccessAlias = append(ts.privateAccessAlias, splitString[i])
 	}
 
@@ -668,6 +717,11 @@ func (ts *tenantSearch) mapCustomAccessAlias() error {
 	splitString := strings.Split(ts.qsAal, "|")
 
 	for i := 0; i < len(splitString); i++ {
+		pattern := `^[a-zA-Z0-9\s-]*$`
+		re := regexp.MustCompile(pattern)
+		if !re.Match([]byte(splitString[i])) {
+			return fmt.Errorf("invalid search string for alias only a-z A-Z 1-9 - and spaces allowed")
+		}
 		ts.customAccessAlias = append(ts.customAccessAlias, splitString[i])
 	}
 

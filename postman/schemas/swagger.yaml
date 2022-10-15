@@ -379,7 +379,7 @@ components:
         items:
           maxLength: 36
           type: string
-          pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9-]+[a-zA-Z0-9.\s-]*[a-zA-Z0-9-]+))$'
+          pattern: '^[a-zA-Z0-9\s-]*$'
           description: 'tenant alias - partial or whole tenant alias.'
         minItems: 1
         maxItems: 99
@@ -422,7 +422,7 @@ components:
         items:
           maxLength: 36
           type: string
-          pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9-]+[a-zA-Z0-9.\s-]*[a-zA-Z0-9-]+))$'
+          pattern: '^[a-zA-Z0-9\s-]*$'
           description: 'config alias - partial or whole alias for a lord, super, or public services config. can have multiple aliases in the same 
             query string using it more than once'
         minItems: 1
@@ -450,7 +450,7 @@ components:
         type: array
         items:
           type: string
-          pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9-]+[a-zA-Z0-9.\s-]*[a-zA-Z0-9-]+))$'
+          pattern: '^[a-zA-Z0-9\s-]*$'
           maxLength: 36
           description: 'A partial or whole alias for a private or custom access config. Can have multiple.'
         minItems: 1
@@ -610,6 +610,9 @@ components:
             pageCount:
               type: integer
               description: the number of pages based upon the number of items per page requested
+            rowCount:
+              type: integer
+              description: the number rows returned in the result set
             previous: 
               type: string
               maxLength: 2048

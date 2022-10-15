@@ -4,7 +4,6 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"database/sql"
-	"io/ioutil"
 	"log"
 	"os"
 
@@ -31,7 +30,7 @@ func getNewMySQLTenantDbHandle() *sql.DB {
 	var tenantsDbHandle *sql.DB
 
 	rootCertPool := x509.NewCertPool()
-	pem, _ := ioutil.ReadFile(os.Getenv("DBAPPCERTLOCATION")) // this is the only one that one can use with AzureMYSQL
+	pem, _ := os.ReadFile(os.Getenv("DBAPPCERTLOCATION")) // this is the only one that one can use with AzureMYSQL
 
 	if ok := rootCertPool.AppendCertsFromPEM(pem); !ok {
 		subscripifylogger.FatalLog.Fatal("Failed to append PEM.")
