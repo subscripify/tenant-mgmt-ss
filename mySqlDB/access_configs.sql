@@ -1,4 +1,4 @@
--- this file contians insert commands for seed data into the access_configs table
+-- this file contains insert commands for seed data into the access_configs table table
 INSERT INTO access_configs (
   access_config_uuid,
   config_alias,

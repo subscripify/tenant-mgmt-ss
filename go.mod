@@ -1,4 +1,4 @@
-module dev.azure.com/Subscripify/subscripify-prod/_git/tenant-mgmt-ss
+module dev.azure.com/Subscripify/subscripify-prod/tenant-mgmt-ss.git
 
 go 1.19
 
@@ -9,6 +9,8 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
 )
+
+require dev.azure.com/Subscripify/subscripify-prod/subscripify-logger.git v0.0.0-20221020205949-21948a262f50
 
 require (
 	github.com/goombaio/namegenerator v0.0.0-20181006234301-989e774b106e

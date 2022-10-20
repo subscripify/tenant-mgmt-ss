@@ -1,3 +1,5 @@
+dev.azure.com/Subscripify/subscripify-prod/subscripify-logger.git v0.0.0-20221020205949-21948a262f50 h1:zufiIaYi53lN3qO/7hSFAncE0Kx/84KfQfnw6u1AQvM=
+dev.azure.com/Subscripify/subscripify-prod/subscripify-logger.git v0.0.0-20221020205949-21948a262f50/go.mod h1:v/4KUoclMBMLjL07SiEDDnsrp/X5M0IDK6mLfq8h6Ss=
 github.com/TwiN/go-away v1.6.8 h1:FR3zEhQgfNR4nX7owpfM/gsOqC2XFY4ducMvPu3lL2M=
 github.com/TwiN/go-away v1.6.8/go.mod h1:xjsrzCf4AhmoK9y+nMr8vTC9kqh/8vd89sbVjzo/Kao=
 github.com/bombsimon/tld-validator v1.2.15 h1:7BsiohEM3wC97E+40AGTg0L1Q92qn9tIAx/rkhp27cQ=
