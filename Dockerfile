@@ -1,14 +1,21 @@
-FROM golang:1.10 AS build
-WORKDIR /go/src
-COPY go ./go
-COPY main.go .
+## this is a custom container that has authorization to access private repos on subscripify's azure devops
+FROM subscripifycontreg.azurecr.io/builders/subscripifygolang:1.19.2
 
-ENV CGO_ENABLED=0
-RUN go get -d -v ./...
+WORKDIR /usr/src/app
 
-RUN go build -a -installsuffix cgo -o swagger .
+# pre-copy/cache go.mod for pre-downloading dependencies and only redownloading them in subsequent builds if they change
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
+# only copy the needed folders
+COPY ./cmd ./cmd
+COPY ./configs ./configs
+COPY ./internal ./internal
+COPY ./pkg ./pkg
+COPY ./main.go ./main.go
+RUN go build -v -o /usr/local/bin/tenant-mgmt-ss .
 
-FROM scratch AS runtime
-COPY --from=build /go/src/swagger ./
-EXPOSE 8080/tcp
-ENTRYPOINT ["./swagger"]
+EXPOSE 8080
+
+
+ENTRYPOINT [ "tenant-mgmt-ss" ]
+CMD ["serve"]

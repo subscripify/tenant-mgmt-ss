@@ -1,0 +1,826 @@
+openapi: 3.0.3
+info:
+  title: Private Services API  - OpenAPI 3.0
+  description: 'This is the set of api endpoints to support access to Subscripify
+    Super Services. Super Services are those that are available to Subscripify
+    super tenants. They provide higher capabilities to super tenants to manage across
+    multiple main tenants within the context of the Super-Tenant.<br><br> These
+    APIs act as the front end to Private Services engineered and hosted by super
+    tenants that need to access the subscripify platform.<br><br>Examples of super
+    services available only to Super Tenants through this API are- <br>Tenant
+    Management<br>Subscription and Plan Management <br>Billing and Payments<br><br>
+    Subscripify also maintains a set of api endpoints to support access to Subscripify
+    Public Services. Subscripify public services are services required by all tenants
+    and users on the subscripify platform. All tenants, regardless of type have
+    access to these services.<br><br>Examples of private services available to
+    Super Tenants and to Main Tenants are- <br>Identity Services<br>Usage Analytics
+    Services<br>For more information about Subscripify tenant architecture
+    click here.'
+  termsOfService: http://www.subscripify.com/terms/apiusage
+  contact:
+    email: william.ohara@subscripify.com
+  license:
+    name: Private
+    url: http://www.subscripify.com/license
+  version: 0.0.1
+externalDocs:
+  description: Find out more about Subscripify
+  url: http://www.subscripify.com
+servers:
+- url: https://lord-tenant.subscripify.com
+tags:
+- name: tenants
+  description: everything needed to create and manage tenants on the Subscripify platform
+  externalDocs:
+    description: Link to Tenant Architecture Doc
+    url: http://wiki.subscripify.com/tenant-architecture
+- name: subscription
+  description: everything subscriptions
+  externalDocs:
+    description: Find out more about our store
+    url: http://wiki.subscripify.com/tenant-architecture
+paths:
+  /lord-tenants:
+    post:
+      tags:
+      - tenants
+      summary: Add a new lord tenant
+      description: Adds a new lord tenant to the subscripify tenant system. This will
+        start a new Kubernetes cluster on the selected cloud service
+      operationId: addLordTenant
+      requestBody:
+        description: All data required to start a new lord tenant
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/lordTenantCreateBody'
+                - $ref: '#/components/schemas/tenantConfigsCreateBodyExtend'
+                  
+        required: true
+      responses:
+        '200':
+          description: Successful operation returns the new object UUID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tenantUUIDCreatedObject'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '409':
+          $ref: '#/components/responses/409'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '429':
+          $ref: '#/components/responses/429'
+        default:
+          $ref: '#/components/responses/default'
+      security:
+        - tenant_auth:
+          - write
+  /tenants:
+    post:
+      tags:
+      - tenants
+      summary: Add a new main or super tenant 
+      description: Adds a new tenant to the selected liege tenant in liegeUUID header parameter. The liege UUID must be a lord tenant if creating a super tenant and liege UUID must be a super tenant if creating a main tenant.
+      operationId: addTenant 
+      parameters:
+        - $ref: '#/components/parameters/liegeUUIDHeader'
+      requestBody:
+        description: All data required to start a new super or main  tenant
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/tenantCreateBody'
+                - $ref: '#/components/schemas/tenantConfigsCreateBodyExtend'
+              
+        required: true
+      responses: 
+        '200':
+          description: Successful operation returns the new object UUID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tenantUUIDCreatedObject'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '409':
+          $ref: '#/components/responses/409'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '429':
+          $ref: '#/components/responses/429'
+        default:
+          $ref: '#/components/responses/default'
+      security:
+        - tenant_auth:
+          - write
+  /tenants/{targetTenantUUID}:
+    get:
+      summary: returns a tenant
+      description: returns a tenant
+      tags:
+        - "tenants"
+      operationId: getTenant
+      parameters:
+        - $ref: '#/components/parameters/targetTenantUUIDPath'
+      responses:
+        '200':
+          description: return tenant
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fullTenantObject'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '409':
+          $ref: '#/components/responses/409'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '429':
+          $ref: '#/components/responses/429'
+        default:
+          $ref: '#/components/responses/default'
+      security:
+        - tenant_auth:
+          - write
+    patch:
+      summary: updates a tenant
+      description: updates a tenant
+      tags:
+        - "tenants"
+      operationId: updateTenant
+      parameters:
+        - $ref: '#/components/parameters/targetTenantUUIDPath'
+      requestBody:
+        description: All data required to start a new super or main  tenant
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tenantPatchBody'
+      responses:
+        '200':
+          description: return tenant
+          content:
+            application/json:
+              schema:
+                oneOf:
+                $ref: '#/components/schemas/fullTenantObject'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '409':
+          $ref: '#/components/responses/409'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '429':
+          $ref: '#/components/responses/429'
+        default:
+          $ref: '#/components/responses/default'
+      security:
+        - tenant_auth:
+          - write
+    delete:
+      summary: removes a tenant
+      description: removes a tenant
+      tags:
+        - "tenants"
+      operationId: deleteTenant
+      parameters:
+        - $ref: '#/components/parameters/targetTenantUUIDPath'
+      responses:
+        '200':
+          description: return tenant
+          content:
+            application/json:
+              schema:
+                oneOf:
+                $ref: '#/components/schemas/fullTenantObject'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '409':
+          $ref: '#/components/responses/409'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '429':
+          $ref: '#/components/responses/429'
+        default:
+          $ref: '#/components/responses/default'
+      security:
+        - tenant_auth:
+          - write
+  /search/tenants:
+    get:
+      tags: 
+      - tenants
+      summary: Tenant Search
+      description: Search for tenants based upon the input parameters available
+      operationId: searchTenant
+      parameters:
+        - $ref: '#/components/parameters/liegeUUIDHeader'
+        - $ref: '#/components/parameters/pageStart'
+        - $ref: '#/components/parameters/recordOnPageCount'
+        - $ref: '#/components/parameters/searchTypeQuery'
+        - $ref: '#/components/parameters/searchTenantUUIDQuery'
+        - $ref: '#/components/parameters/searchTenantAliasQuery'
+        - $ref: '#/components/parameters/searchSubdomainQuery'
+        - $ref: '#/components/parameters/searchDomainQuery'
+        - $ref: '#/components/parameters/searchConfigAliasQuery'
+        - $ref: '#/components/parameters/searchConfigQuery'
+        - $ref: '#/components/parameters/searchAccessAliasQuery'
+        - $ref: '#/components/parameters/searchAccessQuery'
+      responses: 
+        '200':
+          description: Successful operation returns full tenant data including generated
+            felids
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/tenantSearchResults'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '409':
+          $ref: '#/components/responses/409'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '429':
+          $ref: '#/components/responses/429'
+        default:
+          $ref: '#/components/responses/default'
+      security:
+        - tenant_auth:
+          - write
+components:
+  parameters:
+    liegeUUIDHeader:
+      name: liegeUUID
+      description: 'Liege is the tenant that manages the target tenant. In the case of adding a tenant, this header is required 
+        and establishes the feudal relationship between the creator tenant and the created tenant. <br><br> In the case of tenant updates or 
+        deletes this field holds the liege of the target tenant. If the two ids do not have the appropriate relationship the action will fail.
+        <br><br>This field is also checked against the identity of the caller. The identity must be a member of the Liege tenant and must have the
+        appropriate permissions.'
+      in: header
+      required: true
+      schema: 
+        type: string
+        pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+    targetTenantUUIDPath:
+      name: targetTenantUUID
+      in: path
+      required: true
+      schema:
+        maxLength: 36
+        pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+        type: string
+        description: 'This is the UUID of the target tenant. The target tenant must belong to the liege tenant in the liegeUUID header.'
+    pageStart:
+      name: pg 
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 99999999999
+        description: 'the page number you wish to show, defaults to 1 if absent. a page is defined as the number of rows in the result set divided by the line count per page.'
+        format: int64
+    recordOnPageCount:
+      name: lc 
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 999999999999
+        description: line count per page- the number of rows per page. 
+        format: int64
+    searchTypeQuery:
+      name: type 
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          maxLength: 5
+          pattern: ^(lord|super|main)$`
+          description: 'A full name for either a main, lord, or super tenant for a private or custom access config. Can have multiple.'
+        minItems: 1
+        maxItems: 99
+      style: pipeDelimited
+    searchTenantUUIDQuery:
+      name: tid
+      in: query
+      required: false
+      schema:
+        type: array
+        items: 
+          type: string 
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          description: tenant id - the UUID for a tenant
+        minItems: 1
+        maxItems: 99
+      style: pipeDelimited
+    searchTenantAliasQuery:
+      name: tal
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          maxLength: 36
+          type: string
+          pattern: '^[a-zA-Z0-9\s-]*$'
+          description: 'tenant alias - partial or whole tenant alias.'
+        minItems: 1
+        maxItems: 99
+      style: pipeDelimited
+
+    searchSubdomainQuery:
+      name: subdmn
+      in: query
+      required: false
+      schema:
+        type: array
+        items: 
+          type: string
+          maxLength: 61
+          pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9-]+[a-zA-Z0-9.\s-]*[a-zA-Z0-9-]+))$'
+          description: 'subdomain - partial or whole subdomain name.'    
+        minItems: 1
+        maxItems: 99
+      style: pipeDelimited  
+    searchDomainQuery:
+      name: dmn
+      in: query
+      required: false
+      schema:
+        type: array
+        items: 
+          type: string
+          maxLength: 61
+          pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9-]+[a-zA-Z0-9.\s-]*[a-zA-Z0-9-]+))$'
+          description: 'domain - partial or whole domain name - can contain top level domain.'    
+        minItems: 1
+        maxItems: 99
+      style: pipeDelimited  
+    searchConfigAliasQuery:
+      name: cal
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          maxLength: 36
+          type: string
+          pattern: '^[a-zA-Z0-9\s-]*$'
+          description: 'config alias - partial or whole alias for a lord, super, or public services config. can have multiple aliases in the same 
+            query string using it more than once'
+        minItems: 1
+        maxItems: 99
+      style: pipeDelimited
+    searchConfigQuery:
+      name: cid
+      in: query
+      required: false
+      schema:
+        type: array
+        items: 
+          type: string
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          description: 'config id - whole UUID for a lord, super, or public services config. No partials, must be full UUID or search will fail. search will apply against the uuid for all lord, super and public configs'
+        minItems: 1
+        maxItems: 99
+      style: pipeDelimited
+    searchAccessAliasQuery:
+      name: aal 
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: '^[a-zA-Z0-9\s-]*$'
+          maxLength: 36
+          description: 'A partial or whole alias for a private or custom access config. Can have multiple.'
+        minItems: 1
+        maxItems: 99
+      style: pipeDelimited   
+    searchAccessQuery:
+      name: aid
+      in: query
+      required: false
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 99
+        items:
+          type: string
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          description: A whole UUID for a private or custom access config id. No partials, must be a full UUID or search will fail. Can have up to two in a URL. Any more will be ignored.
+      style: pipeDelimited
+  schemas:
+    tenantPatchBody:
+      additionalProperties: false
+      type: object
+      properties:
+        tenantAlias: 
+          maxLength: 36
+          pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$'
+          type: string
+          description: The alias name does not need to be unique and is used for quick reference when searching in UI. 
+            No starting spaces and no special characters.
+          example: "my tenant alias"
+        lordServicesConfig:
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          type: string
+          description: The services config UUID to use for the lord tenant. Must be a valid services config UUID
+        superServicesConfig:
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          type: string
+          description: The services config UUID to use for the super-tenant. Must
+            be a valid services config UUID
+        publicServicesConfig:
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          type: string
+          description: The services config UUID to use for the main-tenant's public
+            services. The services config UUID  used must be a publicServices UUID
+            and belong to the liege tenant
+        privateAccessConfig:
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          type: string
+          description: The private access config UUID to use for the tenant's public
+            services. Must be a valid private access UUID. This value must be empty when creating a main tenant.
+        customAccessConfig:
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          type: string
+          description: The public access config UUID to use for the tenant's public
+            services. Must be a valid public access UUID.
+    lordTenantCreateBody:
+      type: object
+      properties:
+        topLevelDomain:
+          maxLength: 15
+          pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9-]+[a-zA-Z0-9.\s-]*[a-zA-Z0-9-]+))$'
+          type: string
+          description: 'Sets the top level domain for the tenant - validates against ICANN/IANA list https://data.iana.org/TLD/tlds-alpha-by-domain.txt
+            e.g. "com" from my-tenant.subscripify.com'
+          example: com
+        secondaryDomain:
+          maxLength: 30
+          pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$'
+          type: string
+          description: 'Sets the secondary domain name for the tenant. e.g. "subscripify" from my-tenant.subscripify.com'
+          example: subscripify
+        lordServicesConfig:
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          type: string
+          description: The services config UUID to use for the lord tenant. Must be a valid services config UUID
+        subscripifyDeploymentCloudLocation:
+          maxLength: 10
+          pattern: azure
+          type: string
+          description: The cloud provider to deploy to. e.g. The only cloud provider
+            supported (currently) is azure.
+      additionalProperties: true
+    tenantCreateBody:
+      type: object
+      properties:
+        tenantType:
+          maxLength: 5
+          pattern: ^super|main$
+          type: string
+          description: Indicate which type of tenant to establish, main or super.
+        privateAccessConfig:
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          type: string
+          description: The private access config UUID to use for the tenant's public
+            services. Must be a valid private access UUID. This value must be empty when creating a main tenant.
+        customAccessConfig:
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          type: string
+          description: The public access config UUID to use for the tenant's public
+            services. Must be a valid public access UUID.
+      additionalProperties: true
+    tenantConfigsCreateBodyExtend:
+      type: object
+      properties:
+        tenantAlias: 
+          maxLength: 36
+          pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$'
+          type: string
+          description: The alias name does not need to be unique and is used for quick reference when searching in UI. 
+            No starting spaces and no special characters.
+          example: "my tenant alias"  
+        subdomain:
+          maxLength: 30
+          pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$'
+          type: string
+          description: The subdomain name string which used for the services namespace
+            of the tenant and providing unique url for each tenant
+          example: subscripify
+        superServicesConfig:
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          type: string
+          description: The services config UUID to use for a super tenant. Must
+            be a valid services config UUID. This value must be empty when creating a main tenant.
+        publicServicesConfig:
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          type: string
+          description: The services config UUID to use for the tenant's public
+            services. Must be a valid public services UUID. 
+      additionalProperties: true
+    tenantUUIDCreatedObject:
+      additionalProperties: false
+      type: object
+      properties:
+        tenantUUID:
+          type: string
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+    tenantSearchResults:
+      additionalProperties: false
+      type: object
+      properties:
+        paging:
+          additionalProperties: false
+          type: object
+          properties:
+            pageCount:
+              type: integer
+              description: the number of pages based upon the number of items per page requested
+            rowCount:
+              type: integer
+              description: the number rows returned in the result set
+            previous: 
+              type: string
+              maxLength: 2048
+              pattern: '[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)'
+              description: the url of the previous page in a series
+            next:
+              type: string
+              maxLength: 2048
+              pattern: '[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)'
+              description: the url of the next page in a series
+        data:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              tenantUUID:
+                type: string
+                pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+              tenantAlias:
+                type: string
+                maxLength: 36
+                pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$'
+                description: The name of the organization at time of tenant creation and the alias used for searching by org name.
+              tenantSubdomain:
+                type: string
+                maxLength: 61
+                pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9-]+[a-zA-Z0-9.\s-]*[a-zA-Z0-9-]+))$'
+                description: the subdomain of the tenant
+              tenantSecDomain:
+                type: string
+                maxLength: 61
+                pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9-]+[a-zA-Z0-9.\s-]*[a-zA-Z0-9-]+))$'
+                description: the secondary domain of the tenant - does not include the top level domain
+              tenantTld:
+                type: string
+                maxLength: 15
+                pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9-]+[a-zA-Z0-9.\s-]*[a-zA-Z0-9-]+))$'
+                description: the top level domain of the tenant
+              tenantType:
+                maxLength: 5
+                pattern: ^super|lord|main$
+                type: string
+                description: Indicate which type of tenant. Lord tenants will see both "super" and "main" tenant types. 
+                  Super tenants will only see "main" tenant types. 
+              lordConfigAlias:
+                type: string 
+                maxLength: 36
+                pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$'
+                description: the lord config alias of the tenant - non lord tenants will be blank
+              lordConfigUUID:
+                type: string
+                description: the lord config UUID of the tenant - non lord tenants will be blank
+                pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+              superConfigAlias:
+                type: string 
+                maxLength: 36
+                pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$'
+                description: the super config alias of the tenant - non super tenants will be blank
+              superConfigUUID:
+                type: string
+                description: the super config UUID of the tenant - non super tenants will be blank
+                pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+              publicConfigAlias:
+                type: string 
+                maxLength: 36
+                pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$'
+                description: the public config alias of the tenant
+              publicConfigUUID:
+                type: string
+                description: the public config UUID of the tenant
+                pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+              privateAccessAlias:
+                type: string 
+                maxLength: 36
+                pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$'
+                description: the private access config (if applicable) alias of the tenant
+              privateAccessUUID:
+                type: string
+                description: the private access config (if applicable) UUID of the tenant
+                pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+              customAccessAlias:
+                type: string 
+                maxLength: 36
+                pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.\s\-]*[a-zA-Z0-9]+))$'
+                description: the custom access config (if applicable) alias of the tenant
+              customAccessUUID:
+                type: string
+                description: the custom access config (if applicable) UUID of the tenant 
+                pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          maxItems: 100
+    extendedTenantObject:
+      type: object
+      properties:
+        tenantUUID:
+          type: string
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          readOnly: true
+        kubeNamespacePrefix:
+          type: string
+          maxLength: 32
+          pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9]+[a-zA-Z0-9.-]*[a-zA-Z0-9]+))$'
+          description: The name prefix for the Kubernetes namespaces and cloud resources that make up this tenant.
+          readOnly: true
+        liegeUUID:
+          type: string
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          description: The UUID of this tenant's owner tenant. This value is equal to lordUUID for super tenants
+          readOnly: true
+        lordUUID:
+          type: string
+          maxLength: 36
+          pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+          description: The UUID of this tenant's lord tenant
+          readOnly: true
+        createTimestamp:
+          type: string
+          readOnly: true
+          pattern: /^(((\d{4})(-)(0[13578]|10|12)(-)(0[1-9]|[12][0-9]|3[01]))|((\d{4})(-)(0[469]|1‌​1)(-)([0][1-9]|[12][0-9]|30))|((\d{4})(-)(02)(-)(0[1-9]|1[0-9]|2[0-8]))|(([02468]‌​[048]00)(-)(02)(-)(29))|(([13579][26]00)(-)(02)(-)(29))|(([0-9][0-9][0][48])(-)(0‌​2)(-)(29))|(([0-9][0-9][2468][048])(-)(02)(-)(29))|(([0-9][0-9][13579][26])(-)(02‌​)(-)(29)))(\s([0-1][0-9]|2[0-4]):([0-5][0-9]):([0-5][0-9]))$/
+          maxLength: 100
+        createdBy:
+          type: string
+          maxLength: 225
+          pattern: (?:[a-z0-9!#$%&'*+/=?^_\x60{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_\x60{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])
+          readOnly: true
+    fullTenantObject:
+      allOf:
+        - $ref: '#/components/schemas/lordTenantCreateBody'
+        - $ref: '#/components/schemas/tenantCreateBody'
+        - $ref: '#/components/schemas/tenantConfigsCreateBodyExtend'
+        - $ref: '#/components/schemas/extendedTenantObject'      
+    httpResponseMessage:
+      type: object
+      properties:
+        responseCode:
+          type: integer
+        message:
+          maxLength: 200
+          type: string
+          pattern: '^([a-zA-Z0-9]|(?:[a-zA-Z0-9-]+[a-zA-Z0-9\s-]*[a-zA-Z0-9\s-]+))$'
+      additionalProperties: false    
+  responses:
+    '401':
+          description: Authorization Required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpResponseMessage'
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpResponseMessage'
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpResponseMessage'
+    '405':
+      description: Invalid method
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpResponseMessage'
+    '406':
+      description: Improper Protocol
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpResponseMessage'
+    '409':
+      description: Resource Already Exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpResponseMessage'
+    '415':
+      description: Improper media type
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpResponseMessage'
+    '429':
+      description: too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpResponseMessage'
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpResponseMessage'
+  securitySchemes:
+    tenant_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://auth.subscripify.com/oauth/authorize
+          scopes:
+            write:tenant: create tenants 
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+

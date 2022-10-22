@@ -27,11 +27,12 @@ func init() {
 
 // builds a connection to an SQL database
 func getNewMySQLTenantDbHandle() *sql.DB {
-	var tenantsDbHandle *sql.DB
 
 	rootCertPool := x509.NewCertPool()
-	pem, _ := os.ReadFile(os.Getenv("DBAPPCERTLOCATION")) // this is the only one that one can use with AzureMYSQL
-
+	pem, err := os.ReadFile("publicpem/BaltimoreCyberTrustRoot.crt.pem") // this is the only one that one can use with AzureMYSQL
+	if err != nil {
+		subscripifylogger.FatalLog.Fatalf("Failed to read PEM: %v", err)
+	}
 	if ok := rootCertPool.AppendCertsFromPEM(pem); !ok {
 		subscripifylogger.FatalLog.Fatal("Failed to append PEM.")
 	}
@@ -67,8 +68,8 @@ func getNewMySQLTenantDbHandle() *sql.DB {
 		log.Fatal("SUBSCRIPIFY_DB_ENV is not set or invalid")
 	}
 	// Get a database handle.
-	var err error
-	tenantsDbHandle, err = sql.Open("mysql", cfgdb.FormatDSN())
+
+	tenantsDbHandle, err := sql.Open("mysql", cfgdb.FormatDSN())
 	log.Print(cfgdb.FormatDSN())
 	if err != nil {
 		subscripifylogger.FatalLog.Fatal(err)
