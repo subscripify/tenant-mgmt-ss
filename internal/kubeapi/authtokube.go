@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	subscripifylogger "dev.azure.com/Subscripify/subscripify-prod/subscripify-logger.git"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -21,9 +22,12 @@ import (
 
 func ClusterCheck() {
 	// creates the in-cluster config
+
 	config, err := rest.InClusterConfig()
 	if err != nil {
-		panic(err.Error())
+		// assume not running on Kubernetes (for now)
+		subscripifylogger.InfoLog.Print("running out side of Kubernetes")
+		return
 	}
 	// creates the clientset
 	clientset, err := kubernetes.NewForConfig(config)

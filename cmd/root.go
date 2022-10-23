@@ -10,6 +10,7 @@ import (
 	subscripifylogger "dev.azure.com/Subscripify/subscripify-prod/subscripify-logger.git"
 	tenant "dev.azure.com/Subscripify/subscripify-prod/tenant-mgmt-ss.git/cmd/tenant"
 	tenantapi "dev.azure.com/Subscripify/subscripify-prod/tenant-mgmt-ss.git/internal/httpclient"
+	subscripifycluster "dev.azure.com/Subscripify/subscripify-prod/tenant-mgmt-ss.git/internal/kubeapi"
 )
 
 func Execute() {
@@ -22,7 +23,7 @@ func Execute() {
 		fmt.Println("subcommand required")
 		os.Exit(1)
 	}
-
+	subscripifycluster.ClusterCheck()
 	switch os.Args[1] {
 	case "test-data":
 		testDataCmd.Parse(os.Args[2:])

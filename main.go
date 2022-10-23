@@ -11,11 +11,10 @@ package main
 
 import (
 	"dev.azure.com/Subscripify/subscripify-prod/tenant-mgmt-ss.git/cmd"
-	"dev.azure.com/Subscripify/subscripify-prod/tenant-mgmt-ss.git/internal/subscripifycluster"
 )
 
 func main() {
-	subscripifycluster.ClusterCheck()
+
 	cmd.Execute()
 
 }
